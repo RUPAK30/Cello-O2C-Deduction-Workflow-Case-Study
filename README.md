@@ -1,6 +1,6 @@
 # Every rupee needs an owner: an order-to-cash case study
 
-> **Live page:** _add the Vercel URL here after deploy_ · Product case study by **Rupak Ghanpathi** · built from Cello World Ltd's public filings
+> **Live page:** [everyrupee-o2c.vercel.app](https://everyrupee-o2c.vercel.app) · Product case study by **Rupak Ghanpathi** · built from Cello World Ltd's public filings
 
 In Indian distribution, a short payment is usually three things at once: tax withheld, a valid claim, and a dispute. Most teams treat it as one. This case study designs the workflow that separates them, proves what's valid, and prevents the next gap.
 
