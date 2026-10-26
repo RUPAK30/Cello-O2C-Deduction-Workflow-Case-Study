@@ -16,7 +16,10 @@ In Indian distribution, a short payment is usually three things at once: tax wit
 | Receivables above revenue-pace growth | **approx. ₹34 Cr** (an estimate, not a measured backlog) |
 
 ## What the live page shows
-A business analysis chain on one page: problem and scope (including what's out of scope) → as-is vs to-be prototype → business rules (BR-1 to BR-7) → traceability from pain points and research to requirements and UAT → user stories with Given/When/Then and RACI (collapsible) → decisions and trade-offs → success metrics and validation plan.
+The first screen states the **problem**, the **solution** and **what I did as the BA**. Below it:
+- **Prototype:** as-is vs to-be for one short payment, with live rule parameters (Finance tolerance, proof of delivery), control tests (UAT-04 to 07), a credit flag and an audit trail.
+- **Integrations (static, no login):** a mock Slack notification to the dispute owner (copyable), SLA and IRP deadlines as Google Calendar links or .ics files, user stories as a JIRA-importable CSV and UAT cases as CSV.
+- **Requirements:** problem and scope, business rules BR-1 to BR-7, a clickable traceability matrix (finding → requirement → test), stories, UAT cases and RACI, decisions and trade-offs, metrics and the validation plan.
 
 ## The design: four layers
 1. **Identify.** Each distributor pays into its own virtual account, so every receipt is tagged to the payer. Unreferenced partial payments settle the oldest open invoice first.
