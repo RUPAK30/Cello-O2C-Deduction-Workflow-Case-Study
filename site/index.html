@@ -4,10 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Every Rupee Needs an Owner</title>
-<meta name="description" content="A business analysis case study in order-to-cash: why distributor short payments go unexplained, the to-be workflow that classifies them, and the rules, stories and tests behind it.">
+<meta name="description" content="A business analysis case study by Rupak Ghanpathi: a workflow that explains every rupee of a distributor short payment on the day it arrives, with the rules, stories and tests behind it.">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Every rupee needs an owner: a business analysis case study">
-<meta property="og:description" content="Distributor short payments mix tax, valid claims and disputes. A BA case study: problem, to-be workflow, business rules, user stories, traceability and UAT. By Rupak Ghanpathi.">
+<meta property="og:description" content="The same ₹20,000 short payment, two workflows: 31 days of email, or explained by 09:03 on day 0. Requirements, business rules, user stories and UAT by Rupak Ghanpathi.">
 <meta property="og:url" content="https://everyrupee-o2c.vercel.app/">
 <meta property="og:image" content="https://everyrupee-o2c.vercel.app/og.png">
 <meta property="og:image:width" content="1200">
@@ -16,261 +16,227 @@
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 <header class="wrap hero">
-  <p class="eyebrow">Business analysis case study · Order-to-cash · Rupak Ghanpathi</p>
+  <p class="eyebrow">Business analysis case study · Rupak Ghanpathi</p>
   <h1>Every rupee needs an owner.</h1>
-  <dl class="summary">
-    <div><dt>Problem</dt><dd>Distributors short-pay without saying why. The gap mixes tax withheld, valid claims and disputes, and it sits in email until month-end. Cash application is delayed and real overdue amounts stay hidden.</dd></div>
-    <div><dt>Solution</dt><dd>A workflow that tags each payment to its payer, separates out the tax, accepts claims that have evidence, and gives every remaining rupee a reason, an owner and a deadline. Valid claims are then settled upfront, before the next payment.</dd></div>
-    <div><dt>What I did as the BA</dt><dd>Framed the problem from public filings, mapped the as-is process, wrote 7 business rules and 7 user stories, traced each to a test, and planned validation interviews with a stop rule.</dd></div>
-  </dl>
-  <nav class="jump" aria-label="Jump to"><a href="#simulator">Try the prototype</a><a href="#rules">Business rules</a><a href="#trace">Traceability</a><a href="#docs">Documents</a></nav>
+  <p class="lede">When a distributor pays less than the invoice, finance teams can spend weeks over email working out why. I designed the workflow that explains every rupee on the day the payment arrives.</p>
 </header>
 
 <main>
-<section class="wrap" id="simulator" aria-labelledby="sim-h">
-  <h2 id="sim-h">1. Prototype: follow one short payment</h2>
-  <p class="sub">Invoice ₹10,00,000; the distributor pays ₹9,80,000 with no breakdown. Compare the hypothesised as-is process with the to-be workflow. All amounts, durations and the split of the gap are <em>illustrative</em>, not Cello data.</p>
-
-  <div class="tabs" role="tablist" aria-label="Process view">
-    <button role="tab" id="tab-today" aria-selected="false" aria-controls="pane-today" data-tab="today">As-is (hypothesised)</button>
-    <button role="tab" id="tab-proposed" aria-selected="true" aria-controls="pane-proposed" data-tab="proposed">To-be</button>
-    <button role="tab" id="tab-prevent" aria-selected="false" aria-controls="pane-prevent" data-tab="prevent">To-be, next month</button>
-  </div>
-
-  <div class="pane" id="pane-today" role="tabpanel" aria-labelledby="tab-today" hidden>
-    <div class="counters">
-      <div><span>Days open</span><strong id="t-days">0</strong></div>
-      <div><span>Emails</span><strong id="t-emails">0</strong></div>
-      <div><span>Owner</span><strong id="t-owner" class="warn">Unclear</strong></div>
-      <div><span>Explained</span><strong id="t-explained">₹0</strong></div>
-    </div>
-    <ol class="steps" id="today-steps"></ol>
-    <div class="controls">
-      <button class="btn primary" id="today-next">Next step</button>
-      <button class="btn" id="today-reset">Reset</button>
+<section class="wrap race-wrap" id="race" aria-labelledby="race-h">
+  <div class="race-head">
+    <h2 id="race-h" class="kicker">The same ₹20,000 short payment, two workflows</h2>
+    <div class="race-ctl">
+      <button class="btn small" id="r-play" aria-label="Pause">Pause</button>
+      <button class="btn small" id="r-step">Step</button>
+      <button class="btn small" id="r-replay">Replay</button>
     </div>
   </div>
+  <p class="sub">Invoice ₹10,00,000, paid ₹9,80,000 with no explanation. Amounts and timings are illustrative.</p>
+  <div class="progress" aria-hidden="true"><span id="r-prog"></span></div>
 
-  <div class="pane" id="pane-proposed" role="tabpanel" aria-labelledby="tab-proposed">
-    <div class="split" aria-label="How the ₹20,000 gap is classified">
-      <div class="bar" id="bar"></div>
+  <div class="race">
+    <div class="lane asis">
+      <div class="lane-h"><span class="lane-t">Today (hypothesised)</span><span class="lane-sub">email and spreadsheets</span></div>
+      <div class="meter">
+        <div><span>Unexplained</span><b class="mono warn" id="a-unexp">₹20,000</b></div>
+        <div><span>Elapsed</span><b class="mono" id="a-time">Day 0</b></div>
+        <div><span>Emails</span><b class="mono" id="a-emails">0</b></div>
+      </div>
+      <ol class="feed" id="a-feed"></ol>
+    </div>
+    <div class="lane tobe">
+      <div class="lane-h"><span class="lane-t">Proposed workflow</span><span class="lane-sub">rules first, people for exceptions</span></div>
+      <div class="meter">
+        <div><span>Unexplained</span><b class="mono" id="b-unexp">₹20,000</b></div>
+        <div><span>Elapsed</span><b class="mono" id="b-time">09:02</b></div>
+        <div><span>Owner</span><b class="mono" id="b-owner">–</b></div>
+      </div>
+      <div class="bar" id="bar" aria-hidden="true"></div>
       <ul class="legend" id="legend"></ul>
+      <ol class="feed" id="b-feed"></ol>
     </div>
-    <ol class="steps" id="prop-steps"></ol>
-    <div class="controls">
-      <button class="btn primary" id="prop-next">Next step</button>
-      <button class="btn" id="prop-reset">Reset</button>
+  </div>
+
+  <div class="verdict" id="verdict" hidden>
+    <p><b class="mono">31 days</b> and 9 emails, still unexplained, versus <b class="mono">every rupee</b> explained and owned by 09:03 on day 0. Nothing written off.</p>
+  </div>
+</section>
+
+<section class="wrap glance" aria-labelledby="glance-h">
+  <h2 id="glance-h" class="kicker">At a glance</h2>
+  <div class="glance-grid">
+    <div><h3>The problem</h3><p>A short payment is usually three things at once: <button class="term" data-term="tds">tax withheld</button>, a valid claim, and a dispute. Most teams treat it as one, so the money sits unexplained while the distributor keeps ordering on credit.</p></div>
+    <div><h3>What I designed</h3><p>A workflow that identifies who paid, separates the tax, accepts claims backed by evidence, and gives every remaining rupee a reason, an owner and a deadline. Valid claims are then settled upfront as <button class="term" data-term="cn">credit notes</button>, so the next payment arrives in full.</p></div>
+    <div><h3>My role</h3><p>Self-initiated, from public filings. I framed the problem, mapped the current process, wrote the business rules, user stories and test cases, and planned how to validate it with the people who would use it.</p></div>
+  </div>
+  <ul class="chips" aria-label="Skills shown">
+    <li>Requirements elicitation</li><li>Process mapping (as-is / to-be)</li><li>Business rules</li><li>User stories and acceptance criteria</li><li>Traceability</li><li>UAT and controls</li><li>Stakeholder mapping (RACI)</li><li>Success metrics</li><li>Order-to-cash and Indian tax</li>
+  </ul>
+</section>
+
+<section class="wrap" id="try" aria-labelledby="try-h">
+  <h2 id="try-h">Try the rules yourself</h2>
+  <p class="sub">The proposed workflow above is driven by rules Finance controls. Change one and watch the payment re-classify.</p>
+  <div class="try-grid">
+    <div class="card">
+      <h3>Finance's settings</h3>
+      <label class="param"><span>Auto-accept limit for evidenced claims: <b class="mono" id="tol-out">₹10,000</b></span>
+        <input type="range" id="tol" min="5000" max="15000" step="1000" value="10000"></label>
+      <label class="check"><input type="checkbox" id="pod"> Distributor attached <button class="term" data-term="pod" type="button">proof of delivery</button> for the damage claim</label>
+      <table class="mini">
+        <tbody id="result-rows"></tbody>
+      </table>
+      <p class="kpi" id="kpi"></p>
     </div>
-
-    <div id="after" hidden>
-      <div class="result">
-        <h3>Outcome</h3>
-        <table>
-          <thead><tr><th>Classification</th><th class="num">Amount</th><th>Handled by</th></tr></thead>
-          <tbody id="result-rows"></tbody>
-        </table>
-        <p class="kpi" id="kpi"></p>
+    <div class="card">
+      <h3>Try to break the controls</h3>
+      <p class="sub">Each attempt should be blocked and logged.</p>
+      <div class="break-grid">
+        <button class="btn" data-break="noreason">Close a case without a reason</button>
+        <button class="btn" data-break="nopod">Accept damage without proof of delivery</button>
+        <button class="btn" data-break="self">Approve your own case above ₹10,000</button>
+        <button class="btn" data-break="writeoff">Write off the unexplained remainder</button>
       </div>
-
-      <div class="params">
-        <h3>Change the rules</h3>
-        <p class="sub">These are Finance's parameters. Change one and the payment is re-classified.</p>
-        <label class="param"><span>Auto-accept tolerance (BR-3): <b id="tol-out">₹10,000</b></span>
-          <input type="range" id="tol" min="5000" max="15000" step="1000" value="10000"></label>
-        <label class="check"><input type="checkbox" id="pod"> Proof of delivery attached to the damage claim</label>
-      </div>
-
-      <div class="break">
-        <h3>Run the control tests (UAT)</h3>
-        <p class="sub">Each negative test should be blocked and logged.</p>
-        <div class="break-grid">
-          <button class="btn" data-break="noreason"><span class="tid">UAT-04</span> Close a case without a reason code</button>
-          <button class="btn" data-break="nopod"><span class="tid">UAT-05</span> Accept a damage claim without proof of delivery</button>
-          <button class="btn" data-break="self"><span class="tid">UAT-06</span> Maker approves own case above ₹10,000</button>
-          <button class="btn" data-break="writeoff"><span class="tid">UAT-07</span> Auto write-off of the unexplained remainder</button>
-        </div>
-        <div id="blocked" class="blocked" role="status" aria-live="polite"></div>
-      </div>
-
-      <div class="credit">
-        <h3>Credit link (BR-7)</h3>
-        <table>
-          <thead><tr><th>Open dispute, Distributor A</th><th class="num">Amount</th><th class="num">Age</th></tr></thead>
-          <tbody id="credit-rows"></tbody>
-        </table>
-        <div class="rule-row">
-          <span>Disputed &gt; ₹20,000 <em>or</em> older than 45 days (illustrative, Finance-set)</span>
-          <span class="flag" id="credit-flag"></span>
-        </div>
-        <p class="sub">A flag, not a block: the credit controller decides with the dispute history on screen.</p>
-      </div>
+      <div id="blocked" class="blocked" role="status" aria-live="polite"></div>
     </div>
-
-    <div class="audit">
+    <div class="card">
+      <h3>What the owner receives</h3>
+      <div id="notify"></div>
+    </div>
+    <div class="card">
+      <h3>Credit check on the next order</h3>
+      <table class="mini"><tbody id="credit-rows"></tbody></table>
+      <p class="flag" id="credit-flag"></p>
+      <p class="sub">Rule: disputes over ₹20,000 or older than 45 days (illustrative). A flag for the credit controller, not an automatic block.</p>
+    </div>
+    <div class="card">
+      <h3>Next month: paid in full</h3>
+      <p>The ₹8,000 scheme benefit is issued upfront as credit note CN-0213 and reported to the <button class="term" data-term="irp">IRP</button> by <b id="irp-date"></b>. The distributor pays ₹10,00,000 − ₹8,000 − ₹1,000 expected TDS = <b class="mono">₹9,91,000</b>. Exact match; no case opened.</p>
+      <div class="cal"><a id="irp-gcal" target="_blank" rel="noopener">Add IRP deadline to Google Calendar</a><button class="linkbtn" id="irp-ics">Download .ics</button></div>
+    </div>
+    <div class="card">
       <h3>Audit trail</h3>
-      <ol id="audit"></ol>
+      <ol class="audit" id="audit"></ol>
     </div>
   </div>
-
-  <div class="pane" id="pane-prevent" role="tabpanel" aria-labelledby="tab-prevent" hidden>
-    <p>Next month Distributor A is due the same ₹8,000 scheme benefit. It is settled before payment instead of being deducted.</p>
-    <ol class="steps static">
-      <li><b>Scheme claim approved upfront.</b> Credit note CN-0213 for ₹8,000 against the agreed scheme budget.</li>
-      <li><b>Credit note reported to the IRP.</b>
-        <div class="countdown"><div class="cd-bar"><span style="width:7%"></span></div><span>Day 2 of a 30-day window; deadline <b id="irp-date"></b>, SLA alerts at day 20</span></div>
-        <div class="cal"><a id="irp-gcal" target="_blank" rel="noopener">Add deadline to Google Calendar</a><button class="linkbtn" id="irp-ics">Download .ics</button></div>
-      </li>
-      <li><b>Statement sent.</b> ₹10,00,000 − credit note ₹8,000 − expected TDS ₹1,000 = ₹9,91,000 due.</li>
-      <li><b>₹9,91,000 arrives on the virtual account.</b> Exact match. Unexplained gap ₹0; no case opened.</li>
-    </ol>
-  </div>
 </section>
 
-<section class="wrap" aria-labelledby="prob-h">
-  <h2 id="prob-h">2. Why this problem</h2>
-  <p>The case is built on Cello World Ltd, a consumer products manufacturer selling through 565 dealers and distributors on 30–120 day credit.</p>
-  <div class="tbl-wrap">
-  <table>
-    <thead><tr><th>Signal (consolidated)</th><th class="num">FY25</th><th class="num">FY26</th><th class="num">Change</th></tr></thead>
-    <tbody>
-      <tr><td>Revenue from operations</td><td class="num">₹2,136 Cr</td><td class="num">₹2,324 Cr</td><td class="num">+8.8%</td></tr>
-      <tr><td>Trade receivables</td><td class="num">₹658 Cr</td><td class="num">₹750 Cr</td><td class="num">+14.0%</td></tr>
-      <tr class="tot"><td>Receivables above revenue pace (estimate)</td><td class="num"></td><td class="num"></td><td class="num">≈ ₹34 Cr</td></tr>
-    </tbody>
-  </table>
+<section class="wrap" id="why" aria-labelledby="why-h">
+  <h2 id="why-h">Why this problem</h2>
+  <p>The case is built on Cello World Ltd, a consumer products maker selling through 565 dealers and distributors on 30–120 day credit. In FY26 its receivables grew faster than its revenue:</p>
+  <div class="signal">
+    <div><b class="mono">+14.0%</b><span>Receivables, ₹658 Cr → ₹750 Cr</span></div>
+    <div><b class="mono">+8.8%</b><span>Revenue, ₹2,136 Cr → ₹2,324 Cr</span></div>
+    <div><b class="mono">≈ ₹34 Cr</b><span>above revenue pace (estimate)</span></div>
   </div>
-  <p class="note">₹658 Cr grown at 8.8% ≈ ₹716 Cr, against ₹750 Cr actual. An estimate, not a measured backlog. Receivables can also rise through credit expansion, channel mix or year-end timing, so this justifies discovery, not a diagnosis.</p>
-  <div class="contrast">
-    <div><h4>In scope</h4><p>Distributor receipts, short payments and deductions; their classification, evidence, ownership, approval and settlement as credit notes.</p></div>
-    <div><h4>Out of scope, and why</h4><p>Credit-limit policy (only a flag is raised), collections strategy and ERP replacement. These are separate decisions with different owners.</p></div>
-  </div>
+  <p class="note">₹658 Cr grown at 8.8% ≈ ₹716 Cr, against ₹750 Cr actual. An estimate, not a measured backlog; receivables also rise through credit expansion, channel mix or timing. It justifies discovery, not a diagnosis. In scope: receipts, deductions, their evidence, ownership and settlement. Out of scope: credit-limit policy, collections strategy and ERP replacement.</p>
 </section>
 
-<section class="wrap" id="rules" aria-labelledby="rules-h">
-  <h2 id="rules-h">3. Business rules</h2>
-  <div class="tbl-wrap">
-  <table class="rules">
-    <thead><tr><th>ID</th><th>Layer</th><th>Rule</th></tr></thead>
-    <tbody>
-      <tr id="BR-1"><td>BR-1</td><td>Identify</td><td>Each distributor pays into its own virtual account number, so every receipt is tagged to the payer. An unreferenced partial payment settles the oldest open invoice first.</td></tr>
-      <tr id="BR-2"><td>BR-2</td><td>Split</td><td>Track each distributor's running purchase total. TDS u/s 194Q applies when the buyer's previous-year turnover exceeds ₹10 crore and its purchases from the seller exceed ₹50 lakh in the year, at 0.1% of the amount above ₹50 lakh; once crossed, a TDS line is expected and matched to Form 26AS. GST-TDS (2%) applies only to notified buyers such as government bodies.</td></tr>
-      <tr id="BR-3"><td>BR-3</td><td>Validate</td><td>Auto-accept a claim only if its evidence is present, it is within budget, it is under the Finance-set tolerance and it is within 2× the distributor's own norm. Everything else goes to a person.</td></tr>
-      <tr id="BR-4"><td>BR-4</td><td>Validate</td><td>Unexplained gaps are never written off by a rule.</td></tr>
-      <tr id="BR-5"><td>BR-5</td><td>Control</td><td>Above the approval threshold (illustratively ₹10,000) a second person approves; self-approval is blocked.</td></tr>
-      <tr id="BR-6"><td>BR-6</td><td>Prevent</td><td>Valid claims are settled as credit notes. Credit notes are reported to the IRP within 30 days (e-invoicing, turnover ₹10 Cr+, from 1 April 2025) and GST credit notes are issued no later than 30 November of the following year (Section 34).</td></tr>
-      <tr id="BR-7"><td>BR-7</td><td>Credit</td><td>When disputed deductions exceed a threshold or age past a limit, the next order is flagged for credit review.</td></tr>
-    </tbody>
-  </table>
+<section class="wrap" id="spec" aria-labelledby="spec-h">
+  <h2 id="spec-h">The specification</h2>
+  <p class="sub">For the business reader: the rules, requirements and tests behind the prototype. Every requirement traces to a pain point or research finding and forward to a test.</p>
+  <div class="tabs" role="tablist" aria-label="Specification">
+    <button role="tab" aria-selected="true" data-spec="rules">Business rules</button>
+    <button role="tab" aria-selected="false" data-spec="codes">Reason codes</button>
+    <button role="tab" aria-selected="false" data-spec="trace">Traceability</button>
+    <button role="tab" aria-selected="false" data-spec="stories">User stories</button>
+    <button role="tab" aria-selected="false" data-spec="uat">UAT</button>
+    <button role="tab" aria-selected="false" data-spec="raci">RACI</button>
   </div>
-  <h3 class="tbl-h">Reason code → evidence → validity (BR-3)</h3>
-  <div class="tbl-wrap">
-  <table class="rules">
-    <thead><tr><th>Reason code</th><th>Required evidence</th><th>Valid when</th></tr></thead>
-    <tbody>
-      <tr><td>Scheme claim</td><td>Scheme circular or agreement, plus eligibility</td><td>Within that distributor's scheme budget</td></tr>
-      <tr><td>Damage / shortage</td><td>Proof of delivery or damage report</td><td>Flagged if more than 2× the distributor's own trailing average</td></tr>
-      <tr><td>Rate difference</td><td>Price list or contract in force on the invoice date</td><td>Matches that price</td></tr>
-      <tr><td>Returns</td><td>Goods received note</td><td>Matches the quantity received</td></tr>
-      <tr><td>No evidence</td><td>None</td><td>Never; it becomes a dispute with an owner and an SLA</td></tr>
-    </tbody>
-  </table>
-  </div>
-  <p class="note">Tax rules summarised for illustration; they change. Check current rules.</p>
-</section>
-
-<section class="wrap" id="trace" aria-labelledby="trace-h">
-  <h2 id="trace-h">4. Traceability: evidence → requirement → test</h2>
-  <p class="sub">Every requirement traces back to a pain point or research finding, and forward to a test. Select an ID to see its definition.</p>
-  <div class="tbl-wrap">
-  <table>
-    <thead><tr><th>Pain point or research finding</th><th>Requirement</th><th>Test</th></tr></thead>
-    <tbody>
-      <tr><td>P1 No remittance detail. Virtual accounts tag each payment to its payer automatically <small>(open.money)</small></td><td>BR-1, US-1</td><td>UAT-01</td></tr>
-      <tr><td>TDS treated as a loss is a leading cause of reconciliation differences <small>(invoicedataextraction.com guide)</small></td><td>BR-2, US-2</td><td>UAT-02</td></tr>
-      <tr><td>90–95% of deduction value is typically valid; 5–10% invalid <small>(HighRadius)</small>. Unstructured claims can over-pay 5–12% of scheme spend <small>(Terra Insight)</small></td><td>BR-3, US-3</td><td>UAT-03, UAT-05</td></tr>
-      <tr><td>P2 Unstructured reasons; P3 unclear owner. Average dispute resolution about 41 days; 44% of companies have no resolution deadline <small>(HighRadius; Attain Consulting 2021 survey)</small></td><td>US-4</td><td>UAT-04, UAT-08</td></tr>
-      <tr><td>P4 Weak approval trail</td><td>BR-4, BR-5, US-5</td><td>UAT-06, UAT-07</td></tr>
-      <tr><td>Missed credit-note windows leak GST <small>(Terra Insight example, illustrative)</small></td><td>BR-6, US-6</td><td>UAT-09</td></tr>
-      <tr><td>P5 Late visibility; old deductions compound with new credit exposure</td><td>BR-7, US-7</td><td>UAT-10</td></tr>
-    </tbody>
-  </table>
-  </div>
-  <p class="exports"><button class="btn" id="dl-stories">Download stories (JIRA CSV)</button><button class="btn" id="dl-uat">Download UAT cases (CSV)</button></p>
-
-  <details id="stories-d">
-    <summary>User stories and acceptance criteria (7)</summary>
-    <ol class="stories" id="stories"></ol>
-  </details>
-  <details id="uat-d">
-    <summary>UAT cases (10)</summary>
-    <div class="tbl-wrap"><table><thead><tr><th>ID</th><th>Traces to</th><th>Scenario</th><th>Expected result</th></tr></thead><tbody id="uat"></tbody></table></div>
-  </details>
-  <details>
-    <summary>Stakeholders and RACI</summary>
-    <div class="tbl-wrap">
-    <table class="raci">
-      <thead><tr><th>Activity</th><th>AR exec</th><th>AR lead</th><th>Controller</th><th>Sales</th><th>IT / ERP</th><th>Audit</th></tr></thead>
-      <tbody>
+  <div class="pane">
+    <div data-pane="rules">
+      <div class="tbl-wrap"><table class="rules"><thead><tr><th>ID</th><th>Layer</th><th>Rule</th></tr></thead><tbody>
+        <tr id="BR-1"><td>BR-1</td><td>Identify</td><td>Each distributor pays into its own virtual account number, so every receipt is tagged to the payer. An unreferenced partial payment settles the oldest open invoice first.</td></tr>
+        <tr id="BR-2"><td>BR-2</td><td>Split</td><td>Track each distributor's running purchase total. TDS u/s 194Q applies when the buyer's previous-year turnover exceeds ₹10 crore and its purchases from the seller exceed ₹50 lakh in the year, at 0.1% of the amount above ₹50 lakh; once crossed, a TDS line is expected and matched to Form 26AS. GST-TDS (2%) applies only to notified buyers such as government bodies.</td></tr>
+        <tr id="BR-3"><td>BR-3</td><td>Validate</td><td>Auto-accept a claim only if its evidence is present, it is within budget, it is under the Finance-set tolerance and it is within 2× the distributor's own norm. Everything else goes to a person.</td></tr>
+        <tr id="BR-4"><td>BR-4</td><td>Validate</td><td>Unexplained gaps are never written off by a rule.</td></tr>
+        <tr id="BR-5"><td>BR-5</td><td>Control</td><td>Above the approval threshold (illustratively ₹10,000) a second person approves; self-approval is blocked.</td></tr>
+        <tr id="BR-6"><td>BR-6</td><td>Prevent</td><td>Valid claims are settled as credit notes. Credit notes are reported to the IRP within 30 days (e-invoicing, turnover ₹10 Cr+, from 1 April 2025) and GST credit notes are issued no later than 30 November of the following year (Section 34).</td></tr>
+        <tr id="BR-7"><td>BR-7</td><td>Credit</td><td>When disputed deductions exceed a threshold or age past a limit, the next order is flagged for credit review.</td></tr>
+      </tbody></table></div>
+      <p class="note">Tax rules summarised for illustration; they change. Check current rules.</p>
+    </div>
+    <div data-pane="codes" hidden>
+      <div class="tbl-wrap"><table class="rules"><thead><tr><th>Reason code</th><th>Required evidence</th><th>Valid when</th></tr></thead><tbody>
+        <tr><td>Scheme claim</td><td>Scheme circular or agreement, plus eligibility</td><td>Within that distributor's scheme budget</td></tr>
+        <tr><td>Damage / shortage</td><td>Proof of delivery or damage report</td><td>Flagged if more than 2× the distributor's own trailing average</td></tr>
+        <tr><td>Rate difference</td><td>Price list or contract in force on the invoice date</td><td>Matches that price</td></tr>
+        <tr><td>Returns</td><td>Goods received note</td><td>Matches the quantity received</td></tr>
+        <tr><td>No evidence</td><td>None</td><td>Never; it becomes a dispute with an owner and an SLA</td></tr>
+      </tbody></table></div>
+    </div>
+    <div data-pane="trace" hidden>
+      <div class="tbl-wrap"><table id="trace-table"><thead><tr><th>Pain point or research finding</th><th>Requirement</th><th>Test</th></tr></thead><tbody>
+        <tr><td>P1 No remittance detail. Virtual accounts tag each payment to its payer automatically <small>(open.money)</small></td><td>BR-1, US-1</td><td>UAT-01</td></tr>
+        <tr><td>TDS treated as a loss is a leading cause of reconciliation differences <small>(invoicedataextraction.com guide)</small></td><td>BR-2, US-2</td><td>UAT-02</td></tr>
+        <tr><td>90–95% of deduction value is typically valid; 5–10% invalid <small>(HighRadius)</small>. Unstructured claims can over-pay 5–12% of scheme spend <small>(Terra Insight)</small></td><td>BR-3, US-3</td><td>UAT-03, UAT-05</td></tr>
+        <tr><td>P2 Unstructured reasons; P3 unclear owner. Average dispute resolution about 41 days; 44% of companies have no resolution deadline <small>(HighRadius; Attain Consulting 2021 survey)</small></td><td>US-4</td><td>UAT-04, UAT-08</td></tr>
+        <tr><td>P4 Weak approval trail</td><td>BR-4, BR-5, US-5</td><td>UAT-06, UAT-07</td></tr>
+        <tr><td>Missed credit-note windows leak GST <small>(Terra Insight example, illustrative)</small></td><td>BR-6, US-6</td><td>UAT-09</td></tr>
+        <tr><td>P5 Late visibility; old deductions compound with new credit exposure</td><td>BR-7, US-7</td><td>UAT-10</td></tr>
+      </tbody></table></div>
+      <p class="note">Select an ID to open its definition.</p>
+    </div>
+    <div data-pane="stories" hidden>
+      <ol class="stories" id="stories"></ol>
+      <p class="exports"><button class="btn small" id="dl-stories">Download for JIRA (CSV)</button></p>
+    </div>
+    <div data-pane="uat" hidden>
+      <div class="tbl-wrap"><table><thead><tr><th>ID</th><th>Traces to</th><th>Scenario</th><th>Expected result</th></tr></thead><tbody id="uat"></tbody></table></div>
+      <p class="exports"><button class="btn small" id="dl-uat">Download test cases (CSV)</button></p>
+    </div>
+    <div data-pane="raci" hidden>
+      <div class="tbl-wrap"><table class="raci"><thead><tr><th>Activity</th><th>AR exec</th><th>AR lead</th><th>Controller</th><th>Sales</th><th>IT / ERP</th><th>Audit</th></tr></thead><tbody>
         <tr><td>Match payments to invoices</td><td>R</td><td>A</td><td>I</td><td></td><td>C</td><td></td></tr>
         <tr><td>Investigate a difference</td><td>R</td><td>A</td><td></td><td>C</td><td></td><td></td></tr>
         <tr><td>Confirm a scheme or damage claim</td><td>C</td><td></td><td></td><td>R</td><td></td><td></td></tr>
         <tr><td>Approve a deduction or write-off</td><td></td><td>R</td><td>A</td><td>C</td><td></td><td>I</td></tr>
         <tr><td>Post the adjustment in the ERP</td><td>R</td><td>A</td><td></td><td></td><td>C</td><td></td></tr>
         <tr><td>Report exception ageing</td><td>R</td><td>A</td><td>I</td><td>I</td><td></td><td>I</td></tr>
-      </tbody>
-    </table>
+      </tbody></table></div>
+      <p class="note">R = does the work, A = accountable, C = consulted, I = informed. The distributor is the external party in every exception.</p>
     </div>
-    <p class="note">R = does the work, A = accountable, C = consulted, I = informed. The distributor is the external party in every exception.</p>
-  </details>
-</section>
-
-<section class="wrap" aria-labelledby="dec-h">
-  <h2 id="dec-h">5. Decisions and trade-offs</h2>
-  <div class="tbl-wrap">
-  <table>
-    <thead><tr><th>Decision</th><th>What it costs</th></tr></thead>
-    <tbody>
-      <tr><td><b>Control before speed.</b> Release 1 fixes ownership and approvals.</td><td>Less automation at launch</td></tr>
-      <tr><td><b>Strict matching at launch.</b> Exact reference and amount only.</td><td>Lower auto-match rate, in exchange for zero wrong matches</td></tr>
-      <tr><td><b>ERP stays the system of record.</b> A case layer (proposed: a workflow platform such as ServiceNow) posts only approved outcomes.</td><td>Integration work, to confirm with IT</td></tr>
-      <tr><td><b>No automatic write-off of unexplained gaps.</b></td><td>Small items stay open longer and need a person</td></tr>
-      <tr><td><b>Automate only the evidenced majority.</b> BR-3 auto-accepts; people work exceptions.</td><td>Needs a Finance-approved tolerance and clean evidence capture</td></tr>
-      <tr><td><b>Prevent before you reconcile.</b> Settle valid claims as credit notes.</td><td>Sales must agree scheme budgets upfront</td></tr>
-    </tbody>
-  </table>
   </div>
 </section>
 
-<section class="wrap two" aria-label="Measurement and validation">
-  <div>
-    <h2>6. Success metrics</h2>
-    <ul class="plain">
-      <li>Days deductions outstanding</li>
-      <li>Share of gaps auto-classified</li>
-      <li>Share of claims auto-accepted with evidence</li>
-      <li>Invalid deductions recovered</li>
-      <li>Credit notes reported within 30 days</li>
-      <li>Zero wrong write-offs</li>
-    </ul>
-    <p class="note">Pilot on one division; targets set from the measured baseline, not assumed.</p>
+<section class="wrap" id="close" aria-label="Trade-offs, metrics and validation">
+  <div class="close-grid">
+    <div>
+      <h2>Trade-offs I chose</h2>
+      <ul class="plain">
+        <li><b>Control before speed:</b> ownership and approvals first, automation second.</li>
+        <li><b>Strict matching at launch:</b> fewer auto-matches, zero wrong ones.</li>
+        <li><b>ERP stays the system of record:</b> a workflow layer (proposed: a platform such as ServiceNow) posts only approved outcomes.</li>
+        <li><b>No automatic write-offs:</b> small items may wait for a person.</li>
+        <li><b>Automate only the evidenced majority:</b> needs a Finance-approved tolerance.</li>
+        <li><b>Prevent before you reconcile:</b> Sales must agree scheme budgets upfront.</li>
+      </ul>
+    </div>
+    <div>
+      <h2>How I'd measure it</h2>
+      <ul class="plain">
+        <li>Days deductions outstanding</li>
+        <li>Share of gaps auto-classified</li>
+        <li>Share of claims auto-accepted with evidence</li>
+        <li>Invalid deductions recovered</li>
+        <li>Credit notes reported within 30 days</li>
+        <li>Zero wrong write-offs</li>
+      </ul>
+    </div>
+    <div>
+      <h2>How I'd validate it</h2>
+      <ul class="plain">
+        <li>Five 45-minute interviews: AR executive, AR lead, Finance Controller, area sales manager, ERP owner</li>
+        <li>One month of anonymised receipts</li>
+        <li><b>Stop rule:</b> if gaps are rare or close within days, stop and redirect to wherever finance spends the most manual effort.</li>
+      </ul>
+    </div>
   </div>
-  <div>
-    <h2>7. Validation plan</h2>
-    <ul class="plain">
-      <li>Five 45-minute interviews: AR executive, AR lead, Finance Controller, area sales manager, ERP owner</li>
-      <li>One month of anonymised receipts</li>
-      <li><b>Stop rule:</b> if differences are rare or resolved within days, stop and redirect to wherever the finance team spends the most manual effort.</li>
-    </ul>
-  </div>
-</section>
-
-<section class="wrap" id="docs" aria-labelledby="dl-h">
-  <h2 id="dl-h">Documents</h2>
   <p class="downloads"><a href="Cello_O2C_Case_Study.pdf">Full case study (PDF)</a><a href="Cello_O2C_One_Pager.pdf">One-pager (PDF)</a></p>
 </section>
 </main>
@@ -279,6 +245,7 @@
   <p>Self-initiated. Built from Cello World Ltd's public filings (FY26 consolidated, FY25 restated) and public industry research. Internal processes are hypotheses, not confirmed company practice. Tools such as virtual accounts, Slack or a workflow platform are proposals, not claims about Cello's systems. Tax rules are summarised for illustration and change; check current law.</p>
   <p><a href="https://www.linkedin.com/in/rupak-ghanpathi">LinkedIn</a> · <a href="https://github.com/RUPAK30">GitHub</a></p>
 </footer>
+<div class="pop" id="pop" role="tooltip" hidden></div>
 <script src="app.js"></script>
 </body>
 </html>

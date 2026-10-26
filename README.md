@@ -16,10 +16,12 @@ In Indian distribution, a short payment is usually three things at once: tax wit
 | Receivables above revenue-pace growth | **approx. ₹34 Cr** (an estimate, not a measured backlog) |
 
 ## What the live page shows
-The first screen states the **problem**, the **solution** and **what I did as the BA**. Below it:
-- **Prototype:** as-is vs to-be for one short payment, with live rule parameters (Finance tolerance, proof of delivery), control tests (UAT-04 to 07), a credit flag and an audit trail.
+Written for two readers: recruiters (plain language, skills named, tap-to-explain finance terms) and business hiring managers (the full specification).
+- **The race:** the same ₹20,000 short payment plays out automatically in two lanes, today's email process (31 days, still unexplained) against the proposed workflow (every rupee classified and owned by 09:03 on day 0). Pause, step and replay; reduced-motion users see the end state.
+- **At a glance:** the problem, what I designed, my role, and the BA skills shown.
+- **Try the rules:** live Finance parameters (auto-accept limit, proof of delivery), control tests that are blocked and logged, the owner's notification, the credit check, next month's credit note and the audit trail.
 - **Integrations (static, no login):** a mock Slack notification to the dispute owner (copyable), SLA and IRP deadlines as Google Calendar links or .ics files, user stories as a JIRA-importable CSV and UAT cases as CSV.
-- **Requirements:** problem and scope, business rules BR-1 to BR-7, a clickable traceability matrix (finding → requirement → test), stories, UAT cases and RACI, decisions and trade-offs, metrics and the validation plan.
+- **The specification:** one tabbed panel with business rules BR-1 to BR-7, reason codes, a clickable traceability matrix (finding → requirement → test), user stories, UAT cases and RACI; then trade-offs, metrics and the validation plan.
 
 ## The design: four layers
 1. **Identify.** Each distributor pays into its own virtual account, so every receipt is tagged to the payer. Unreferenced partial payments settle the oldest open invoice first.
