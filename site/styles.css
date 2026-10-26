@@ -163,3 +163,7 @@ details[open] { padding-bottom: 16px; }
   .rule-row { flex-direction: row; justify-content: space-between; align-items: center; }
   .two { grid-template-columns: 1fr 1fr; }
 }
+@media (max-width: 480px) {
+  .tabs { overflow-x: visible; flex-wrap: wrap; gap: 0; }
+  .tabs button { flex: 1 1 auto; padding: 10px 8px; font-size: .86rem; text-align: center; }
+}

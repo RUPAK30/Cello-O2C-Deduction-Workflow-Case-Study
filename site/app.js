@@ -73,7 +73,7 @@
     },
     {
       key: "tds", amt: 1000,
-      html: "<span class='day'>Day 0, 09:02</span><b>TDS line expected.</b> Distributor A's purchases this year crossed ₹50 lakh, so 0.1% TDS u/s 194Q is expected on this invoice.<dl><dt>Expected</dt><dd>₹1,000</dd><dt>Status</dt><dd>Credit to match in Form 26AS</dd></dl><span class='tag tds'>Not a loss</span>",
+      html: "<span class='day'>Day 0, 09:02</span><b>TDS line expected.</b> Distributor A's purchases this year crossed ₹50 lakh, so 0.1% TDS u/s 194Q is expected on this invoice (on its taxable value, before GST).<dl><dt>Expected</dt><dd>₹1,000 (illustrative)</dd><dt>Status</dt><dd>Credit to match in Form 26AS</dd></dl><span class='tag tds'>Not a loss</span>",
       audit: "₹1,000 classified as TDS u/s 194Q; queued for Form 26AS match"
     },
     {
