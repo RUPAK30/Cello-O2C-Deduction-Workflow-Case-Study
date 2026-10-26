@@ -15,6 +15,9 @@ In Indian distribution, a short payment is usually three things at once: tax wit
 | Revenue, ₹2,136 Cr to ₹2,324 Cr | +8.8% |
 | Receivables above revenue-pace growth | **approx. ₹34 Cr** (an estimate, not a measured backlog) |
 
+## What the live page shows
+A business analysis chain on one page: problem and scope (including what's out of scope) → as-is vs to-be prototype → business rules (BR-1 to BR-7) → traceability from pain points and research to requirements and UAT → user stories with Given/When/Then and RACI (collapsible) → decisions and trade-offs → success metrics and validation plan.
+
 ## The design: four layers
 1. **Identify.** Each distributor pays into its own virtual account, so every receipt is tagged to the payer. Unreferenced partial payments settle the oldest open invoice first.
 2. **Split.** Statutory withholding (TDS u/s 194Q; GST-TDS for notified buyers) is separated from commercial deductions. TDS is a credit to match in Form 26AS, not a loss.
