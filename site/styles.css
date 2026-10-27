@@ -178,3 +178,32 @@ a.idlink { white-space: nowrap; }
   .tabs button { flex: 1 1 auto; padding: 10px 8px; font-size: .84rem; text-align: center; }
   .feed li { grid-template-columns: 44px 1fr; }
 }
+
+/* print: the case study PDF is generated from this page */
+@media print {
+  @page { size: A4; margin: 14mm 12mm; }
+  body { background: #fff; font-size: 12px; }
+  section { padding: 16px 0; }
+  .wrap { max-width: none; padding: 0; }
+  .race-ctl, .progress, .tabs, .exports, .cal, .pop, .break-grid, .blocked, #try .param, #try .check, .downloads, .linkbtn { display: none !important; }
+  .race { grid-template-columns: 1fr 1fr; }
+  .feed { min-height: 0; }
+  .feed li { display: grid !important; }
+  .feed li.new, .verdict { animation: none; }
+  .glance-grid, .try-grid { grid-template-columns: repeat(3, 1fr); }
+  .close-grid { grid-template-columns: 1.3fr 1fr 1fr; }
+  [data-pane] { display: block !important; margin-bottom: 14px; }
+  [data-pane]::before { display: block; font: 600 13px var(--serif); margin: 6px 0; }
+  [data-pane="rules"]::before { content: "Business rules"; }
+  [data-pane="codes"]::before { content: "Reason codes"; }
+  [data-pane="trace"]::before { content: "Traceability"; }
+  [data-pane="stories"]::before { content: "User stories and acceptance criteria"; }
+  [data-pane="uat"]::before { content: "UAT cases"; }
+  [data-pane="raci"]::before { content: "RACI"; }
+  .pane { border: 0; padding: 0; }
+  .audit { max-height: none; }
+  .card, .lane, tr, .stories li, .glance-grid > div { break-inside: avoid; }
+  #spec, #close { break-before: page; }
+  .term { text-decoration: none; }
+  a.idlink { color: inherit; text-decoration: none; }
+}

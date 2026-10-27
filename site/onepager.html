@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>One-Pager: Every Rupee</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+  body { background: #fff; }
+  .op { width: 186mm; margin: 0 auto; padding: 12mm 0; font-size: 11px; line-height: 1.45; }
+  .op h1 { font-size: 30px; margin: 4px 0 6px; }
+  .op h2 { font: 600 9.5px var(--sans); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin: 14px 0 6px; }
+  .op .lede { font-size: 13px; margin-bottom: 8px; }
+  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .row3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .box { border: 1px solid var(--line); border-radius: 6px; padding: 8px 10px; }
+  .box.a { border-top: 3px solid var(--dispute); }
+  .box.b { border-top: 3px solid var(--accent); }
+  .box h3 { font-size: 13px; margin: 0 0 4px; }
+  .big { font: 500 20px var(--mono); }
+  .big.warn { color: var(--dispute); } .big.ok { color: var(--accent); }
+  .op ol, .op ul { margin: 0; padding-left: 16px; }
+  .op li { margin-bottom: 2px; }
+  .op p { margin: 0 0 4px; }
+  .op table { font-size: 10px; }
+  .op th, .op td { padding: 4px 6px; }
+  .op .chips li { font-size: 9.5px; padding: 2px 8px; }
+  .foot2 { margin-top: 12px; padding-top: 8px; border-top: 1px solid var(--line); color: var(--muted); font-size: 9px; }
+  @media print { @page { size: A4; margin: 0; } }
+</style>
+</head>
+<body>
+<div class="op">
+  <p class="eyebrow">Business analysis case study · Order-to-cash · Rupak Ghanpathi</p>
+  <h1>Every rupee needs an owner.</h1>
+  <p class="lede">A distributor short payment is usually three things at once: tax withheld, a valid claim, and a dispute. I designed the workflow that separates them on the day the payment arrives.</p>
+
+  <h2>The same ₹20,000 gap, two workflows (illustrative)</h2>
+  <div class="row">
+    <div class="box a"><h3>Today (hypothesised)</h3><p class="big warn">Day 31 · ₹20,000</p><p>still unexplained after 9 emails. Payer found by hand, owner unclear, approval over email, visible only at month-end.</p></div>
+    <div class="box b"><h3>Proposed workflow</h3><p class="big ok">09:03 · ₹0</p><p>unexplained on day 0. ₹1,000 TDS (a tax credit), ₹8,000 evidenced scheme claim accepted by rule, ₹11,000 damage claim disputed with an owner and a 7-day SLA.</p></div>
+  </div>
+
+  <h2>Four layers</h2>
+  <div class="row">
+    <div><p><b>1 Identify.</b> A virtual account per distributor tags every receipt to its payer; unreferenced payments settle the oldest invoice.</p>
+    <p><b>2 Split.</b> TDS u/s 194Q is expected once purchases cross ₹50 lakh and matched to Form 26AS; it is a credit, not a loss.</p></div>
+    <div><p><b>3 Validate.</b> Claims with evidence, within budget and tolerance are accepted by rule; everything else gets a reason, owner and SLA. Nothing is written off automatically.</p>
+    <p><b>4 Prevent.</b> Valid claims become credit notes upfront, reported to the IRP within 30 days, so the next payment arrives in full.</p></div>
+  </div>
+
+  <h2>Signal from public filings (FY25 → FY26)</h2>
+  <div class="row3">
+    <div><span class="big">+14.0%</span><br>Receivables, ₹658 → ₹750 Cr</div>
+    <div><span class="big">+8.8%</span><br>Revenue, ₹2,136 → ₹2,324 Cr</div>
+    <div><span class="big">≈ ₹34 Cr</span><br>above revenue pace (estimate, not a measured backlog)</div>
+  </div>
+
+  <div class="row" style="margin-top:4px">
+    <div>
+      <h2>Requirements delivered</h2>
+      <ul>
+        <li>7 business rules (BR-1 to BR-7) and a reason-code evidence matrix</li>
+        <li>7 user stories with Given/When/Then acceptance criteria</li>
+        <li>10 UAT cases, including 4 negative control tests</li>
+        <li>Traceability from pain point and research to requirement and test</li>
+        <li>RACI across AR, Finance, Sales, IT and Audit</li>
+      </ul>
+    </div>
+    <div>
+      <h2>Validate and measure</h2>
+      <ul>
+        <li>Five interviews and one month of receipts; stop if gaps are rare or close fast</li>
+        <li>Days deductions outstanding · share auto-classified · invalid deductions recovered · credit notes reported in 30 days · zero wrong write-offs</li>
+      </ul>
+      <h2>Trade-offs</h2>
+      <ul>
+        <li>Control before speed; strict matching at launch; ERP stays the system of record; no automatic write-offs</li>
+      </ul>
+    </div>
+  </div>
+
+  <h2>Skills shown</h2>
+  <ul class="chips">
+    <li>Requirements elicitation</li><li>Process mapping</li><li>Business rules</li><li>User stories and acceptance criteria</li><li>Traceability</li><li>UAT and controls</li><li>RACI</li><li>Success metrics</li>
+  </ul>
+
+  <p class="foot2">Interactive prototype: everyrupee-o2c.vercel.app · Self-initiated from Cello World Ltd's public filings (FY26 consolidated, FY25 restated) and public industry research. Internal processes are hypotheses, not confirmed company practice. Amounts are illustrative. Tax rules summarised for illustration; check current law.</p>
+</div>
+</body>
+</html>

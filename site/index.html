@@ -150,25 +150,11 @@
   </div>
   <div class="pane">
     <div data-pane="rules">
-      <div class="tbl-wrap"><table class="rules"><thead><tr><th>ID</th><th>Layer</th><th>Rule</th></tr></thead><tbody>
-        <tr id="BR-1"><td>BR-1</td><td>Identify</td><td>Each distributor pays into its own virtual account number, so every receipt is tagged to the payer. An unreferenced partial payment settles the oldest open invoice first.</td></tr>
-        <tr id="BR-2"><td>BR-2</td><td>Split</td><td>Track each distributor's running purchase total. TDS u/s 194Q applies when the buyer's previous-year turnover exceeds ₹10 crore and its purchases from the seller exceed ₹50 lakh in the year, at 0.1% of the amount above ₹50 lakh; once crossed, a TDS line is expected and matched to Form 26AS. GST-TDS (2%) applies only to notified buyers such as government bodies.</td></tr>
-        <tr id="BR-3"><td>BR-3</td><td>Validate</td><td>Auto-accept a claim only if its evidence is present, it is within budget, it is under the Finance-set tolerance and it is within 2× the distributor's own norm. Everything else goes to a person.</td></tr>
-        <tr id="BR-4"><td>BR-4</td><td>Validate</td><td>Unexplained gaps are never written off by a rule.</td></tr>
-        <tr id="BR-5"><td>BR-5</td><td>Control</td><td>Above the approval threshold (illustratively ₹10,000) a second person approves; self-approval is blocked.</td></tr>
-        <tr id="BR-6"><td>BR-6</td><td>Prevent</td><td>Valid claims are settled as credit notes. Credit notes are reported to the IRP within 30 days (e-invoicing, turnover ₹10 Cr+, from 1 April 2025) and GST credit notes are issued no later than 30 November of the following year (Section 34).</td></tr>
-        <tr id="BR-7"><td>BR-7</td><td>Credit</td><td>When disputed deductions exceed a threshold or age past a limit, the next order is flagged for credit review.</td></tr>
-      </tbody></table></div>
+      <div class="tbl-wrap"><table class="rules"><thead><tr><th>ID</th><th>Layer</th><th>Rule</th></tr></thead><tbody id="rules-body"></tbody></table></div>
       <p class="note">Tax rules summarised for illustration; they change. Check current rules.</p>
     </div>
     <div data-pane="codes" hidden>
-      <div class="tbl-wrap"><table class="rules"><thead><tr><th>Reason code</th><th>Required evidence</th><th>Valid when</th></tr></thead><tbody>
-        <tr><td>Scheme claim</td><td>Scheme circular or agreement, plus eligibility</td><td>Within that distributor's scheme budget</td></tr>
-        <tr><td>Damage / shortage</td><td>Proof of delivery or damage report</td><td>Flagged if more than 2× the distributor's own trailing average</td></tr>
-        <tr><td>Rate difference</td><td>Price list or contract in force on the invoice date</td><td>Matches that price</td></tr>
-        <tr><td>Returns</td><td>Goods received note</td><td>Matches the quantity received</td></tr>
-        <tr><td>No evidence</td><td>None</td><td>Never; it becomes a dispute with an owner and an SLA</td></tr>
-      </tbody></table></div>
+      <div class="tbl-wrap"><table class="rules"><thead><tr><th>Reason code</th><th>Required evidence</th><th>Valid when</th></tr></thead><tbody id="codes-body"></tbody></table></div>
     </div>
     <div data-pane="trace" hidden>
       <div class="tbl-wrap"><table id="trace-table"><thead><tr><th>Pain point or research finding</th><th>Requirement</th><th>Test</th></tr></thead><tbody>
@@ -237,7 +223,7 @@
       </ul>
     </div>
   </div>
-  <p class="downloads"><a href="Cello_O2C_Case_Study.pdf">Full case study (PDF)</a><a href="Cello_O2C_One_Pager.pdf">One-pager (PDF)</a></p>
+  <p class="downloads"><a href="Cello_O2C_Case_Study.pdf">Full case study (PDF)</a><a href="Cello_O2C_One_Pager.pdf">One-pager (PDF)</a><a href="Cello_O2C_BRD.pdf">Business requirements document (PDF)</a></p>
 </section>
 </main>
 
@@ -246,6 +232,7 @@
   <p><a href="https://www.linkedin.com/in/rupak-ghanpathi">LinkedIn</a> · <a href="https://github.com/RUPAK30">GitHub</a></p>
 </footer>
 <div class="pop" id="pop" role="tooltip" hidden></div>
+<script src="data.js"></script>
 <script src="app.js"></script>
 </body>
 </html>

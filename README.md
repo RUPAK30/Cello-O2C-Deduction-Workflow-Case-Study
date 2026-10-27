@@ -4,9 +4,9 @@
 
 In Indian distribution, a short payment is usually three things at once: tax withheld, a valid claim, and a dispute. Most teams treat it as one. This case study designs the workflow that separates them, proves what's valid, and prevents the next gap.
 
-**[Read the full case study (PDF)](Cello_O2C_Case_Study.pdf)** · **[One-pager (PDF)](Cello_O2C_One_Pager.pdf)**
+**[Case study (PDF)](site/Cello_O2C_Case_Study.pdf)** · **[One-pager (PDF)](site/Cello_O2C_One_Pager.pdf)** · **[BRD (PDF)](site/Cello_O2C_BRD.pdf)**
 
-[![One-pager preview](preview.png)](Cello_O2C_One_Pager.pdf)
+[![One-pager preview](preview.png)](site/Cello_O2C_One_Pager.pdf)
 
 ## Why it matters
 | Metric (FY25 to FY26) | Change |
@@ -43,7 +43,7 @@ Kept from the original design: a case with reason code and owner, SLA routing, m
 
 ## Repo map
 - `site/` — the live page (static HTML, CSS, JS; deployed on Vercel with Root Directory `site`)
-- `Cello_O2C_Case_Study.pdf`, `Cello_O2C_One_Pager.pdf` — the original documents
+- `site/data.js` — single source for business rules, reason codes, user stories and UAT; the page, BRD and CSV exports all render from it`n- `site/brd.html`, `site/onepager.html` — editable sources for the BRD and one-pager; the PDFs in `site/` are generated from these and from the page's print layout
 
 ## Skills shown
 Problem framing · stakeholder analysis · process design · user stories and acceptance criteria · controls and UAT · success metrics

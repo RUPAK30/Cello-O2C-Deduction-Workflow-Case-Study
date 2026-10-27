@@ -34,33 +34,8 @@
   document.addEventListener("keydown", function (e) { if (e.key === "Escape") closePop(); });
 
   /* ---------- shared data: stories and UAT (rendered and exported) ---------- */
-  var STORIES = [
-    ["US-1", "Identify payer", "As an AR executive, I want each receipt tagged to its distributor, so I never identify payers from bank narrations.", "Given a receipt on a distributor's virtual account with no reference, when it is imported, then it is applied to that distributor's oldest open invoice and logged."],
-    ["US-2", "Expect TDS", "As an AR lead, I want TDS separated from deductions, so tax credits are not chased as losses.", "Given a distributor past the ₹50 lakh purchase threshold, when a receipt is short by the expected 0.1%, then the amount is classified as TDS and queued for the Form 26AS match."],
-    ["US-3", "Auto-accept evidenced claims", "As a Finance Controller, I want evidenced, in-budget claims under tolerance accepted automatically, so people work only exceptions.", "Given a scheme claim with its circular attached, within budget, under tolerance and within 2x the distributor's norm, when it is validated, then it is accepted and the rule that accepted it is recorded."],
-    ["US-4", "Route disputes", "As an AR lead, I want every unevidenced deduction to open a case with a reason code, owner and SLA, so nothing waits for month-end.", "Given a damage claim without proof of delivery, when it is classified, then a dispute opens, is assigned to the area sales manager, the owner is notified and the SLA timer starts."],
-    ["US-5", "Maker-checker", "As a Finance Controller, I want deductions above the threshold approved by a second person, so write-offs are controlled.", "Given a case above ₹10,000, when its maker approves it, then the action is blocked, logged and routed to a checker."],
-    ["US-6", "Settle upfront", "As a Sales manager, I want valid scheme benefits issued as credit notes before payment, so the distributor pays in full.", "Given an approved claim, when the credit note is issued, then a 30-day IRP reporting deadline is set and alerts at day 20."],
-    ["US-7", "Credit flag", "As a credit controller, I want ageing disputes to flag the next order, so exposure doesn't compound.", "Given disputed deductions above the threshold or age limit, when the distributor places an order, then the order is flagged for review, not blocked."]
-  ];
-  var UAT = [
-    ["UAT-01", "BR-1, US-1", "Unreferenced receipt on a virtual account", "Tagged to the distributor; applied to the oldest open invoice; logged"],
-    ["UAT-02", "BR-2, US-2", "Receipt short by 0.1% after the ₹50 lakh threshold", "Classified as TDS; queued for Form 26AS match"],
-    ["UAT-03", "BR-3, US-3", "Evidenced scheme claim within budget and tolerance", "Auto-accepted; accepting rule recorded"],
-    ["UAT-04", "US-4", "Close a case without a reason code (negative)", "Blocked and logged"],
-    ["UAT-05", "BR-3", "Accept a damage claim without proof of delivery (negative)", "Blocked; claim stays a dispute"],
-    ["UAT-06", "BR-5, US-5", "Maker approves own case above ₹10,000 (negative)", "Blocked, logged, routed to a checker"],
-    ["UAT-07", "BR-4", "Auto write-off of an unexplained gap (negative)", "Blocked; case stays open with its owner"],
-    ["UAT-08", "US-4", "Dispute passes its SLA", "Escalated to the AR lead; history kept"],
-    ["UAT-09", "BR-6, US-6", "Credit note issued", "30-day IRP deadline set; alert at day 20"],
-    ["UAT-10", "BR-7, US-7", "Disputes above ₹20,000 or older than 45 days, new order placed", "Order flagged for credit review, not blocked"]
-  ];
-  $("stories").innerHTML = STORIES.map(function (s) {
-    return "<li id='" + s[0] + "'><b>" + s[0] + " " + s[1] + ".</b> " + s[2] + " <i>" + s[3] + "</i></li>";
-  }).join("");
-  $("uat").innerHTML = UAT.map(function (u) {
-    return "<tr id='" + u[0] + "'><td class='id'>" + u[0] + "</td><td>" + u[1] + "</td><td>" + u[2] + "</td><td>" + u[3] + "</td></tr>";
-  }).join("");
+  var STORIES = O2C.STORIES, UAT = O2C.UAT;
+  O2C.render(document);
 
   /* ---------- spec tabs and traceability links ---------- */
   var specTabs = document.querySelectorAll("[data-spec]");

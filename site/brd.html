@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BRD: Deduction Workflow</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+  body { background: #fff; }
+  .doc { max-width: 860px; margin: 0 auto; padding: 40px 16px 64px; font-size: .95rem; }
+  .doc h1 { font-size: 2rem; margin-bottom: .2em; }
+  .doc h2 { font-size: 1.25rem; margin: 28px 0 10px; padding-top: 12px; border-top: 1px solid var(--line); }
+  .doc table { margin: 8px 0 4px; }
+  .doc ul, .doc ol { padding-left: 20px; }
+  .doc li { margin-bottom: 4px; }
+  .ctl td:first-child { width: 28%; color: var(--muted); }
+  .sign td { height: 34px; }
+  @media print {
+    @page { size: A4; margin: 16mm 14mm; }
+    .doc { padding: 0; font-size: 11.5px; max-width: none; }
+    tr, li { break-inside: avoid; }
+    h2 { break-after: avoid; }
+  }
+</style>
+</head>
+<body>
+<article class="doc">
+  <p class="eyebrow">Business requirements document · Order-to-cash</p>
+  <h1>Distributor deduction workflow</h1>
+  <p class="sub">Cello World Ltd (case study) · Prepared by Rupak Ghanpathi</p>
+
+  <table class="ctl"><tbody>
+    <tr><td>Version</td><td>2.0, draft for validation</td></tr>
+    <tr><td>Status</td><td>Self-initiated; built from public filings. Internal processes are hypotheses to confirm in discovery.</td></tr>
+    <tr><td>Live prototype</td><td><a href="https://everyrupee-o2c.vercel.app">everyrupee-o2c.vercel.app</a></td></tr>
+  </tbody></table>
+
+  <h2>1. Purpose and background</h2>
+  <p>When a distributor pays less than the invoice, the gap usually mixes tax withheld, valid commercial claims and genuine disputes. Treated as one unexplained amount, it waits in email until month-end, delays cash application and hides real overdue balances while the distributor keeps ordering on credit.</p>
+  <p>Signal: in FY26 Cello's trade receivables rose 14.0% (₹658 Cr → ₹750 Cr) against revenue growth of 8.8% (₹2,136 Cr → ₹2,324 Cr), roughly ₹34 Cr above revenue pace. This is an estimate, not a measured backlog; receivables also move with credit policy, channel mix and timing. It justifies discovery, not a diagnosis.</p>
+
+  <h2>2. Scope</h2>
+  <p><b>In scope:</b> distributor receipts, short payments and deductions; their identification, classification, evidence, ownership, approval and settlement as credit notes; a credit-review flag.</p>
+  <p><b>Out of scope:</b> credit-limit policy, collections strategy, ERP replacement and supplier-side (procure-to-pay) matching.</p>
+
+  <h2>3. Stakeholders</h2>
+  <div class="tbl-wrap"><table class="raci"><thead><tr><th>Activity</th><th>AR exec</th><th>AR lead</th><th>Controller</th><th>Sales</th><th>IT / ERP</th><th>Audit</th></tr></thead><tbody>
+    <tr><td>Match payments to invoices</td><td>R</td><td>A</td><td>I</td><td></td><td>C</td><td></td></tr>
+    <tr><td>Investigate a difference</td><td>R</td><td>A</td><td></td><td>C</td><td></td><td></td></tr>
+    <tr><td>Confirm a scheme or damage claim</td><td>C</td><td></td><td></td><td>R</td><td></td><td></td></tr>
+    <tr><td>Approve a deduction or write-off</td><td></td><td>R</td><td>A</td><td>C</td><td></td><td>I</td></tr>
+    <tr><td>Post the adjustment in the ERP</td><td>R</td><td>A</td><td></td><td></td><td>C</td><td></td></tr>
+    <tr><td>Report exception ageing</td><td>R</td><td>A</td><td>I</td><td>I</td><td></td><td>I</td></tr>
+  </tbody></table></div>
+  <p class="note">R = does the work, A = accountable, C = consulted, I = informed. The distributor is the external party in every exception.</p>
+
+  <h2>4. Current state (hypothesised) and pain points</h2>
+  <ol>
+    <li><b>P1 No remittance detail:</b> payments can't be tied to specific invoices.</li>
+    <li><b>P2 Unstructured reasons:</b> the cause of a difference lives in emails, not in a reportable field.</li>
+    <li><b>P3 Unclear ownership:</b> Finance and Sales each assume the other is chasing.</li>
+    <li><b>P4 Weak approval trail:</b> deductions are accepted over email; audit evidence is scattered.</li>
+    <li><b>P5 Late visibility:</b> ageing exceptions surface only at month-end.</li>
+  </ol>
+
+  <h2>5. Assumptions and hypotheses to validate</h2>
+  <div class="tbl-wrap"><table><thead><tr><th>Hypothesis</th><th>Discovery question</th><th>How to validate</th></tr></thead><tbody>
+    <tr><td>H1 Remittance detail is missing</td><td>"If a distributor owes ₹10 lakh and pays ₹9.8 lakh, what happens to the ₹20,000 until it's closed?"</td><td>Sample one month of bank receipts</td></tr>
+    <tr><td>H2 Ownership is unclear</td><td>"How is responsibility for resolving a difference assigned?"</td><td>Interview AR and Sales managers</td></tr>
+    <tr><td>H3 Work happens outside the ERP</td><td>"Which systems support payment matching and exception resolution today?"</td><td>Walk through one real exception</td></tr>
+    <tr><td>H4 The effort is material</td><td>"How much effort does your team spend resolving these exceptions?"</td><td>Review the month-end ageing process</td></tr>
+    <tr><td>Control question</td><td>"Where does your finance team spend the most manual effort on reconciliation?"</td><td>Confirms this is the right problem</td></tr>
+  </tbody></table></div>
+  <p><b>Stop rule:</b> if differences are rare or resolved within days, stop and redirect to the area the control question surfaces.</p>
+
+  <h2>6. Business rules</h2>
+  <div class="tbl-wrap"><table class="rules"><thead><tr><th>ID</th><th>Layer</th><th>Rule</th></tr></thead><tbody id="rules-body"></tbody></table></div>
+  <h3 class="tbl-h">Reason code → evidence → validity (BR-3)</h3>
+  <div class="tbl-wrap"><table class="rules"><thead><tr><th>Reason code</th><th>Required evidence</th><th>Valid when</th></tr></thead><tbody id="codes-body"></tbody></table></div>
+  <p class="note">Tax rules summarised for illustration; they change. Check current rules.</p>
+
+  <h2>7. Functional requirements (user stories)</h2>
+  <ol class="stories" id="stories"></ol>
+
+  <h2>8. Data requirements</h2>
+  <p>Distributor ID, virtual account number, invoice number and amount, receipt reference and amount received, gap, expected TDS and Form 26AS match status, reason code, evidence reference, owner, SLA due date, status, maker, checker, credit note number, IRP reporting date, and a timestamp for every status change.</p>
+
+  <h2>9. Controls and non-functional requirements</h2>
+  <ul>
+    <li>Maker-checker above the Finance-set threshold; self-approval blocked and logged.</li>
+    <li>No automatic write-off of unexplained gaps; tolerances set and changed only by Finance, with the change logged.</li>
+    <li>Full audit trail per case; reassignment keeps history.</li>
+    <li>Role-based access; daily reconciliation of case totals to the ERP.</li>
+    <li>The ERP remains the system of record; the workflow layer (proposed: a platform such as ServiceNow) posts only approved outcomes. Integration method to confirm with IT.</li>
+  </ul>
+
+  <h2>10. User acceptance tests</h2>
+  <div class="tbl-wrap"><table><thead><tr><th>ID</th><th>Traces to</th><th>Scenario</th><th>Expected result</th></tr></thead><tbody id="uat"></tbody></table></div>
+
+  <h2>11. Success metrics and pilot</h2>
+  <p>Days deductions outstanding · share of gaps auto-classified · share of claims auto-accepted with evidence · invalid deductions recovered · credit notes reported within 30 days · zero wrong write-offs.</p>
+  <p><b>Pilot:</b> one division, one month of historical receipts run offline (subject to security approval), then four to six weeks live. Targets are set from the measured baseline. <b>Go / no-go:</b> continue only if accuracy holds, resolution time falls against the baseline, and AR and Sales use the queue.</p>
+
+  <h2>12. Risks and dependencies</h2>
+  <ul>
+    <li>Remittance and evidence data quality; distributor adoption of virtual accounts and claim evidence.</li>
+    <li>ERP integration effort and platform licensing.</li>
+    <li>Sales agreeing scheme budgets upfront and owning dispute cases.</li>
+    <li>Tax rules changing; thresholds and deadlines must be configurable, not hard-coded.</li>
+  </ul>
+
+  <h2>13. Sign-off</h2>
+  <div class="tbl-wrap"><table class="sign"><thead><tr><th>Role</th><th>Name</th><th>Decision</th><th>Date</th></tr></thead><tbody>
+    <tr><td>Finance Controller (sponsor)</td><td></td><td></td><td></td></tr>
+    <tr><td>AR lead</td><td></td><td></td><td></td></tr>
+    <tr><td>Head of Sales</td><td></td><td></td><td></td></tr>
+    <tr><td>IT / ERP owner</td><td></td><td></td><td></td></tr>
+  </tbody></table></div>
+  <p class="note">Self-initiated from Cello World Ltd's public filings (FY26 consolidated, FY25 restated) and public industry research. Not client work. Tools named are proposals, not claims about Cello's systems.</p>
+</article>
+<script src="data.js"></script>
+<script>O2C.render(document);</script>
+</body>
+</html>
