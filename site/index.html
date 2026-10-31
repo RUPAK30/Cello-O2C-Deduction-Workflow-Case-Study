@@ -24,6 +24,7 @@
   <p class="eyebrow">Business analysis case study · Rupak Ghanpathi</p>
   <h1>Every rupee needs an owner.</h1>
   <p class="lede">When a distributor pays less than the invoice, finance teams can spend weeks over email working out why. I designed the workflow that explains every rupee on the day the payment arrives.</p>
+  <p style="margin:18px 0 0;display:flex;gap:12px;flex-wrap:wrap;align-items:center"><a class="btn" href="desk.html" style="background:var(--accent);border-color:var(--accent);color:#fff;text-decoration:none;padding:12px 18px;border-radius:10px;font-weight:600">Open the working desk →</a><span style="font-size:.88rem;color:var(--muted)">Load a bank statement and work the cases yourself. Synthetic data.</span></p>
 </header>
 
 <main>
@@ -128,7 +129,7 @@
 
 <section class="wrap" id="why" aria-labelledby="why-h">
   <h2 id="why-h">Why this problem</h2>
-  <p>The case is built on Cello World Ltd, a consumer products maker selling through 565 dealers and distributors on 30–120 day credit. In FY26 its receivables grew faster than its revenue:</p>
+  <p>The case is built on Cello World Ltd, a consumer products maker selling through more than 4,000 distributors to over 1,50,000 retailers (FY25 investor presentation), mostly on credit. In FY26 its receivables grew faster than its revenue:</p>
   <div class="signal">
     <div><b class="mono">+14.0%</b><span>Receivables, ₹658 Cr → ₹750 Cr</span></div>
     <div><b class="mono">+8.8%</b><span>Revenue, ₹2,136 Cr → ₹2,324 Cr</span></div>
@@ -138,7 +139,7 @@
 </section>
 
 <section class="wrap" id="spec" aria-labelledby="spec-h">
-  <h2 id="spec-h">The specification</h2>
+  <details class="specd"><summary style="cursor:pointer"><h2 id="spec-h" style="display:inline">The specification</h2> <span style="color:var(--muted);font-size:.9rem">· rules, reason codes, traceability, stories, UAT, RACI (tap to open)</span></summary>
   <p class="sub">For the business reader: the rules, requirements and tests behind the prototype. Every requirement traces to a pain point or research finding and forward to a test.</p>
   <div class="tabs" role="tablist" aria-label="Specification">
     <button role="tab" aria-selected="true" data-spec="rules">Business rules</button>
@@ -188,6 +189,7 @@
       <p class="note">R = does the work, A = accountable, C = consulted, I = informed. The distributor is the external party in every exception.</p>
     </div>
   </div>
+</details>
 </section>
 
 <section class="wrap" id="close" aria-label="Trade-offs, metrics and validation">
@@ -205,14 +207,9 @@
     </div>
     <div>
       <h2>How I'd measure it</h2>
-      <ul class="plain">
-        <li>Days deductions outstanding</li>
-        <li>Share of gaps auto-classified</li>
-        <li>Share of claims auto-accepted with evidence</li>
-        <li>Invalid deductions recovered</li>
-        <li>Credit notes reported within 30 days</li>
-        <li>Zero wrong write-offs</li>
-      </ul>
+      <p><b>One number decides it:</b> the share of short-paid rupees with a class and an owner on the day the payment arrives. Target: all of them.</p>
+      <p>It should move one business outcome: receivables growing faster than revenue (₹658 Cr → ₹750 Cr against +8.8% revenue).</p>
+      <p style="font-size:.88rem;color:var(--muted)">Guardrails, not goals: zero wrong write-offs; credit notes reported within 30 days.</p>
     </div>
     <div>
       <h2>How I'd validate it</h2>
@@ -224,6 +221,24 @@
     </div>
   </div>
   <p class="downloads"><a href="Cello_O2C_Case_Study.pdf">Full case study (PDF)</a><a href="Cello_O2C_One_Pager.pdf">One-pager (PDF)</a><a href="Cello_O2C_BRD.pdf">Business requirements document (PDF)</a></p>
+</section>
+
+<section class="wrap" id="fail" aria-labelledby="fail-h">
+  <h2 id="fail-h">Where this would fail</h2>
+  <div class="close-grid">
+    <div><h3>Distributors keep paying the old account</h3><p>Virtual accounts only identify the payer if they are used. <b>Design answer:</b> the old account stays open for a quarter with receipts matched by the oldest-invoice rule, and Sales gets a weekly list of distributors still using it.</p></div>
+    <div><h3>Scheme rules change mid-quarter</h3><p>Auto-acceptance is only as good as the budget it checks. <b>Design answer:</b> no scheme is valid until Sales enters it with dates and a budget; claims against an unentered scheme go to a person, never through.</p></div>
+    <div><h3>Sales overrides the credit flag</h3><p>A flag nobody respects is noise. <b>Design answer:</b> the flag never blocks an order, but every override is logged with a name, and overrides per area appear in the monthly review.</p></div>
+  </div>
+</section>
+
+<section class="wrap" id="evolved" aria-labelledby="evo-h">
+  <h2 id="evo-h">How this evolved</h2>
+  <ol class="plain">
+    <li><b>v1 · The assignment.</b> A deduction workflow: a case with a reason code and owner, SLA routing, maker-checker, ERP as system of record.</li>
+    <li><b>v2 · The research.</b> TDS treated as a loss, 90–95% of deduction value usually valid, missed credit-note windows: answered by four layers (Identify, Split, Validate, Prevent).</li>
+    <li><b>v3 · Working, not described.</b> The page had become a long read. It now leads with a desk you can operate: load a statement, work cases, hit the controls. The full specification sits behind one tap.</li>
+  </ol>
 </section>
 </main>
 

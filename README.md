@@ -15,6 +15,9 @@ In Indian distribution, a short payment is usually three things at once: tax wit
 | Revenue, ₹2,136 Cr to ₹2,324 Cr | +8.8% |
 | Receivables above revenue-pace growth | **approx. ₹34 Cr** (an estimate, not a measured backlog) |
 
+## The working desk (new)
+**[everyrupee-o2c.vercel.app/desk.html](https://everyrupee-o2c.vercel.app/desk.html)**: a working prototype, not an animation. Load the sample bank statement or upload your own CSV, and the seven business rules run on every receipt: payer identified by virtual account, 194Q TDS split out, claims auto-accepted only with evidence and within budget, everything else opened as a case with an owner and SLA. Then work the cases as an AR executive or Finance controller: attach evidence, approve (maker-checker blocks self-approval above the threshold), recover invalid claims, issue credit notes, advance days to see SLA escalation and IRP alerts, place orders to trigger the credit flag, and download cases and the audit trail as CSV. Synthetic data; runs entirely in the browser.
+
 ## What the live page shows
 Written for two readers: recruiters (plain language, skills named, tap-to-explain finance terms) and business hiring managers (the full specification).
 - **The race:** the same ₹20,000 short payment plays out automatically in two lanes, today's email process (31 days, still unexplained) against the proposed workflow (every rupee classified and owned by 09:03 on day 0). Pause, step and replay; reduced-motion users see the end state.

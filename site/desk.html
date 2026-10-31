@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Deductions Desk · Every Rupee Needs an Owner</title>
+<meta name="description" content="A working prototype: load a bank statement and watch every short-paid rupee get classified, owned and settled under seven business rules. Synthetic data, runs in your browser.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+.dk{max-width:1080px;margin:0 auto;padding:0 16px}
+.dk-top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding:18px 0 6px}
+.dk-top a{font-size:.9rem;text-decoration:none}
+.dk h1{font-size:clamp(1.8rem,5vw,2.6rem);margin:6px 0 6px}
+.note{font-size:.85rem;color:var(--muted);background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin:10px 0 18px}
+.bar-top{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px solid var(--line);padding:10px 0;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.bar-top label{font-size:.82rem;color:var(--muted);display:flex;gap:6px;align-items:center}
+.bar-top select,.bar-top input{font:inherit;font-size:.88rem;padding:6px 8px;border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--ink)}
+.bar-top input{width:96px}
+.day{font-family:var(--mono);font-weight:500;background:var(--ink);color:#fff;border-radius:8px;padding:6px 10px;font-size:.85rem}
+.btn{font:inherit;font-size:.9rem;padding:9px 14px;border-radius:9px;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer}
+.btn.small{font-size:.82rem;padding:6px 10px}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn:hover{border-color:var(--accent)}
+.grid{display:grid;gap:16px;grid-template-columns:1fr}
+@media(min-width:900px){.grid.two{grid-template-columns:1.1fr .9fr}}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px}
+.card h2{font-size:1.15rem;margin-bottom:4px}
+.card .sub{font-size:.88rem;color:var(--muted);margin-bottom:12px}
+.step{font-family:var(--sans);font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);font-weight:600}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+form.add{display:grid;gap:8px;grid-template-columns:minmax(0,1fr) minmax(0,1fr);margin-top:12px}.grid>*{min-width:0}form.add select{width:100%}
+form.add label{font-size:.78rem;color:var(--muted);display:flex;flex-direction:column;gap:3px}
+form.add input,form.add select{font:inherit;font-size:.9rem;padding:7px 8px;border:1px solid var(--line);border-radius:8px;background:#fff;min-width:0}
+form.add .full{grid-column:1/-1}
+form.add .chk{flex-direction:row;align-items:center;gap:8px;color:var(--ink)}
+details summary{cursor:pointer;font-size:.9rem;color:var(--accent);margin-top:12px}
+.kpis{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:14px 0 10px}
+@media(min-width:700px){.kpis{grid-template-columns:repeat(4,1fr)}}
+.kpi{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 12px}
+.kpi span{display:block;font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.kpi b{font-family:var(--mono);font-size:1.15rem;font-weight:500}
+.kpi.lead{border-color:var(--accent);background:var(--accent-soft)}
+.stack{display:flex;height:12px;border-radius:6px;overflow:hidden;background:var(--line)}
+.stack span{display:block;height:100%}
+.s-tds{background:var(--tds)}.s-acc{background:var(--rev)}.s-dis{background:var(--dispute)}
+.legend{list-style:none;padding:0;margin:8px 0 0;display:flex;gap:14px;flex-wrap:wrap;font-size:.82rem;color:var(--muted)}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px;vertical-align:-1px}
+table{width:100%;border-collapse:collapse;font-size:.86rem}
+th,td{text-align:left;padding:7px 6px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.r{text-align:right}.tiny{font-size:.72rem;color:var(--muted)}
+.tbl{overflow-x:auto}
+.case{border:1px solid var(--line);border-radius:12px;padding:12px;margin-bottom:10px;background:#fff}
+.case header{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.case .amt{margin-left:auto}
+.case p{margin:6px 0 0;font-size:.88rem}
+.case .why{color:var(--dispute);font-size:.82rem}
+.case.closed{opacity:.72;background:var(--surface)}
+.case.late{border-color:var(--dispute)}
+.acts{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;align-items:center}
+.by{font-size:.78rem;color:var(--muted)}
+.type{font-size:.75rem;padding:2px 8px;border-radius:999px;background:var(--accent-soft);color:var(--accent)}
+.t-unexplained,.t-damage{background:var(--dispute-soft);color:var(--dispute)}
+.t-scheme{background:var(--rev-soft);color:#7a5f0c}
+.pill{font-size:.72rem;padding:2px 8px;border-radius:999px;font-weight:600}
+.pill.ok,.ok{color:#2c6b45}.pill.ok{background:#e3f1e8}
+.pill.bad{background:var(--dispute-soft);color:var(--dispute)}
+.empty{color:var(--muted);font-size:.9rem}
+#log{list-style:none;padding:0;margin:0;max-height:360px;overflow:auto;font-size:.82rem}
+#log li{padding:6px 0;border-bottom:1px solid var(--line)}
+#log .rule{font-family:var(--mono);font-size:.72rem;background:var(--accent-soft);color:var(--accent);border-radius:4px;padding:1px 5px;margin-right:4px}
+.flash{position:fixed;left:50%;bottom:18px;transform:translate(-50%,140%);background:var(--ink);color:#fff;padding:10px 16px;border-radius:10px;font-size:.9rem;max-width:min(92vw,560px);transition:transform .25s;z-index:20}
+.flash.show{transform:translate(-50%,0)}.flash.warn{background:var(--dispute)}
+@media(max-width:700px){.bar-top{position:static}}
+.foot{font-size:.8rem;color:var(--muted);padding:24px 0 40px}
+</style>
+</head>
+<body>
+<div class="dk">
+  <div class="dk-top"><a href="./">← The case study</a><a href="brd.html">The full specification →</a></div>
+  <p class="eyebrow">Working prototype · Rupak Ghanpathi</p>
+  <h1>The deductions desk</h1>
+  <p class="lede">Load this morning's bank statement. Every short-paid rupee gets a class, an owner and a deadline, under the seven business rules. Then work the cases.</p>
+  <p class="note"><b>Synthetic data.</b> Five made-up distributors and seven invoices. Nothing is sent anywhere: it runs in your browser and saves on this device. Not connected to, or affiliated with, Cello World.</p>
+</div>
+
+<div class="bar-top"><div class="dk row" style="width:100%">
+  <span class="day" id="day">Day 0</span>
+  <label>Acting as <select id="who"><option value="maker">Asha (AR executive)</option><option value="checker">Vikram (Finance controller)</option></select></label>
+  <label>Auto-accept up to ₹<input id="set-tolerance" type="number" min="0" step="1000"></label>
+  <label>2nd approver above ₹<input id="set-approval" type="number" min="0" step="1000"></label>
+  <button class="btn small" id="next-day">Next day →</button>
+  <button class="btn small" id="reset">Reset</button>
+</div></div>
+
+<main class="dk">
+  <section style="padding:18px 0 0">
+    <div class="grid two">
+      <div class="card">
+        <p class="step">1 · Receive</p>
+        <h2>Today's bank statement</h2>
+        <p class="sub">Each distributor pays into its own virtual account, so the payer is known (BR-1). Remittance claims come with the payment.</p>
+        <div class="row">
+          <button class="btn primary" id="load-sample">Load the sample statement</button>
+          <label class="btn" style="display:inline-flex;gap:6px">Upload a CSV<input id="file" type="file" accept=".csv,text/csv" hidden></label>
+          <button class="btn small" id="dl-sample" type="button">Sample CSV format</button>
+        </div>
+        <details><summary>Or enter one receipt by hand</summary>
+          <form class="add" id="add">
+            <label class="full">Distributor (virtual account)<select id="f-va"></select></label>
+            <label>Amount received (₹)<input id="f-amt" type="number" min="1" placeholder="e.g. 245000"></label>
+            <label>Invoice reference<select id="f-ref"></select></label>
+            <label>Distributor's claim<select id="f-type"><option value="">None</option><option>Scheme claim</option><option>Damage / shortage</option><option>Rate difference</option><option>Returns</option></select></label>
+            <label>Claim amount (₹)<input id="f-camt" type="number" min="0" placeholder="0"></label>
+            <label class="full chk"><input id="f-ev" type="checkbox"> Evidence attached (circular, proof of delivery, price list or GRN)</label>
+            <button class="btn primary full" type="submit">Process this receipt</button>
+          </form>
+        </details>
+      </div>
+      <div class="card">
+        <p class="step">Open invoices</p>
+        <div class="tbl"><table><thead><tr><th>Invoice</th><th>Distributor</th><th class="r">Total</th><th class="r">Open</th><th class="r">Age</th></tr></thead><tbody id="inv-body"></tbody></table></div>
+      </div>
+    </div>
+  </section>
+
+  <section style="padding:18px 0 0">
+    <p class="step">2 · Classify</p>
+    <div class="kpis">
+      <div class="kpi"><span>Short-paid today</span><b id="k-gap">—</b></div>
+      <div class="kpi lead"><span>Resolved by rule</span><b id="k-auto">—</b></div>
+      <div class="kpi"><span>Open cases</span><b id="k-open">0</b></div>
+      <div class="kpi"><span>Without an owner</span><b id="k-unowned">—</b></div>
+    </div>
+    <div class="stack" id="bar"></div>
+    <ul class="legend" id="legend"></ul>
+  </section>
+
+  <section style="padding:18px 0 0" id="cases">
+    <div class="grid two">
+      <div>
+        <p class="step">3 · Work the cases</p>
+        <p class="sub" style="font-size:.88rem;color:var(--muted)">Attach evidence to re-validate, approve, or mark invalid. Try approving a big case as Asha, then switch to Vikram.</p>
+        <div id="case-list"></div>
+        <div class="row"><button class="btn small" id="dl-cases">Download cases (CSV)</button></div>
+      </div>
+      <div>
+        <div class="card" style="margin-bottom:16px">
+          <p class="step">4 · Prevent</p>
+          <h2>Distributors and credit</h2>
+          <p class="sub">Open disputes above ₹20,000 or older than 45 days flag the next order for review (BR-7).</p>
+          <div class="tbl"><table><thead><tr><th>Distributor</th><th class="r">FY purchases</th><th class="r">Scheme left</th><th class="r">Disputed</th><th></th></tr></thead><tbody id="dist-body"></tbody></table></div>
+        </div>
+        <div class="card" style="margin-bottom:16px">
+          <h2>Credit notes</h2>
+          <p class="sub">Report to the IRP within 30 days (BR-6).</p>
+          <table><thead><tr><th>Note</th><th>Distributor</th><th class="r">Amount</th><th class="r">IRP due</th></tr></thead><tbody id="cn-body"></tbody></table>
+        </div>
+        <div class="card">
+          <h2>Audit trail</h2>
+          <p class="sub">Every action, with the rule that drove it.</p>
+          <ul id="log"></ul>
+          <div class="row" style="margin-top:10px"><button class="btn small" id="dl-log">Download audit trail (CSV)</button></div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <p class="foot">Rules simplified for illustration: TDS u/s 194Q at 0.1% of taxable value once a distributor's purchases pass ₹50 lakh; thresholds are Finance-set and illustrative. Tax rules change; check current law. Built by Rupak Ghanpathi as a self-initiated case study.</p>
+</main>
+<div class="flash" id="flash" role="status" aria-live="polite"></div>
+<script src="desk.js"></script>
+</body>
+</html>
