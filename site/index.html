@@ -21,16 +21,39 @@
 </head>
 <body>
 <header class="wrap hero">
-  <p class="eyebrow">Business analysis case study · Rupak Ghanpathi</p>
+  <p class="eyebrow">Business analysis case study · Rupak Ghanpathi · current process, stakeholders, requirements, rules, UAT</p>
   <h1>Every rupee needs an owner.</h1>
   <p class="lede">When a distributor pays less than the invoice, finance teams can spend weeks over email working out why. I designed the workflow that explains every rupee on the day the payment arrives.</p>
-  <p style="margin:18px 0 0;display:flex;gap:12px;flex-wrap:wrap;align-items:center"><a class="btn" href="desk.html" style="background:var(--accent);border-color:var(--accent);color:#fff;text-decoration:none;padding:12px 18px;border-radius:10px;font-weight:600">Open the working desk →</a><span style="font-size:.88rem;color:var(--muted)">Load a bank statement and work the cases yourself. Synthetic data.</span></p>
+  <p style="margin:18px 0 0;display:flex;gap:12px;flex-wrap:wrap;align-items:center"><a class="btn" href="desk.html" style="background:var(--accent);border-color:var(--accent);color:#fff;text-decoration:none;padding:12px 18px;border-radius:10px;font-weight:600">See the requirements running →</a><span style="font-size:.88rem;color:var(--muted)">The BRD's rules as a working desk, with its 10 UAT cases you can run.</span></p>
 </header>
 
 <main>
+<section class="wrap glance" aria-labelledby="glance-h">
+  <h2 id="glance-h" class="kicker">At a glance</h2>
+  <div class="glance-grid">
+    <div><h3>The problem</h3><p>A short payment is usually three things at once: <button class="term" data-term="tds">tax withheld</button>, a valid claim, and a dispute. Most teams treat it as one, so the money sits unexplained while the distributor keeps ordering on credit.</p></div>
+    <div><h3>What I designed</h3><p>A workflow that identifies who paid, separates the tax, accepts claims backed by evidence, and gives every remaining rupee a reason, an owner and a deadline. Valid claims are then settled upfront as <button class="term" data-term="cn">credit notes</button>, so the next payment arrives in full.</p></div>
+    <div><h3>My role</h3><p>Self-initiated, from public filings. I framed the problem, mapped the current process, wrote the business rules, user stories and test cases, and planned how to validate it with the people who would use it.</p></div>
+  </div>
+  <ul class="chips" aria-label="Skills shown">
+    <li>Requirements elicitation</li><li>Process mapping (as-is / to-be)</li><li>Business rules</li><li>User stories and acceptance criteria</li><li>Traceability</li><li>UAT and controls</li><li>Stakeholder mapping (RACI)</li><li>Success metrics</li><li>Order-to-cash and Indian tax</li>
+  </ul>
+</section>
+
+<section class="wrap" id="why" aria-labelledby="why-h">
+  <h2 id="why-h">Why this problem</h2>
+  <p>The case is built on Cello World Ltd, a consumer products maker selling through more than 4,000 distributors to over 1,50,000 retailers (FY25 investor presentation), mostly on credit. In FY26 its receivables grew faster than its revenue:</p>
+  <div class="signal">
+    <div><b class="mono">+14.0%</b><span>Receivables, ₹658 Cr → ₹750 Cr</span></div>
+    <div><b class="mono">+8.8%</b><span>Revenue, ₹2,136 Cr → ₹2,324 Cr</span></div>
+    <div><b class="mono">≈ ₹34 Cr</b><span>above revenue pace (estimate)</span></div>
+  </div>
+  <p class="note">₹658 Cr grown at 8.8% ≈ ₹716 Cr, against ₹750 Cr actual. An estimate, not a measured backlog; receivables also rise through credit expansion, channel mix or timing. It justifies discovery, not a diagnosis. In scope: receipts, deductions, their evidence, ownership and settlement. Out of scope: credit-limit policy, collections strategy and ERP replacement.</p>
+</section>
+
 <section class="wrap race-wrap" id="race" aria-labelledby="race-h">
   <div class="race-head">
-    <h2 id="race-h" class="kicker">The same ₹20,000 short payment, two workflows</h2>
+    <h2 id="race-h" class="kicker">Current process vs future process: the same ₹20,000 short payment</h2>
     <div class="race-ctl">
       <button class="btn small" id="r-play" aria-label="Pause">Pause</button>
       <button class="btn small" id="r-step">Step</button>
@@ -68,17 +91,7 @@
   </div>
 </section>
 
-<section class="wrap glance" aria-labelledby="glance-h">
-  <h2 id="glance-h" class="kicker">At a glance</h2>
-  <div class="glance-grid">
-    <div><h3>The problem</h3><p>A short payment is usually three things at once: <button class="term" data-term="tds">tax withheld</button>, a valid claim, and a dispute. Most teams treat it as one, so the money sits unexplained while the distributor keeps ordering on credit.</p></div>
-    <div><h3>What I designed</h3><p>A workflow that identifies who paid, separates the tax, accepts claims backed by evidence, and gives every remaining rupee a reason, an owner and a deadline. Valid claims are then settled upfront as <button class="term" data-term="cn">credit notes</button>, so the next payment arrives in full.</p></div>
-    <div><h3>My role</h3><p>Self-initiated, from public filings. I framed the problem, mapped the current process, wrote the business rules, user stories and test cases, and planned how to validate it with the people who would use it.</p></div>
-  </div>
-  <ul class="chips" aria-label="Skills shown">
-    <li>Requirements elicitation</li><li>Process mapping (as-is / to-be)</li><li>Business rules</li><li>User stories and acceptance criteria</li><li>Traceability</li><li>UAT and controls</li><li>Stakeholder mapping (RACI)</li><li>Success metrics</li><li>Order-to-cash and Indian tax</li>
-  </ul>
-</section>
+
 
 <section class="wrap" id="try" aria-labelledby="try-h">
   <h2 id="try-h">Try the rules yourself</h2>
@@ -127,16 +140,7 @@
   </div>
 </section>
 
-<section class="wrap" id="why" aria-labelledby="why-h">
-  <h2 id="why-h">Why this problem</h2>
-  <p>The case is built on Cello World Ltd, a consumer products maker selling through more than 4,000 distributors to over 1,50,000 retailers (FY25 investor presentation), mostly on credit. In FY26 its receivables grew faster than its revenue:</p>
-  <div class="signal">
-    <div><b class="mono">+14.0%</b><span>Receivables, ₹658 Cr → ₹750 Cr</span></div>
-    <div><b class="mono">+8.8%</b><span>Revenue, ₹2,136 Cr → ₹2,324 Cr</span></div>
-    <div><b class="mono">≈ ₹34 Cr</b><span>above revenue pace (estimate)</span></div>
-  </div>
-  <p class="note">₹658 Cr grown at 8.8% ≈ ₹716 Cr, against ₹750 Cr actual. An estimate, not a measured backlog; receivables also rise through credit expansion, channel mix or timing. It justifies discovery, not a diagnosis. In scope: receipts, deductions, their evidence, ownership and settlement. Out of scope: credit-limit policy, collections strategy and ERP replacement.</p>
-</section>
+
 
 <section class="wrap" id="spec" aria-labelledby="spec-h">
   <details class="specd"><summary style="cursor:pointer"><h2 id="spec-h" style="display:inline">The specification</h2> <span style="color:var(--muted);font-size:.9rem">· rules, reason codes, traceability, stories, UAT, RACI (tap to open)</span></summary>
@@ -237,7 +241,7 @@
   <ol class="plain">
     <li><b>v1 · The assignment.</b> A deduction workflow: a case with a reason code and owner, SLA routing, maker-checker, ERP as system of record.</li>
     <li><b>v2 · The research.</b> TDS treated as a loss, 90–95% of deduction value usually valid, missed credit-note windows: answered by four layers (Identify, Split, Validate, Prevent).</li>
-    <li><b>v3 · Working, not described.</b> The page had become a long read. It now leads with a desk you can operate: load a statement, work cases, hit the controls. The full specification sits behind one tap.</li>
+    <li><b>v3 · An executable specification.</b> The page had become a long read. The rules now run as a desk: the ten UAT cases execute against it and report pass or fail, and every action is traced to its rule, story and test. The full specification sits behind one tap.</li>
   </ol>
 </section>
 </main>

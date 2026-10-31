@@ -5,7 +5,8 @@
   var $ = function (id) { return document.getElementById(id); };
   var inr = function (n) { n = Math.round(n); return (n < 0 ? "−₹" : "₹") + Math.abs(n).toLocaleString("en-IN"); };
   var esc = function (s) { return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); };
-  var KEY = "o2c.desk.v1";
+  var KEY = "o2c.desk.v1", QUIET = false;
+  var TRACE = { "BR-1": "US-1 · UAT-01", "BR-2": "US-2 · UAT-02", "BR-3": "US-3 · UAT-03, 05", "BR-4": "US-4 · UAT-04, 07", "BR-5": "US-5 · UAT-06", "BR-6": "US-6 · UAT-09", "BR-7": "US-7 · UAT-10", "SLA": "US-4 · UAT-08" };
 
   var OWNERS = { "Scheme claim": "Sales ops", "Damage / shortage": "Area sales manager", "Rate difference": "Pricing", "Returns": "Warehouse", "Unexplained": "AR lead" };
   var USERS = { maker: "Asha (AR executive)", checker: "Vikram (Finance controller)" };
@@ -47,7 +48,7 @@
 
   var S;
   function load() { try { S = JSON.parse(localStorage.getItem(KEY)); } catch (e) { S = null; } if (!S || !S.dists) S = seed(); }
-  function save() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} }
+  function save() { if (QUIET) return; try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} }
   function log(rule, text) { S.log.unshift({ day: S.day, who: USERS[S.user], rule: rule, text: text }); }
   function dist(va) { return S.dists.filter(function (d) { return d.va === va; })[0]; }
   function invByNo(no) { return S.invoices.filter(function (i) { return i.no === no; })[0]; }
@@ -100,6 +101,7 @@
   function autoCheck(c, first) {
     var d = dist(c.va), why = [];
     if (c.type === "Unexplained") return;
+    c.checks = { evidence: !!c.evidence, limit: c.amount <= S.settings.tolerance, budget: c.type !== "Scheme claim" || c.amount <= d.schemeLeft, norm: c.type !== "Damage / shortage" || c.amount <= 2 * d.dmgNorm };
     if (!c.evidence) why.push("no evidence");
     if (c.amount > S.settings.tolerance) why.push("above the " + inr(S.settings.tolerance) + " tolerance");
     if (c.type === "Scheme claim" && c.amount > d.schemeLeft) why.push("over the distributor's remaining scheme budget (" + inr(d.schemeLeft) + ")");
@@ -147,7 +149,7 @@
       else { c.status = "Accepted"; c.closedBy = USERS[S.user]; if (c.type === "Scheme claim") d.schemeLeft = Math.max(0, d.schemeLeft - c.amount); issueCN(c); log("BR-5", c.id + " approved by " + USERS[S.user] + (c.maker ? " (recommended by " + USERS[c.maker] + ")" : "") + "."); }
     }
     else if (what === "recover") { S.seq.dn++; c.status = "Recovered"; c.closedBy = USERS[S.user]; log("BR-4", c.id + ": " + inr(c.amount) + " found invalid. Debit note DN-" + (500 + S.seq.dn) + " raised; " + c.dist + " to pay."); }
-    creditCheck(d); save(); render();
+    creditCheck(d); save(); if (!QUIET) render();
   }
 
   function nextDay() {
@@ -156,13 +158,13 @@
     S.notes.forEach(function (n) { if (!n.reported && S.day === n.issued + 20) log("BR-6", "Alert: " + n.id + " must be reported to the IRP by day " + n.irpDue + "."); });
     S.invoices.forEach(function (i) { i.age++; });
     S.dists.forEach(creditCheck);
-    save(); render();
+    save(); if (!QUIET) render();
   }
   function order(va) {
     var d = dist(va), x = exposure(va);
     if (x.flagged) { log("BR-7", "New order from " + d.name + " flagged for credit review (" + inr(x.amt) + " disputed, oldest " + x.oldest + " days). Not blocked."); flash("Order placed and flagged for credit review: not blocked, a controller decides.", true); }
     else { log("BR-7", "New order from " + d.name + " passed the credit check."); flash("Order placed. Credit check passed.", false); }
-    save(); render();
+    save(); if (!QUIET) render();
   }
 
   /* ---------- input ---------- */
@@ -180,16 +182,19 @@
     var list;
     try { list = parseCSV(text); } catch (e) { flash(e.message, true); return; }
     if (!list.length) { flash("No receipts found in that file.", true); return; }
+    var before = S.log.length, cBefore = S.cases.length;
     log("Import", label + ": " + list.length + " receipts.");
     list.forEach(processReceipt);
+    var fired = {}; S.log.slice(0, S.log.length - before).forEach(function (l) { if (/^BR-/.test(l.rule)) fired[l.rule] = (fired[l.rule] || 0) + 1; });
+    S.lastRun = list.length + " receipts · rules fired: " + Object.keys(fired).sort().map(function (k) { return k + "×" + fired[k]; }).join(", ") + " · " + (S.cases.length - cBefore) + " claims classified (" + S.cases.slice(cBefore).filter(function (c) { return c.closedBy === "Rule BR-3"; }).length + " auto-accepted, " + S.cases.slice(cBefore).filter(function (c) { return c.status === "Open"; }).length + " to an owner) · 0 unowned rupees";
     save(); render();
-    flash(list.length + " receipts processed. Every short-paid rupee now has a class and an owner.", false);
+    flash(S.lastRun, false);
     $("cases").scrollIntoView({ behavior: "smooth", block: "start" });
   }
 
   /* ---------- output ---------- */
   var flashT;
-  function flash(msg, warn) { var f = $("flash"); f.textContent = msg; f.className = "flash show" + (warn ? " warn" : ""); clearTimeout(flashT); flashT = setTimeout(function () { f.className = "flash"; }, 4200); }
+  function flash(msg, warn) { if (QUIET) return; var f = $("flash"); f.textContent = msg; f.className = "flash show" + (warn ? " warn" : ""); clearTimeout(flashT); flashT = setTimeout(function () { f.className = "flash"; }, 4200); }
 
   function render() {
     $("day").textContent = "Day " + S.day;
@@ -202,6 +207,8 @@
     var autoPct = gap ? Math.round((tds + acc) / gap * 100) : 0;
     $("k-gap").textContent = inr(gap);
     $("k-auto").textContent = gap ? autoPct + "%" : "—";
+    var fired = S.log.filter(function (l) { return /^BR-/.test(l.rule); }).length; $("k-rules").textContent = fired || "—";
+    $("lastrun").textContent = S.lastRun || "";
     $("k-open").textContent = open.length + " · " + inr(openAmt);
     $("k-unowned").textContent = gap ? "₹0" : "—";
     $("bar").innerHTML = gap ? [["tds", tds], ["acc", acc], ["dis", dis]].map(function (s) { return "<span class='s-" + s[0] + "' style='width:" + (s[1] / gap * 100) + "%'></span>"; }).join("") : "";
@@ -217,7 +224,7 @@
         "<button class='btn small' data-a='recover' data-id='" + c.id + "'>Invalid: recover</button>";
       return "<article class='case" + (c.status !== "Open" ? " closed" : "") + (late ? " late" : "") + "'><header><b class='mono'>" + c.id + "</b><span class='type t-" + c.type.split(" ")[0].toLowerCase() + "'>" + esc(c.type) + "</span><b class='mono amt'>" + inr(c.amount) + "</b></header>" +
         "<p>" + esc(c.dist) + " · " + c.inv + (c.status === "Open" ? " · owner <b>" + esc(c.owner) + "</b> · SLA day " + c.due + (late ? " <span class='pill bad'>late</span>" : "") : "") + "</p>" +
-        (c.status === "Open" && c.reason ? "<p class='why'>Not auto-accepted: " + esc(c.reason) + ".</p>" : "") +
+        (c.checks ? "<table class='dt'><tr><th>Evidence</th><th>≤ limit</th><th>In budget</th><th>≤ 2× norm</th><th>BR-3 outcome</th></tr><tr>" + ["evidence", "limit", "budget", "norm"].map(function (k) { return "<td class='" + (c.checks[k] ? "y" : "n") + "'>" + (c.checks[k] ? "✓" : "✗") + "</td>"; }).join("") + "<td>" + (c.checks.evidence && c.checks.limit && c.checks.budget && c.checks.norm ? "Auto-accept" : "To " + esc(OWNERS[c.type])) + "</td></tr></table>" : "<p class='trace2'>" + (c.type === "Unexplained" ? "BR-4 · US-4 · UAT-07: no reason code, so it can't be auto-accepted or written off." : "") + "</p>") +
         (c.maker && c.status === "Open" ? "<p class='why'>Recommended by " + esc(USERS[c.maker]) + "; waiting for a second approver.</p>" : "") +
         "<div class='acts'>" + actions + "</div></article>";
     }).join("") : "<p class='empty'>No cases yet. Load today's bank statement above.</p>";
@@ -231,6 +238,36 @@
 
   function download(name, text, type) { var b = new Blob([text], { type: type }); var a = document.createElement("a"); a.href = URL.createObjectURL(b); a.download = name; document.body.appendChild(a); a.click(); a.remove(); }
   function csv(rows) { return "﻿" + rows.map(function (r) { return r.map(function (c) { return '"' + String(c == null ? "" : c).replace(/"/g, '""') + '"'; }).join(","); }).join("\n"); }
+
+
+  /* ---------- UAT runner: executes the BRD's acceptance tests against this engine ---------- */
+  function scenario(fn) {
+    var keep = S; QUIET = true; S = seed();
+    var out; try { out = fn(); } catch (e) { out = { pass: false, actual: "Error: " + e.message }; }
+    S = keep; QUIET = false; return out;
+  }
+  var R = function (va, amount, ref, type, camt, ev) { return { va: va, amount: amount, ref: ref || "", claimType: type || "", claimAmt: camt || 0, evidence: !!ev }; };
+  var lastCase = function () { return S.cases[S.cases.length - 1]; };
+  var TESTS = [
+    ["UAT-01", "BR-1, US-1", "Unreferenced receipt on a virtual account", "Applied to the distributor's oldest open invoice", function () { processReceipt(R("CELLOVA0003", 800000)); var r = S.receipts[0]; return { pass: r.inv === "INV-3007", actual: "Applied to " + r.inv }; }],
+    ["UAT-02", "BR-2, US-2", "Short by 0.1% after the ₹50 lakh threshold", "Classified as TDS; no case opened", function () { processReceipt(R("CELLOVA0001", 999153, "INV-1041")); var r = S.receipts[0]; return { pass: r.tds === 847 && S.cases.length === 0, actual: "TDS " + inr(r.tds) + ", " + S.cases.length + " cases" }; }],
+    ["UAT-03", "BR-3, US-3", "Evidenced scheme claim within budget and limit", "Auto-accepted; rule recorded", function () { processReceipt(R("CELLOVA0001", 991153, "INV-1041", "Scheme claim", 8000, true)); var c = lastCase(); return { pass: c.status === "Accepted" && c.closedBy === "Rule BR-3", actual: c.status + " by " + c.closedBy }; }],
+    ["UAT-04", "US-4", "Approve a case with no reason code (negative)", "Blocked and logged", function () { processReceipt(R("CELLOVA0002", 295000, "INV-2015")); var c = lastCase(); act(c.id, "approve"); return { pass: c.status === "Open" && /Blocked/.test(S.log[0].text), actual: c.status + "; " + S.log[0].text.slice(0, 40) + "…" }; }],
+    ["UAT-05", "BR-3", "Damage claim without proof of delivery (negative)", "Not accepted; stays a dispute", function () { processReceipt(R("CELLOVA0002", 295000, "INV-2015", "Damage / shortage", 5000, false)); var c = S.cases[0]; return { pass: c.status === "Open" && c.owner === "Area sales manager", actual: c.status + ", owner " + c.owner }; }],
+    ["UAT-06", "BR-5, US-5", "Maker approves own case above ₹10,000 (negative)", "Blocked, logged, routed to a checker", function () { processReceipt(R("CELLOVA0003", 787322, "INV-3007", "Scheme claim", 12000, true)); var c = lastCase(); act(c.id, "approve"); act(c.id, "approve"); var blocked = c.status === "Open"; S.user = "checker"; act(c.id, "approve"); return { pass: blocked && c.status === "Accepted", actual: (blocked ? "Blocked for maker" : "Not blocked") + "; checker: " + c.status }; }],
+    ["UAT-07", "BR-4", "Unexplained gap left for 60 days (negative)", "Never written off; stays open with an owner", function () { processReceipt(R("CELLOVA0002", 297000, "INV-2015")); for (var i = 0; i < 60; i++) nextDay(); var c = S.cases[0]; return { pass: c.status === "Open", actual: c.status + ", owner " + c.owner }; }],
+    ["UAT-08", "US-4", "Dispute passes its SLA", "Escalated to the AR lead; history kept", function () { processReceipt(R("CELLOVA0002", 297000, "INV-2015")); for (var i = 0; i < 8; i++) nextDay(); var c = S.cases[0]; return { pass: c.escalated && /AR lead/.test(c.owner), actual: "Owner: " + c.owner }; }],
+    ["UAT-09", "BR-6, US-6", "Credit note issued", "IRP deadline set 30 days out", function () { processReceipt(R("CELLOVA0001", 991153, "INV-1041", "Scheme claim", 8000, true)); var n = S.notes[0]; return { pass: !!n && n.irpDue - n.issued === 30, actual: n ? n.id + ", IRP due in " + (n.irpDue - n.issued) + " days" : "No note" }; }],
+    ["UAT-10", "BR-7, US-7", "Old dispute, then a new order", "Order flagged for review, not blocked", function () { processReceipt(R("CELLOVA0004", 238000, "INV-4002", "Scheme claim", 12000, true)); order("CELLOVA0004"); return { pass: /flagged for credit review/.test(S.log[0].text), actual: S.log[0].text.slice(0, 48) + "…" }; }]
+  ];
+  function runUAT() {
+    var rows = TESTS.map(function (t) { var o = scenario(t[4]); return [t[0], t[1], t[2], t[3], o.actual, o.pass]; });
+    var passed = rows.filter(function (r) { return r[5]; }).length;
+    $("uat-sum").textContent = passed + " of " + rows.length + " passed · run against this page's engine on fresh data, your desk untouched";
+    $("uat-body").innerHTML = rows.map(function (r) { return "<tr><td class='mono'>" + r[0] + "</td><td class='tiny'>" + r[1] + "</td><td>" + esc(r[2]) + "<br><span class='tiny'>Expected: " + esc(r[3]) + "</span></td><td class='tiny'>" + esc(r[4]) + "</td><td><span class='pill " + (r[5] ? "ok'>Pass" : "bad'>Fail") + "</span></td></tr>"; }).join("");
+    $("uat").hidden = false;
+    $("uat").scrollIntoView({ behavior: "smooth", block: "start" });
+  }
 
   /* ---------- wiring ---------- */
   load(); render();
@@ -249,6 +286,7 @@
   $("who").onchange = function () { S.user = $("who").value; log("User", "Switched to " + USERS[S.user] + "."); save(); render(); };
   ["tolerance", "approval"].forEach(function (k) { $("set-" + k).onchange = function () { S.settings[k] = Math.max(0, Number(this.value) || 0); log("Setting", k + " set to " + inr(S.settings[k]) + " by " + USERS[S.user] + "."); save(); render(); }; });
   $("next-day").onclick = nextDay;
+  $("run-uat").onclick = runUAT;
   $("reset").onclick = function () { S = seed(); save(); render(); refill(); flash("Reset to a fresh morning.", false); };
   $("dl-cases").onclick = function () { download("cases.csv", csv([["Case", "Distributor", "Invoice", "Type", "Amount", "Owner", "Status", "Opened (day)", "SLA (day)", "Credit note"]].concat(S.cases.map(function (c) { return [c.id, c.dist, c.inv, c.type, c.amount, c.owner, c.status, c.opened, c.due, c.cn || ""]; }))), "text/csv"); };
   $("dl-log").onclick = function () { download("audit-trail.csv", csv([["Day", "User", "Rule", "Event"]].concat(S.log.slice().reverse().map(function (l) { return [l.day, l.who, l.rule, l.text]; }))), "text/csv"); };

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Deductions Desk · Every Rupee Needs an Owner</title>
+<title>Requirements, Running · Every Rupee Needs an Owner</title>
 <meta name="description" content="A working prototype: load a bank statement and watch every short-paid rupee get classified, owned and settled under seven business rules. Synthetic data, runs in your browser.">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -38,8 +38,7 @@ form.add input,form.add select{font:inherit;font-size:.9rem;padding:7px 8px;bord
 form.add .full{grid-column:1/-1}
 form.add .chk{flex-direction:row;align-items:center;gap:8px;color:var(--ink)}
 details summary{cursor:pointer;font-size:.9rem;color:var(--accent);margin-top:12px}
-.kpis{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:14px 0 10px}
-@media(min-width:700px){.kpis{grid-template-columns:repeat(4,1fr)}}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:14px 0 10px}
 .kpi{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 12px}
 .kpi span{display:block;font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:600}
 .kpi b{font-family:var(--mono);font-size:1.15rem;font-weight:500}
@@ -76,15 +75,22 @@ th{font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--mu
 .flash{position:fixed;left:50%;bottom:18px;transform:translate(-50%,140%);background:var(--ink);color:#fff;padding:10px 16px;border-radius:10px;font-size:.9rem;max-width:min(92vw,560px);transition:transform .25s;z-index:20}
 .flash.show{transform:translate(-50%,0)}.flash.warn{background:var(--dispute)}
 @media(max-width:700px){.bar-top{position:static}}
+.dt{border-collapse:collapse;margin-top:8px;font-size:.74rem;width:100%}
+.dt th{font-size:.66rem;padding:3px 4px;background:var(--bg);text-transform:none;letter-spacing:0}
+.dt td{padding:3px 4px;text-align:center;border:1px solid var(--line)}
+.dt td.y{color:#2c6b45;font-weight:700}.dt td.n{color:var(--dispute);font-weight:700;background:var(--dispute-soft)}
+.trace,.trace2{font-family:var(--mono);font-size:.68rem;color:var(--muted);margin-right:4px}
+#log .trace{margin-left:2px}
 .foot{font-size:.8rem;color:var(--muted);padding:24px 0 40px}
 </style>
 </head>
 <body>
 <div class="dk">
   <div class="dk-top"><a href="./">← The case study</a><a href="brd.html">The full specification →</a></div>
-  <p class="eyebrow">Working prototype · Rupak Ghanpathi</p>
-  <h1>The deductions desk</h1>
-  <p class="lede">Load this morning's bank statement. Every short-paid rupee gets a class, an owner and a deadline, under the seven business rules. Then work the cases.</p>
+  <p class="eyebrow">Business analysis · executable specification · Rupak Ghanpathi</p>
+  <h1>The requirements, running</h1>
+  <p class="lede">The BRD's seven business rules, implemented as a working desk. Run the ten UAT cases against it, or load a bank statement and work the cases yourself. Every action is traced to its rule, story and test.</p>
+  <p class="row" style="margin:6px 0 0"><button class="btn primary" id="run-uat" type="button">Run the 10 UAT cases</button><a class="btn" href="brd.html" style="text-decoration:none">Read the BRD</a></p>
   <p class="note"><b>Synthetic data.</b> Five made-up distributors and seven invoices. Nothing is sent anywhere: it runs in your browser and saves on this device. Not connected to, or affiliated with, Cello World.</p>
 </div>
 
@@ -96,6 +102,16 @@ th{font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--mu
   <button class="btn small" id="next-day">Next day →</button>
   <button class="btn small" id="reset">Reset</button>
 </div></div>
+
+
+<section class="dk" id="uat" hidden style="padding:18px 16px 0">
+  <div class="card">
+    <p class="step">Verification</p>
+    <h2>UAT results</h2>
+    <p class="sub" id="uat-sum"></p>
+    <div class="tbl"><table><thead><tr><th>Test</th><th>Traces to</th><th>Scenario</th><th>Actual</th><th>Result</th></tr></thead><tbody id="uat-body"></tbody></table></div>
+  </div>
+</section>
 
 <main class="dk">
   <section style="padding:18px 0 0">
@@ -130,14 +146,25 @@ th{font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--mu
 
   <section style="padding:18px 0 0">
     <p class="step">2 · Classify</p>
+    <details class="card" style="margin-top:8px"><summary><b>BR-3 as a decision table</b> <span class="tiny">(tap to open)</span></summary>
+      <table class="dt" style="margin-top:10px"><tr><th>Evidence present</th><th>Amount ≤ Finance limit</th><th>Within scheme budget</th><th>Within 2× distributor's damage norm</th><th>Outcome</th></tr>
+      <tr><td class="y">Y</td><td class="y">Y</td><td class="y">Y</td><td class="y">Y</td><td>Auto-accept, credit note (BR-6)</td></tr>
+      <tr><td class="n">N</td><td>any</td><td>any</td><td>any</td><td>Case to the reason-code owner</td></tr>
+      <tr><td>any</td><td class="n">N</td><td>any</td><td>any</td><td>Case to owner; 2nd approver above threshold (BR-5)</td></tr>
+      <tr><td>any</td><td>any</td><td class="n">N</td><td>any</td><td>Case to Sales ops</td></tr>
+      <tr><td>any</td><td>any</td><td>any</td><td class="n">N</td><td>Case to Area sales manager</td></tr>
+      <tr><td colspan="4">No reason code</td><td>Case to AR lead; never written off (BR-4)</td></tr></table>
+    </details>
     <div class="kpis">
       <div class="kpi"><span>Short-paid today</span><b id="k-gap">—</b></div>
-      <div class="kpi lead"><span>Resolved by rule</span><b id="k-auto">—</b></div>
+      <div class="kpi"><span>Classified by rule</span><b id="k-auto">—</b></div>
+      <div class="kpi"><span>Rule firings logged</span><b id="k-rules">—</b></div>
       <div class="kpi"><span>Open cases</span><b id="k-open">0</b></div>
-      <div class="kpi"><span>Without an owner</span><b id="k-unowned">—</b></div>
+      <div class="kpi lead"><span>Rupees without an owner</span><b id="k-unowned">—</b></div>
     </div>
     <div class="stack" id="bar"></div>
     <ul class="legend" id="legend"></ul>
+    <p class="mono tiny" id="lastrun" style="margin-top:8px"></p>
   </section>
 
   <section style="padding:18px 0 0" id="cases">
