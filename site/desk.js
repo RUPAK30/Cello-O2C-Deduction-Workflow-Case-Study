@@ -287,6 +287,8 @@
   ["tolerance", "approval"].forEach(function (k) { $("set-" + k).onchange = function () { S.settings[k] = Math.max(0, Number(this.value) || 0); log("Setting", k + " set to " + inr(S.settings[k]) + " by " + USERS[S.user] + "."); save(); render(); }; });
   $("next-day").onclick = nextDay;
   $("run-uat").onclick = runUAT;
+  if (/[?&]uat=1/.test(location.search)) setTimeout(runUAT, 300);
+  if (location.hash === "#rules") { var dr = $("rules"); if (dr) dr.open = true; }
   $("reset").onclick = function () { S = seed(); save(); render(); refill(); flash("Reset to a fresh morning.", false); };
   $("dl-cases").onclick = function () { download("cases.csv", csv([["Case", "Distributor", "Invoice", "Type", "Amount", "Owner", "Status", "Opened (day)", "SLA (day)", "Credit note"]].concat(S.cases.map(function (c) { return [c.id, c.dist, c.inv, c.type, c.amount, c.owner, c.status, c.opened, c.due, c.cn || ""]; }))), "text/csv"); };
   $("dl-log").onclick = function () { download("audit-trail.csv", csv([["Day", "User", "Rule", "Event"]].concat(S.log.slice().reverse().map(function (l) { return [l.day, l.who, l.rule, l.text]; }))), "text/csv"); };

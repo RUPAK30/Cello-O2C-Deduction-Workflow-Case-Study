@@ -18,27 +18,42 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
+<style>
+.skills{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:1fr 1fr;gap:8px;counter-reset:k}
+@media(min-width:760px){.skills{grid-template-columns:repeat(3,1fr)}}
+.skills a{display:block;height:100%;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 12px;text-decoration:none;color:var(--ink)}
+.skills a:hover{border-color:var(--accent)}
+.skills b{display:block;font-size:.92rem;color:var(--accent)}
+.skills span{display:block;font-size:.8rem;color:var(--muted);line-height:1.35;margin-top:2px}
+.cta{display:inline-block;background:var(--accent);color:#fff;text-decoration:none;padding:12px 18px;border-radius:10px;font-weight:600}
+details.fold>summary{cursor:pointer;list-style:none;padding:14px 16px;background:var(--surface);border:1px solid var(--line);border-radius:12px;font-size:.95rem}
+details.fold>summary::after{content:" +";color:var(--accent);font-weight:700}
+details.fold[open]>summary::after{content:" −"}
+details.fold>summary::-webkit-details-marker{display:none}
+details.fold[open]>summary{margin-bottom:14px}
+#try,#close,#fail,#evolved{padding-top:8px;padding-bottom:8px}
+</style>
+<script>document.addEventListener("click",function(e){var a=e.target.closest(".skills a");if(!a)return;var h=a.getAttribute("href");if(h.charAt(0)!=="#")return;var t=document.querySelector(h);if(!t)return;var d=t.querySelector("details");if(d)d.open=true;if(a.dataset.tab){var b=document.querySelector('[data-spec="'+a.dataset.tab+'"]');if(b)b.click();}});</script>
 </head>
 <body>
 <header class="wrap hero">
-  <p class="eyebrow">Business analysis case study · Rupak Ghanpathi · current process, stakeholders, requirements, rules, UAT</p>
+  <p class="eyebrow">Business analysis case study · Rupak Ghanpathi</p>
   <h1>Every rupee needs an owner.</h1>
-  <p class="lede">When a distributor pays less than the invoice, finance teams can spend weeks over email working out why. I designed the workflow that explains every rupee on the day the payment arrives.</p>
-  <p style="margin:18px 0 0;display:flex;gap:12px;flex-wrap:wrap;align-items:center"><a class="btn" href="desk.html" style="background:var(--accent);border-color:var(--accent);color:#fff;text-decoration:none;padding:12px 18px;border-radius:10px;font-weight:600">See the requirements running →</a><span style="font-size:.88rem;color:var(--muted)">The BRD's rules as a working desk, with its 10 UAT cases you can run.</span></p>
+  <p class="lede" style="margin-bottom:6px">When a distributor pays less than the invoice, nobody knows why for weeks. I specified the workflow that explains every rupee on day 0.</p>
+  <p class="kicker" style="margin:18px 0 8px">Six BA skills, each with its proof · tap one</p>
+  <ol class="skills">
+    <li><a href="#why"><b>Problem framing</b><span>Receivables +14% vs revenue +8.8%, from filings</span></a></li>
+    <li><a href="#race"><b>Process mapping</b><span>Current vs future, the same ₹20,000</span></a></li>
+    <li><a href="#spec" data-tab="raci"><b>Stakeholders &amp; RACI</b><span>Six roles, who owns each step</span></a></li>
+    <li><a href="desk.html#rules"><b>Business rules</b><span>7 rules, one as a decision table</span></a></li>
+    <li><a href="desk.html?uat=1"><b>Stories &amp; UAT</b><span>10 tests you can run: 10 pass</span></a></li>
+    <li><a href="#fail" data-open="1"><b>Risk &amp; validation</b><span>Where it fails, and the stop rule</span></a></li>
+  </ol>
+  <p style="margin:16px 0 28px"><a class="cta" href="desk.html">See the requirements running →</a></p>
 </header>
 
 <main>
-<section class="wrap glance" aria-labelledby="glance-h">
-  <h2 id="glance-h" class="kicker">At a glance</h2>
-  <div class="glance-grid">
-    <div><h3>The problem</h3><p>A short payment is usually three things at once: <button class="term" data-term="tds">tax withheld</button>, a valid claim, and a dispute. Most teams treat it as one, so the money sits unexplained while the distributor keeps ordering on credit.</p></div>
-    <div><h3>What I designed</h3><p>A workflow that identifies who paid, separates the tax, accepts claims backed by evidence, and gives every remaining rupee a reason, an owner and a deadline. Valid claims are then settled upfront as <button class="term" data-term="cn">credit notes</button>, so the next payment arrives in full.</p></div>
-    <div><h3>My role</h3><p>Self-initiated, from public filings. I framed the problem, mapped the current process, wrote the business rules, user stories and test cases, and planned how to validate it with the people who would use it.</p></div>
-  </div>
-  <ul class="chips" aria-label="Skills shown">
-    <li>Requirements elicitation</li><li>Process mapping (as-is / to-be)</li><li>Business rules</li><li>User stories and acceptance criteria</li><li>Traceability</li><li>UAT and controls</li><li>Stakeholder mapping (RACI)</li><li>Success metrics</li><li>Order-to-cash and Indian tax</li>
-  </ul>
-</section>
+
 
 <section class="wrap" id="why" aria-labelledby="why-h">
   <h2 id="why-h">Why this problem</h2>
@@ -94,6 +109,7 @@
 
 
 <section class="wrap" id="try" aria-labelledby="try-h">
+<details class="fold" id="try-d"><summary><b>Try one rule</b> · change a Finance setting, watch one payment re-classify</summary>
   <h2 id="try-h">Try the rules yourself</h2>
   <p class="sub">The proposed workflow above is driven by rules Finance controls. Change one and watch the payment re-classify.</p>
   <div class="try-grid">
@@ -138,6 +154,7 @@
       <ol class="audit" id="audit"></ol>
     </div>
   </div>
+</details>
 </section>
 
 
@@ -197,6 +214,7 @@
 </section>
 
 <section class="wrap" id="close" aria-label="Trade-offs, metrics and validation">
+<details class="fold" id="close-d"><summary><b>Trade-offs, the one metric, and how I'd validate it</b></summary>
   <div class="close-grid">
     <div>
       <h2>Trade-offs I chose</h2>
@@ -225,24 +243,29 @@
     </div>
   </div>
   <p class="downloads"><a href="Cello_O2C_Case_Study.pdf">Full case study (PDF)</a><a href="Cello_O2C_One_Pager.pdf">One-pager (PDF)</a><a href="Cello_O2C_BRD.pdf">Business requirements document (PDF)</a></p>
+</details>
 </section>
 
 <section class="wrap" id="fail" aria-labelledby="fail-h">
+<details class="fold" id="fail-d"><summary><b>Where this would fail</b> · three risks and the design answer to each</summary>
   <h2 id="fail-h">Where this would fail</h2>
   <div class="close-grid">
     <div><h3>Distributors keep paying the old account</h3><p>Virtual accounts only identify the payer if they are used. <b>Design answer:</b> the old account stays open for a quarter with receipts matched by the oldest-invoice rule, and Sales gets a weekly list of distributors still using it.</p></div>
     <div><h3>Scheme rules change mid-quarter</h3><p>Auto-acceptance is only as good as the budget it checks. <b>Design answer:</b> no scheme is valid until Sales enters it with dates and a budget; claims against an unentered scheme go to a person, never through.</p></div>
     <div><h3>Sales overrides the credit flag</h3><p>A flag nobody respects is noise. <b>Design answer:</b> the flag never blocks an order, but every override is logged with a name, and overrides per area appear in the monthly review.</p></div>
   </div>
+</details>
 </section>
 
 <section class="wrap" id="evolved" aria-labelledby="evo-h">
+<details class="fold" id="evolved-d"><summary><b>How this evolved</b> · v1 assignment → v2 research → v3 executable spec</summary>
   <h2 id="evo-h">How this evolved</h2>
   <ol class="plain">
     <li><b>v1 · The assignment.</b> A deduction workflow: a case with a reason code and owner, SLA routing, maker-checker, ERP as system of record.</li>
     <li><b>v2 · The research.</b> TDS treated as a loss, 90–95% of deduction value usually valid, missed credit-note windows: answered by four layers (Identify, Split, Validate, Prevent).</li>
     <li><b>v3 · An executable specification.</b> The page had become a long read. The rules now run as a desk: the ten UAT cases execute against it and report pass or fail, and every action is traced to its rule, story and test. The full specification sits behind one tap.</li>
   </ol>
+</details>
 </section>
 </main>
 

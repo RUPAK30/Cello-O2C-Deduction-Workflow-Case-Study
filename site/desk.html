@@ -89,9 +89,9 @@ th{font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--mu
   <div class="dk-top"><a href="./">← The case study</a><a href="brd.html">The full specification →</a></div>
   <p class="eyebrow">Business analysis · executable specification · Rupak Ghanpathi</p>
   <h1>The requirements, running</h1>
-  <p class="lede">The BRD's seven business rules, implemented as a working desk. Run the ten UAT cases against it, or load a bank statement and work the cases yourself. Every action is traced to its rule, story and test.</p>
+  <p class="lede">The BRD's 7 rules as a working desk. Run its 10 UAT cases, or load a statement and work the cases. Every action shows its rule, story and test.</p>
   <p class="row" style="margin:6px 0 0"><button class="btn primary" id="run-uat" type="button">Run the 10 UAT cases</button><a class="btn" href="brd.html" style="text-decoration:none">Read the BRD</a></p>
-  <p class="note"><b>Synthetic data.</b> Five made-up distributors and seven invoices. Nothing is sent anywhere: it runs in your browser and saves on this device. Not connected to, or affiliated with, Cello World.</p>
+  <p class="note">Synthetic data · runs in your browser · not affiliated with Cello World.</p>
 </div>
 
 <div class="bar-top"><div class="dk row" style="width:100%">
@@ -146,7 +146,7 @@ th{font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--mu
 
   <section style="padding:18px 0 0">
     <p class="step">2 · Classify</p>
-    <details class="card" style="margin-top:8px"><summary><b>BR-3 as a decision table</b> <span class="tiny">(tap to open)</span></summary>
+    <details class="card" id="rules" style="margin-top:8px"><summary><b>BR-3 as a decision table</b> <span class="tiny">(tap to open)</span></summary>
       <table class="dt" style="margin-top:10px"><tr><th>Evidence present</th><th>Amount ≤ Finance limit</th><th>Within scheme budget</th><th>Within 2× distributor's damage norm</th><th>Outcome</th></tr>
       <tr><td class="y">Y</td><td class="y">Y</td><td class="y">Y</td><td class="y">Y</td><td>Auto-accept, credit note (BR-6)</td></tr>
       <tr><td class="n">N</td><td>any</td><td>any</td><td>any</td><td>Case to the reason-code owner</td></tr>
@@ -171,7 +171,7 @@ th{font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--mu
     <div class="grid two">
       <div>
         <p class="step">3 · Work the cases</p>
-        <p class="sub" style="font-size:.88rem;color:var(--muted)">Attach evidence to re-validate, approve, or mark invalid. Try approving a big case as Asha, then switch to Vikram.</p>
+        <p class="sub" style="font-size:.85rem;color:var(--muted)">Tip: approve a ₹12,000 case as Asha (blocked), then switch to Vikram.</p>
         <div id="case-list"></div>
         <div class="row"><button class="btn small" id="dl-cases">Download cases (CSV)</button></div>
       </div>
