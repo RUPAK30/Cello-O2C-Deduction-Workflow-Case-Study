@@ -274,6 +274,12 @@
   $("load-sample").onclick = function () { runStatement(SAMPLE, "Sample statement"); };
   $("dl-sample").onclick = function () { download("sample-bank-statement.csv", SAMPLE, "text/csv"); };
   $("file").onchange = function (e) { var f = e.target.files[0]; if (!f) return; var rd = new FileReader(); rd.onload = function () { runStatement(String(rd.result), f.name); }; rd.readAsText(f); e.target.value = ""; };
+  /* Narration parser: reads the distributor's free-text remittance note into a reason code and amount. TDS is never taken from the note: BR-2 computes it. */
+  $("f-nar").oninput = function () {
+    var t = this.value.toLowerCase(), m = t.match(/(\d[\d,]*)/g), amt = m ? Number(m[m.length - 1].replace(/,/g, "")) : 0;
+    var type = /scheme|diwali|promo|discount|offer|target/.test(t) ? "Scheme claim" : /damage|broken|short(age)? qty|shortage|leak/.test(t) ? "Damage / shortage" : /rate|price diff/.test(t) ? "Rate difference" : /return|grn/.test(t) ? "Returns" : "";
+    $("f-type").value = type; if (amt && type) $("f-camt").value = amt;
+  };
   $("add").onsubmit = function (e) {
     e.preventDefault();
     var r = { va: $("f-va").value, amount: Number($("f-amt").value) || 0, ref: $("f-ref").value, claimType: $("f-type").value, claimAmt: Number($("f-camt").value) || 0, evidence: $("f-ev").checked };
