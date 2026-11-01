@@ -36,7 +36,8 @@ window.O2C = {
     ["UAT-07", "BR-4", "Auto write-off of an unexplained gap (negative)", "Blocked; case stays open with its owner"],
     ["UAT-08", "US-4", "Dispute passes its SLA", "Escalated to the AR lead; history kept"],
     ["UAT-09", "BR-6, US-6", "Credit note issued", "30-day IRP deadline set; alert at day 20"],
-    ["UAT-10", "BR-7, US-7", "Disputes above ₹20,000 or older than 45 days, new order placed", "Order flagged for credit review, not blocked"]
+    ["UAT-10", "BR-7, US-7", "Disputes above ₹20,000 or older than 45 days, new order placed", "Order flagged for credit review, not blocked"],
+    ["UAT-11", "BR-8", "Scheme deduction with no approved scheme budget", "Routed to the Regional sales head; charged to the trade budget or recovered from the distributor"]
   ],
   render: function (doc) {
     var o = this, fill = function (id, html) { var el = doc.getElementById(id); if (el) el.innerHTML = html; };
