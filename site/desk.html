@@ -118,8 +118,10 @@ th{font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--mu
   </div>
 </section>
 
-<main class="dk">
-  <section style="padding:18px 0 0">
+<main class="dk shell">
+  <aside class="side"><p>Workspace</p><a href="#recv">Receive</a><a href="#cls">Classify</a><a href="#cases">Cases</a><a href="#dists">Distributors</a><a href="#auditc">Audit trail</a><button type="button" onclick="document.getElementById('run-uat').click()">Run tests</button></aside>
+  <div class="main">
+  <section style="padding:18px 0 0" id="recv">
     <div class="grid two">
       <div class="card">
         <p class="step">1 · Receive</p>
@@ -151,7 +153,7 @@ th{font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--mu
     </div>
   </section>
 
-  <section style="padding:18px 0 0">
+  <section style="padding:18px 0 0" id="cls">
     <p class="step">2 · Classify</p>
     <details class="card" id="rules" style="margin-top:8px"><summary><b>BR-3 as a decision table</b> <span class="tiny">(tap to open)</span></summary>
       <table class="dt" style="margin-top:10px"><tr><th>Evidence present</th><th>Amount ≤ Finance limit</th><th>Within scheme budget</th><th>Within 2× distributor's damage norm</th><th>Outcome</th></tr>
@@ -184,7 +186,7 @@ th{font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--mu
       </div>
       <div>
         <div class="card" style="margin-bottom:16px">
-          <p class="step">4 · Prevent</p>
+          <p class="step" id="dists">4 · Prevent</p>
           <h2>Distributors and credit</h2>
           <p class="sub">Open disputes above ₹20,000 or older than 45 days flag the next order for review (BR-7).</p>
           <div class="tbl"><table><thead><tr><th>Distributor</th><th class="r">FY purchases</th><th class="r">Scheme left</th><th class="r">Disputed</th><th></th></tr></thead><tbody id="dist-body"></tbody></table></div>
@@ -195,7 +197,7 @@ th{font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--mu
           <table><thead><tr><th>Note</th><th>Distributor</th><th class="r">Amount</th><th class="r">IRP due</th></tr></thead><tbody id="cn-body"></tbody></table>
         </div>
         <div class="card">
-          <h2>Audit trail</h2>
+          <h2 id="auditc">Audit trail</h2>
           <p class="sub">Every action, with the rule that drove it.</p>
           <ul id="log"></ul>
           <div class="row" style="margin-top:10px"><button class="btn small" id="dl-log">Download audit trail (CSV)</button></div>
@@ -203,6 +205,7 @@ th{font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--mu
       </div>
     </div>
   </section>
+  </div>
   <p class="foot">Rules simplified for illustration: TDS u/s 194Q at 0.1% of taxable value once a distributor's purchases pass ₹50 lakh; thresholds are Finance-set and illustrative. Tax rules change; check current law. Built by Rupak Ghanpathi as a self-initiated case study.</p>
 </main>
 <div class="flash" id="flash" role="status" aria-live="polite"></div>

@@ -50,9 +50,23 @@ details.fold[open]>summary{margin-bottom:14px}
 <header class="appbar"><div class="in"><a class="logo" href="./"><i>₹</i><span>Short-payment reconciliation</span></a><nav><a href="./" class="hide-s on">Overview</a><a href="brd.html" class="hide-s">BRD</a><a href="https://github.com/RUPAK30/Cello-O2C-Deduction-Workflow-Case-Study" class="hide-s">GitHub</a><a href="desk.html" class="pri">Executable spec</a></nav></div></header>
 
 <header class="wrap hero">
+  <div class="hero-grid"><div>
   <p class="eyebrow">Business analysis case study · Rupak Ghanpathi</p>
   <h1>Distributor short-payment reconciliation</h1>
   <p class="lede" style="margin-bottom:6px">Current-state analysis, business rules, user stories and acceptance tests for how a consumer-goods manufacturer reconciles distributor payments that arrive below the invoice value.</p>
+  </div>
+  <a class="preview" href="desk.html" aria-label="Open the executable specification">
+    <div class="pv-h"><b>Reconciliation desk</b><span class="pv-chip">Day 0 · sample data</span></div>
+    <div class="pv-k"><div><span>Short-paid</span><b>₹58,457</b></div><div><span>By rule</span><b>26%</b></div><div><span>Unowned</span><b class="ok">₹0</b></div></div>
+    <div class="pv-bar"><i style="width:4%;background:#64748B"></i><i style="width:22%;background:#B7791F"></i><i style="width:74%;background:#C2410C"></i></div>
+    <ul class="pv-l">
+      <li><code>C-3302</code><span>Damage · no proof</span><b>₹11,000</b><em class="w">Area sales mgr</em></li>
+      <li><code>C-3304</code><span>Scheme · above limit</span><b>₹12,000</b><em class="w">2nd approver</em></li>
+      <li><code>C-3301</code><span>Scheme · evidenced</span><b>₹8,000</b><em class="g">Auto · CN-201</em></li>
+    </ul>
+    <div class="pv-f"><span class="pv-chip g">UAT 10 / 10 passing</span><span>Open →</span></div>
+  </a>
+  </div>
   <p class="kicker" style="margin:18px 0 8px">Six BA skills, each with its proof · tap one</p>
   <ol class="skills">
     <li><a href="#why"><b>Problem framing</b><span>Problem statement from public filings</span></a></li>
