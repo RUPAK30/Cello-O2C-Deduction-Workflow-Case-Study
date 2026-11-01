@@ -77,3 +77,20 @@ body{background:radial-gradient(900px 480px at 88% -60px,#FFE7D6 0%,transparent 
 .bar-top{position:static!important;background:none!important;backdrop-filter:none!important;border:0!important}
 html{scroll-padding-top:120px}
 .mini{font-weight:700}
+
+/* Final look: white product UI, graphite actions, one soft colour glow behind the hero. */
+:root{--accent:#111827;--accent-soft:#F4F4F5;--bg:#FFFFFF}
+body{background:#fff!important}
+.hero,.appbar+.dk{position:relative}
+.hero::before,.appbar+.dk::before{content:"";position:absolute;left:-30vw;right:-30vw;top:-80px;height:560px;z-index:-1;pointer-events:none;background:radial-gradient(40% 60% at 75% 30%,rgba(255,170,140,.5),transparent 70%),radial-gradient(35% 55% at 95% 10%,rgba(190,160,255,.45),transparent 70%),radial-gradient(40% 60% at 55% 0%,rgba(255,214,150,.5),transparent 70%),radial-gradient(35% 50% at 20% 10%,rgba(160,220,255,.32),transparent 70%);filter:blur(10px)}
+.eyebrow,.kicker,.step,.mini{color:#6B7280!important}
+.cta,.btn.primary,.appbar nav a.pri,.tabs2 button{background:#111827!important;border-color:#111827!important;color:#fff!important}
+.cta:hover,.btn.primary:hover,.appbar nav a.pri:hover,.tabs2 button:hover{background:#000!important}
+.appbar{background:rgba(255,255,255,.72)!important}
+.appbar .logo i{background:linear-gradient(135deg,#FF9A7A,#B79CFF)!important}
+.skills a,.wwh-c,.card{background:rgba(255,255,255,.88)}
+.skills a:hover{border-color:#111827;box-shadow:0 8px 20px -10px rgba(17,24,39,.3)}
+.tabs2{background:rgba(255,255,255,.85)!important}
+.tabs2 i{background:#F4F4F5;color:#111827}
+.pv-f{color:#111827}
+a{color:#111827}
