@@ -94,3 +94,22 @@ body{background:#fff!important}
 .tabs2 i{background:#F4F4F5;color:#111827}
 .pv-f{color:#111827}
 a{color:#111827}
+
+/* Money: green and gold light, amounts as the hero. */
+.hero::before,.appbar+.dk::before{background:radial-gradient(40% 60% at 78% 25%,rgba(16,185,129,.30),transparent 70%),radial-gradient(38% 55% at 96% 6%,rgba(250,204,21,.32),transparent 70%),radial-gradient(40% 60% at 55% 0%,rgba(167,243,208,.45),transparent 70%),radial-gradient(35% 50% at 18% 8%,rgba(253,230,138,.35),transparent 70%)!important}
+.hero::after{content:"₹";position:absolute;right:4%;top:40px;font:700 340px/1 var(--sans);color:rgba(4,120,87,.05);z-index:-1;pointer-events:none}
+.appbar .logo i{background:linear-gradient(135deg,#10B981,#CA8A04)!important}
+.pv-k b,.pv-l b{color:#064E3B}.pv-k b{font-size:1.15rem}
+.money{display:grid;grid-template-columns:1fr;gap:8px;margin:22px 0 8px}
+@media(min-width:900px){.money{grid-template-columns:1.1fr auto 1fr 1fr 1fr;align-items:stretch}}
+.money>div{border-radius:12px;padding:12px 14px;background:rgba(255,255,255,.9);border:1px solid var(--line)}
+.m-in{background:#111827!important;color:#fff;border-color:#111827!important}
+.m-in span{display:block;font-size:.72rem;opacity:.7}.m-in b{font-family:var(--mono);font-size:1.5rem;font-weight:500}
+.m-arrow{display:none!important}
+@media(min-width:900px){.m-arrow{display:grid!important;place-items:center;border:0!important;background:none!important;font-size:1.4rem;color:#9CA3AF;padding:0 2px!important}}
+.m-s b{display:block;font-family:var(--mono);font-size:1.45rem;font-weight:500;letter-spacing:-.01em}
+.m-s span{display:block;font-size:.76rem;color:var(--muted);line-height:1.35;margin-top:2px}
+.m-tds{border-top:3px solid #64748B!important}.m-tds b{color:#334155}
+.m-acc{border-top:3px solid #059669!important}.m-acc b{color:#047857}
+.m-dis{border-top:3px solid #D97706!important}.m-dis b{color:#B45309}
+html,body{overflow-x:clip}
