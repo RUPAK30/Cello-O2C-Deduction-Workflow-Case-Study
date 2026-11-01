@@ -280,6 +280,12 @@
     var type = /scheme|diwali|promo|discount|offer|target/.test(t) ? "Scheme claim" : /damage|broken|short(age)? qty|shortage|leak/.test(t) ? "Damage / shortage" : /rate|price diff/.test(t) ? "Rate difference" : /return|grn/.test(t) ? "Returns" : "";
     $("f-type").value = type; if (amt && type) $("f-camt").value = amt;
   };
+  document.addEventListener("click", function (e) {
+    var b = e.target.closest("[data-pre]"); if (!b) return;
+    var P = b.dataset.pre === "1" ? ["CELLOVA0001", 991153, "INV-1041", "Less Diwali scheme 8,000 + TDS", true] : ["CELLOVA0002", 295000, "INV-2015", "", false];
+    $("f-va").value = P[0]; refill(); $("f-amt").value = P[1]; $("f-ref").value = P[2]; $("f-nar").value = P[3]; $("f-type").value = ""; $("f-camt").value = ""; $("f-nar").oninput.call($("f-nar")); $("f-ev").checked = P[4];
+    flash(b.dataset.pre === "1" ? "Filled: ₹10,00,000 invoice paid ₹9,91,153. Press Process to see TDS split and the scheme claim auto-accepted." : "Filled: ₹3,00,000 invoice paid ₹2,95,000, no note. Press Process: the ₹5,000 gets an owner, never a write-off.", false);
+  });
   $("add").onsubmit = function (e) {
     e.preventDefault();
     var r = { va: $("f-va").value, amount: Number($("f-amt").value) || 0, ref: $("f-ref").value, claimType: $("f-type").value, claimAmt: Number($("f-camt").value) || 0, evidence: $("f-ev").checked };

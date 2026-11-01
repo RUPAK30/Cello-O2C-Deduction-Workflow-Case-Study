@@ -299,5 +299,7 @@ details.fold[open]>summary{margin-bottom:14px}
 <div class="pop" id="pop" role="tooltip" hidden></div>
 <script src="data.js"></script>
 <script src="app.js"></script>
+<a class="cta" id="float-cta" href="desk.html" style="position:fixed;right:16px;bottom:16px;z-index:30;box-shadow:0 8px 24px -10px rgba(0,0,0,.35);opacity:0;pointer-events:none;transition:opacity .25s">Open the desk →</a>
+<script>(function(){var f=document.getElementById("float-cta"),h=document.querySelector(".wwh");if(!f||!h)return;var on=function(){var v=h.getBoundingClientRect().bottom<0;f.style.opacity=v?1:0;f.style.pointerEvents=v?"auto":"none";};addEventListener("scroll",on,{passive:true});document.addEventListener("toggle",on,true);on();})();</script>
 </body>
 </html>
