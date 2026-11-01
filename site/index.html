@@ -87,7 +87,7 @@ details.fold[open]>summary{margin-bottom:14px}
 <section class="wrap wwh" aria-label="Why, when and how">
   <p class="kicker" style="margin:0 0 10px">Problem, trigger and proposed process</p>
   <div class="wwh-grid">
-    <div class="wwh-c"><b>Why: the problem</b><p>One short payment mixes tax withheld, valid claims and disputes. Recorded as a single difference, it has no owner, and receivables outgrow revenue.</p></div>
+    <div class="wwh-c"><b>Why: the problem</b><p>One short payment mixes tax withheld, valid claims and disputes. Recorded as a single difference, it has no owner, and receivables outgrow revenue. Distributors short-pay partly because their claims take months to settle; settling valid claims fast removes the reason.</p></div>
     <div class="wwh-c"><b>When: the trigger</b><p>A receipt posts below the invoice value.<br><span class="mini">Today</span> weeks of email.<br><span class="mini">Target</span> every rupee classified and owned the same day.</p></div>
     <div class="wwh-c"><b>How: the proposed process</b><ol><li>Identify the payer (BR-1)</li><li>Separate statutory TDS (BR-2)</li><li>Validate claims against evidence (BR-3)</li><li>Route the remainder to an owner with an SLA (BR-4 to BR-7)</li></ol></div>
   </div>
@@ -324,5 +324,6 @@ details.fold[open]>summary{margin-bottom:14px}
 <script src="data.js"></script>
 <script src="app.js"></script>
 <script>(function(){var f=document.getElementById("float-cta"),h=document.querySelector(".wwh");if(!f||!h)return;var on=function(){var v=h.getBoundingClientRect().bottom<0;f.style.opacity=v?1:0;f.style.pointerEvents=v?"auto":"none";};addEventListener("scroll",on,{passive:true});document.addEventListener("toggle",on,true);on();})();</script>
+<p style="max-width:1080px;margin:0 auto;padding:18px 16px 36px;font-size:.8rem;color:#6B7280">Systems of record (the ERP, the CRM, the calendar) record what happened. They don't help at the moment a person has to decide something messy. Three layers for those moments, without replacing the system underneath: <a href="https://lull-hr.vercel.app/">Viraam</a> ends the meeting · <a href="https://everyrupee-o2c.vercel.app/">Every Rupee</a> owns the short-paid difference · <a href="https://tentoday.vercel.app/">Ten Today</a> unblocks the approval. By Rupak Ghanpathi.</p>
 </body>
 </html>

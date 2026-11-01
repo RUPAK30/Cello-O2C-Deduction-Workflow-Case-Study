@@ -8,6 +8,9 @@ In Indian distribution, a short payment is usually three things at once: tax wit
 
 [![One-pager preview](preview.png)](site/Cello_O2C_One_Pager.pdf)
 
+## Where it fits
+Distributors short-pay partly because their claims take months: a distribution-software vendor reports 45–90 days to settle manually, about 35% rejected for missing paperwork, and poor settlement as the second-biggest reason distributors drop a brand ([Spirestock](https://spirestock.com/blog/distributor-claims-settlement-fmcg-india), vendor figures, indicative). Distributor strain is visible independently, e.g. the Oct 2025 Tata Consumer distributor protest over payment delays and unsold, damaged stock ([Storyboard18](https://www.storyboard18.com/how-it-works/tata-consumer-aicpdf-reach-settlement-maharashtra-distributors-call-off-protest-83416.htm)). Every Rupee checks evidence on day one, settles valid claims upfront as credit notes and owns every remaining gap, protecting the manufacturer's cash and the distributor relationship. Discovery question: how long does a damage claim take to settle today?
+
 ## Why it matters
 | Metric (FY25 to FY26) | Change |
 | --- | --- |
