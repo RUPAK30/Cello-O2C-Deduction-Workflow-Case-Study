@@ -7,7 +7,8 @@ window.O2C = {
     ["BR-4", "Validate", "Unexplained gaps are never written off by a rule."],
     ["BR-5", "Control", "Above the approval threshold (illustratively ₹10,000) a second person approves; self-approval is blocked."],
     ["BR-6", "Prevent", "Valid claims are settled as credit notes. Credit notes are reported to the IRP within 30 days (e-invoicing, turnover ₹10 Cr+, from 1 April 2025) and GST credit notes are issued no later than 30 November of the following year (Section 34)."],
-    ["BR-7", "Credit", "When disputed deductions exceed a threshold or age past a limit, the next order is flagged for credit review."]
+    ["BR-7", "Credit", "When disputed deductions exceed a threshold or age past a limit, the next order is flagged for credit review."],
+    ["BR-8", "Control", "A scheme deduction with no approved scheme budget behind it (a verbal promise) goes to the Regional sales head within 3 days: charge it to the region's trade budget, or reject and recover from the distributor. It never sits in unallocated receivables."]
   ],
   CODES: [
     ["Scheme claim", "Scheme circular or agreement, plus eligibility", "Within that distributor's scheme budget"],

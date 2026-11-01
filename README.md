@@ -44,6 +44,9 @@ Kept from the original design: a case with reason code and owner, SLA routing, m
 | Missed credit-note windows leak GST (Terra Insight example, illustrative) | IRP 30-day and Section 34 deadlines are part of the SLA |
 | Virtual accounts tag each payment to its payer automatically (open.money) | The Identify layer removes manual payer identification from bank narrations |
 
+## BR-8: unbudgeted scheme claims (new)
+A scheme deduction with no approved budget behind it, usually a verbal promise by a sales manager, no longer sits in unallocated receivables. It goes to the Regional sales head with a 3-day SLA and two choices: charge it to the region's trade budget, so sales absorbs it rather than net realisation, or reject it and recover from the distributor. It answers the incentive gap between Sales (gross billing) and Finance (net realisation). UAT-11 tests it.
+
 ## Repo map
 - `site/` — the live page (static HTML, CSS, JS; deployed on Vercel with Root Directory `site`)
 - `site/data.js` — single source for business rules, reason codes, user stories and UAT; the page, BRD and CSV exports all render from it`n- `site/brd.html`, `site/onepager.html` — editable sources for the BRD and one-pager; the PDFs in `site/` are generated from these and from the page's print layout

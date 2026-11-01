@@ -113,6 +113,11 @@
       log("BR-3", c.id + " " + c.type.toLowerCase() + " " + inr(c.amount) + " auto-accepted: evidenced, in budget, under tolerance.");
     } else {
       c.reason = why.join("; ");
+      if (c.type === "Scheme claim" && c.amount > d.schemeLeft && !c.unbudgeted) {
+        c.unbudgeted = true; c.owner = "Regional sales head"; c.due = S.day + 3;
+        log("BR-8", c.id + " " + inr(c.amount) + " scheme deduction has no approved scheme budget behind it. Routed to the Regional sales head with a 3-day SLA: charge it to the region's trade budget, or reject and recover from the distributor.");
+        return;
+      }
       log(first ? "BR-3" : "BR-3", c.id + " " + c.type.toLowerCase() + " " + inr(c.amount) + " → " + c.owner + " (" + c.reason + "). SLA day " + c.due + ".");
     }
   }
@@ -146,7 +151,7 @@
       if (c.type === "Unexplained") { log("BR-4", "Blocked: " + c.id + " has no reason code. An unexplained gap can be recovered or reclassified, not approved."); flash("Blocked: unexplained gaps can't be approved. Recover it, or get a reason code first.", true); }
       else if (c.amount > S.settings.approval && c.maker === S.user) { log("BR-5", "Blocked: " + USERS[S.user] + " tried to approve own case " + c.id + " above " + inr(S.settings.approval) + ". Routed to a checker."); flash("Blocked by maker-checker: switch to the Finance controller to approve.", true); }
       else if (c.amount > S.settings.approval && !c.maker) { c.maker = S.user; log("BR-5", c.id + " (" + inr(c.amount) + ") recommended by " + USERS[S.user] + "; needs a second approver."); flash("Recommended. Above " + inr(S.settings.approval) + ", a second person must approve.", false); }
-      else { c.status = "Accepted"; c.closedBy = USERS[S.user]; if (c.type === "Scheme claim") d.schemeLeft = Math.max(0, d.schemeLeft - c.amount); issueCN(c); log("BR-5", c.id + " approved by " + USERS[S.user] + (c.maker ? " (recommended by " + USERS[c.maker] + ")" : "") + "."); }
+      else { c.status = "Accepted"; c.closedBy = USERS[S.user]; if (c.unbudgeted) { S.tradeCharged = (S.tradeCharged || 0) + c.amount; log("BR-8", c.id + ": " + inr(c.amount) + " charged to the region's trade budget (sales absorbs it, not net realisation). Region total charged: " + inr(S.tradeCharged) + "."); } else if (c.type === "Scheme claim") d.schemeLeft = Math.max(0, d.schemeLeft - c.amount); issueCN(c); log("BR-5", c.id + " approved by " + USERS[S.user] + (c.maker ? " (recommended by " + USERS[c.maker] + ")" : "") + "."); }
     }
     else if (what === "recover") { S.seq.dn++; c.status = "Recovered"; c.closedBy = USERS[S.user]; log("BR-4", c.id + ": " + inr(c.amount) + " found invalid. Debit note DN-" + (500 + S.seq.dn) + " raised; " + c.dist + " to pay."); }
     creditCheck(d); save(); if (!QUIET) render();
@@ -220,11 +225,11 @@
       var late = c.status === "Open" && S.day > c.due;
       var actions = c.status !== "Open" ? "<span class='pill " + (c.status === "Accepted" ? "ok" : "bad") + "'>" + c.status + (c.cn ? " · " + c.cn : "") + "</span><span class='by'>by " + esc(c.closedBy) + "</span>" :
         (c.type !== "Unexplained" && !c.evidence ? "<button class='btn small' data-a='evidence' data-id='" + c.id + "'>Attach evidence</button>" : "") +
-        "<button class='btn small primary' data-a='approve' data-id='" + c.id + "'>" + (c.maker && c.maker !== S.user ? "Approve (2nd)" : "Approve") + "</button>" +
-        "<button class='btn small' data-a='recover' data-id='" + c.id + "'>Invalid: recover</button>";
+        "<button class='btn small primary' data-a='approve' data-id='" + c.id + "'>" + (c.unbudgeted ? "Charge to sales trade budget" : c.maker && c.maker !== S.user ? "Approve (2nd)" : "Approve") + "</button>" +
+        "<button class='btn small' data-a='recover' data-id='" + c.id + "'>" + (c.unbudgeted ? "Reject: recover from distributor" : "Invalid: recover") + "</button>";
       return "<article class='case" + (c.status !== "Open" ? " closed" : "") + (late ? " late" : "") + "'><header><b class='mono'>" + c.id + "</b><span class='type t-" + c.type.split(" ")[0].toLowerCase() + "'>" + esc(c.type) + "</span><b class='mono amt'>" + inr(c.amount) + "</b></header>" +
         "<p>" + esc(c.dist) + " · " + c.inv + (c.status === "Open" ? " · owner <b>" + esc(c.owner) + "</b> · SLA day " + c.due + (late ? " <span class='pill bad'>late</span>" : "") : "") + "</p>" +
-        (c.checks ? "<table class='dt'><tr><th>Evidence</th><th>≤ limit</th><th>In budget</th><th>≤ 2× norm</th><th>BR-3 outcome</th></tr><tr>" + ["evidence", "limit", "budget", "norm"].map(function (k) { return "<td class='" + (c.checks[k] ? "y" : "n") + "'>" + (c.checks[k] ? "✓" : "✗") + "</td>"; }).join("") + "<td>" + (c.checks.evidence && c.checks.limit && c.checks.budget && c.checks.norm ? "Auto-accept" : "To " + esc(OWNERS[c.type])) + "</td></tr></table>" : "<p class='trace2'>" + (c.type === "Unexplained" ? "BR-4 · US-4 · UAT-07: no reason code, so it can't be auto-accepted or written off." : "") + "</p>") +
+        (c.checks ? "<table class='dt'><tr><th>Evidence</th><th>≤ limit</th><th>In budget</th><th>≤ 2× norm</th><th>BR-3 outcome</th></tr><tr>" + ["evidence", "limit", "budget", "norm"].map(function (k) { return "<td class='" + (c.checks[k] ? "y" : "n") + "'>" + (c.checks[k] ? "✓" : "✗") + "</td>"; }).join("") + "<td>" + (c.checks.evidence && c.checks.limit && c.checks.budget && c.checks.norm ? "Auto-accept" : "To " + esc(c.owner)) + "</td></tr></table>" : "<p class='trace2'>" + (c.type === "Unexplained" ? "BR-4 · US-4 · UAT-07: no reason code, so it can't be auto-accepted or written off." : "") + "</p>") +
         (c.maker && c.status === "Open" ? "<p class='why'>Recommended by " + esc(USERS[c.maker]) + "; waiting for a second approver.</p>" : "") +
         "<div class='acts'>" + actions + "</div></article>";
     }).join("") : "<p class='empty'>No cases yet. Load today's bank statement above.</p>";
@@ -260,6 +265,7 @@
     ["UAT-09", "BR-6, US-6", "Credit note issued", "IRP deadline set 30 days out", function () { processReceipt(R("CELLOVA0001", 991153, "INV-1041", "Scheme claim", 8000, true)); var n = S.notes[0]; return { pass: !!n && n.irpDue - n.issued === 30, actual: n ? n.id + ", IRP due in " + (n.irpDue - n.issued) + " days" : "No note" }; }],
     ["UAT-10", "BR-7, US-7", "Old dispute, then a new order", "Order flagged for review, not blocked", function () { processReceipt(R("CELLOVA0004", 238000, "INV-4002", "Scheme claim", 12000, true)); order("CELLOVA0004"); return { pass: /flagged for credit review/.test(S.log[0].text), actual: S.log[0].text.slice(0, 48) + "…" }; }]
   ];
+  TESTS.push(["UAT-11", "BR-8", "Scheme deduction with no approved budget", "Routed to the Regional sales head; charge to sales budget or recover", function () { processReceipt(R("CELLOVA0004", 238000, "INV-4002", "Scheme claim", 12000, true)); var c = S.cases.filter(function (x) { return x.type === "Scheme claim"; })[0]; act(c.id, "approve"); S.user = "checker"; act(c.id, "approve"); return { pass: c.unbudgeted && c.status === "Accepted" && S.tradeCharged === 12000, actual: "owner Regional sales head: " + !!c.unbudgeted + " · charged to trade budget " + inr(S.tradeCharged || 0) }; }]);
   function runUAT() {
     var rows = TESTS.map(function (t) { var o = scenario(t[4]); return [t[0], t[1], t[2], t[3], o.actual, o.pass]; });
     var passed = rows.filter(function (r) { return r[5]; }).length;
