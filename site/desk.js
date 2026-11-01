@@ -293,6 +293,8 @@
   ["tolerance", "approval"].forEach(function (k) { $("set-" + k).onchange = function () { S.settings[k] = Math.max(0, Number(this.value) || 0); log("Setting", k + " set to " + inr(S.settings[k]) + " by " + USERS[S.user] + "."); save(); render(); }; });
   $("next-day").onclick = nextDay;
   $("run-uat").onclick = runUAT;
+  $("dl-jira").onclick = function () { var O = window.O2C; download("user-stories-jira.csv", csv([["Summary", "Issue Type", "Description", "Acceptance Criteria", "Labels"]].concat(O.STORIES.map(function (x) { return [x[0] + " " + x[1], "Story", x[2], x[3], "o2c-deductions"]; }))), "text/csv"); };
+  $("dl-uatcsv").onclick = function () { var O = window.O2C; download("uat-cases.csv", csv([["ID", "Traces to", "Scenario", "Expected"]].concat(O.UAT)), "text/csv"); };
   if (/[?&]uat=1/.test(location.search)) setTimeout(runUAT, 300);
   if (location.hash === "#rules") { var dr = $("rules"); if (dr) dr.open = true; }
   $("reset").onclick = function () { S = seed(); save(); render(); refill(); flash("Reset to a fresh morning.", false); };

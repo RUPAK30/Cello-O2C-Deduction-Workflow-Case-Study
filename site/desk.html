@@ -110,6 +110,7 @@ th{font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--mu
     <p class="step">Verification</p>
     <h2>UAT results</h2>
     <p class="sub" id="uat-sum"></p>
+    <p class="row" style="margin-bottom:10px"><button class="btn small" id="dl-jira" type="button">Download user stories (Jira CSV)</button><button class="btn small" id="dl-uatcsv" type="button">Download UAT cases (CSV)</button></p>
     <div class="tbl"><table><thead><tr><th>Test</th><th>Traces to</th><th>Scenario</th><th>Actual</th><th>Result</th></tr></thead><tbody id="uat-body"></tbody></table></div>
   </div>
 </section>
@@ -201,6 +202,7 @@ th{font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--mu
   <p class="foot">Rules simplified for illustration: TDS u/s 194Q at 0.1% of taxable value once a distributor's purchases pass ₹50 lakh; thresholds are Finance-set and illustrative. Tax rules change; check current law. Built by Rupak Ghanpathi as a self-initiated case study.</p>
 </main>
 <div class="flash" id="flash" role="status" aria-live="polite"></div>
+<script src="data.js"></script>
 <script src="desk.js"></script>
 </body>
 </html>
