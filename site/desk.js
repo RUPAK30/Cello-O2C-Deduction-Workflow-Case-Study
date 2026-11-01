@@ -284,13 +284,17 @@
     var b = e.target.closest("[data-pre]"); if (!b) return;
     var P = b.dataset.pre === "1" ? ["CELLOVA0001", 991153, "INV-1041", "Less Diwali scheme 8,000 + TDS", true] : ["CELLOVA0002", 295000, "INV-2015", "", false];
     $("f-va").value = P[0]; refill(); $("f-amt").value = P[1]; $("f-ref").value = P[2]; $("f-nar").value = P[3]; $("f-type").value = ""; $("f-camt").value = ""; $("f-nar").oninput.call($("f-nar")); $("f-ev").checked = P[4];
-    flash(b.dataset.pre === "1" ? "Filled: ₹10,00,000 invoice paid ₹9,91,153. Press Process to see TDS split and the scheme claim auto-accepted." : "Filled: ₹3,00,000 invoice paid ₹2,95,000, no note. Press Process: the ₹5,000 gets an owner, never a write-off.", false);
+    $("add").requestSubmit();
   });
   $("add").onsubmit = function (e) {
     e.preventDefault();
     var r = { va: $("f-va").value, amount: Number($("f-amt").value) || 0, ref: $("f-ref").value, claimType: $("f-type").value, claimAmt: Number($("f-camt").value) || 0, evidence: $("f-ev").checked };
     if (!r.amount) { flash("Enter the amount received.", true); return; }
-    log("Import", "Receipt entered by hand."); processReceipt(r); save(); render(); flash("Receipt processed.", false);
+    var n0 = S.log.length; log("Import", "Receipt entered by hand."); processReceipt(r);
+    S.seq.erp = (S.seq.erp || 0) + 1; var ref = "ERP-SIM-" + String(S.seq.erp).padStart(4, "0"), tm = new Date().toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit", hour12: false });
+    var rules = S.log.slice(0, S.log.length - n0).map(function (l) { return l.rule; }).filter(function (x) { return /^BR-/.test(x); }).filter(function (x, i, a) { return a.indexOf(x) === i; }).sort().join(", ");
+    log("Posting", "Logged · rules " + rules + " · posting ref " + ref + " (simulated) · " + tm + " IST");
+    save(); render(); flash("Logged · " + rules + " · " + ref + " (simulated) · " + tm + " IST", false);
   };
   $("f-va").innerHTML = S.dists.map(function (d) { return "<option value='" + d.va + "'>" + esc(d.name) + "</option>"; }).join("");
   var refill = function () { $("f-ref").innerHTML = "<option value=''>No reference</option>" + S.invoices.filter(function (i) { return i.va === $("f-va").value && i.open > 0; }).map(function (i) { return "<option>" + i.no + "</option>"; }).join(""); };
