@@ -53,7 +53,7 @@ details.fold[open]>summary{margin-bottom:14px}
   <div class="hero-grid"><div>
   <p class="eyebrow">Business analysis case study · Rupak Ghanpathi</p>
   <h1>Distributor short-payment reconciliation</h1>
-  <p class="lede" style="margin-bottom:6px">Current-state analysis, business rules, user stories and acceptance tests for how a consumer-goods manufacturer reconciles distributor payments that arrive below the invoice value.</p>
+  <p class="lede" style="margin-bottom:6px">How a manufacturer should reconcile distributor payments that arrive below the invoice: process, rules, stories and executable tests.</p>
   </div>
   <a class="preview" href="desk.html" aria-label="Open the executable specification">
     <div class="pv-h"><b>Reconciliation desk</b><span class="pv-chip">Day 0 · sample data</span></div>
@@ -80,8 +80,8 @@ details.fold[open]>summary{margin-bottom:14px}
 <section class="wrap wwh" aria-label="Why, when and how">
   <p class="kicker" style="margin:0 0 10px">Problem, trigger and proposed process</p>
   <div class="wwh-grid">
-    <div class="wwh-c"><b>Why: the problem</b><p>A short payment combines three items with different owners: tax withheld at source, valid commercial claims and genuine disputes. Recorded as one unexplained difference, it has no owner, and receivables grow faster than revenue.</p></div>
-    <div class="wwh-c"><b>When: the trigger</b><p>A distributor receipt is posted below the invoice value. Current state: the difference is investigated by email over several weeks. Target state: every rupee is classified and assigned an owner on the day of receipt.</p></div>
+    <div class="wwh-c"><b>Why: the problem</b><p>One short payment mixes tax withheld, valid claims and disputes. Recorded as a single difference, it has no owner, and receivables outgrow revenue.</p></div>
+    <div class="wwh-c"><b>When: the trigger</b><p>A receipt posts below the invoice value.<br><span class="mini">Today</span> weeks of email.<br><span class="mini">Target</span> every rupee classified and owned the same day.</p></div>
     <div class="wwh-c"><b>How: the proposed process</b><ol><li>Identify the payer (BR-1)</li><li>Separate statutory TDS (BR-2)</li><li>Validate claims against evidence (BR-3)</li><li>Route the remainder to an owner with an SLA (BR-4 to BR-7)</li></ol></div>
   </div>
   <p style="margin:16px 0 8px"><a class="cta" href="desk.html">Open the executable specification →</a></p>
