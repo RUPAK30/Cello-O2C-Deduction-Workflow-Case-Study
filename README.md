@@ -1,4 +1,4 @@
-# Every rupee needs an owner: an order-to-cash case study
+# Distributor short-payment reconciliation: a business analysis case study
 
 > **Live page:** [everyrupee-o2c.vercel.app](https://everyrupee-o2c.vercel.app) · Product case study by **Rupak Ghanpathi** · built from Cello World Ltd's public filings
 
@@ -15,7 +15,7 @@ In Indian distribution, a short payment is usually three things at once: tax wit
 | Revenue, ₹2,136 Cr to ₹2,324 Cr | +8.8% |
 | Receivables above revenue-pace growth | **approx. ₹34 Cr** (an estimate, not a measured backlog) |
 
-## The requirements, running (new)
+## Executable specification (new)
 **[everyrupee-o2c.vercel.app/desk.html](https://everyrupee-o2c.vercel.app/desk.html)**: the BRD as an executable specification. One button runs the ten UAT cases against the engine and shows pass/fail with expected vs actual; every action is traced to its rule, story and test; BR-3 is shown as a decision table. Load the sample bank statement or upload your own CSV, and the seven business rules run on every receipt: payer identified by virtual account, 194Q TDS split out, claims auto-accepted only with evidence and within budget, everything else opened as a case with an owner and SLA. Then work the cases as an AR executive or Finance controller: attach evidence, approve (maker-checker blocks self-approval above the threshold), recover invalid claims, issue credit notes, advance days to see SLA escalation and IRP alerts, place orders to trigger the credit flag, and download cases and the audit trail as CSV. Synthetic data; runs entirely in the browser.
 
 ## What the live page shows

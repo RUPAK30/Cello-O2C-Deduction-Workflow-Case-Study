@@ -3,11 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Every Rupee Needs an Owner</title>
-<meta name="description" content="A business analysis case study by Rupak Ghanpathi: a workflow that explains every rupee of a distributor short payment on the day it arrives, with the rules, stories and tests behind it.">
+<title>Distributor Short-Payment Reconciliation · BA Case Study</title>
+<meta name="description" content="Business analysis case study by Rupak Ghanpathi: current-state analysis, business rules, user stories, RACI and executable acceptance tests for distributor short-payment reconciliation.">
 <meta property="og:type" content="website">
-<meta property="og:title" content="Every rupee needs an owner: a business analysis case study">
-<meta property="og:description" content="The same ₹20,000 short payment, two workflows: 31 days of email, or explained by 09:03 on day 0. Requirements, business rules, user stories and UAT by Rupak Ghanpathi.">
+<meta property="og:title" content="Distributor short-payment reconciliation: a business analysis case study">
+<meta property="og:description" content="Problem statement, current and target process, seven business rules, user stories and ten executable UAT cases.">
 <meta property="og:url" content="https://everyrupee-o2c.vercel.app/">
 <meta property="og:image" content="https://everyrupee-o2c.vercel.app/og.png">
 <meta property="og:image:width" content="1200">
@@ -48,26 +48,26 @@ details.fold[open]>summary{margin-bottom:14px}
 <body>
 <header class="wrap hero">
   <p class="eyebrow">Business analysis case study · Rupak Ghanpathi</p>
-  <h1>Every rupee needs an owner.</h1>
-  <p class="lede" style="margin-bottom:6px">A business analysis case study in order-to-cash: what to do when a distributor pays less than the invoice.</p>
+  <h1>Distributor short-payment reconciliation</h1>
+  <p class="lede" style="margin-bottom:6px">Current-state analysis, business rules, user stories and acceptance tests for how a consumer-goods manufacturer reconciles distributor payments that arrive below the invoice value.</p>
   <p class="kicker" style="margin:18px 0 8px">Six BA skills, each with its proof · tap one</p>
   <ol class="skills">
-    <li><a href="#why"><b>Problem framing</b><span>Receivables +14% vs revenue +8.8%, from filings</span></a></li>
-    <li><a href="#race"><b>Process mapping</b><span>Current vs future, the same ₹20,000</span></a></li>
-    <li><a href="#spec" data-tab="raci"><b>Stakeholders &amp; RACI</b><span>Six roles, who owns each step</span></a></li>
-    <li><a href="desk.html#rules"><b>Business rules</b><span>7 rules, one as a decision table</span></a></li>
-    <li><a href="desk.html?uat=1"><b>Stories &amp; UAT</b><span>10 tests you can run: 10 pass</span></a></li>
-    <li><a href="#fail" data-open="1"><b>Risk &amp; validation</b><span>Where it fails, and the stop rule</span></a></li>
+    <li><a href="#why"><b>Problem framing</b><span>Problem statement from public filings</span></a></li>
+    <li><a href="#race"><b>Process mapping</b><span>Current state vs target state</span></a></li>
+    <li><a href="#spec" data-tab="raci"><b>Stakeholders &amp; RACI</b><span>Six roles mapped to each step</span></a></li>
+    <li><a href="desk.html#rules"><b>Business rules</b><span>Seven rules and a decision table</span></a></li>
+    <li><a href="desk.html?uat=1"><b>Stories &amp; UAT</b><span>Ten acceptance tests, executable</span></a></li>
+    <li><a href="#fail" data-open="1"><b>Risk &amp; validation</b><span>Risks, assumptions and a stop rule</span></a></li>
   </ol>
 </header>
 <section class="wrap wwh" aria-label="Why, when and how">
-  <p class="kicker" style="margin:0 0 10px">The assignment, in three questions</p>
+  <p class="kicker" style="margin:0 0 10px">Problem, trigger and proposed process</p>
   <div class="wwh-grid">
-    <div class="wwh-c"><b>Why</b><p>A short payment hides three things: tax withheld, a valid claim and a real dispute. Treated as one, nobody owns it, and receivables grow faster than sales.</p></div>
-    <div class="wwh-c"><b>When</b><p>The morning a distributor's payment lands short. Today it is worked out over weeks of email. The design settles it by 09:03 the same day.</p></div>
-    <div class="wwh-c"><b>How</b><ol><li>Identify who paid</li><li>Split out the tax</li><li>Validate claims with evidence</li><li>Give every other rupee an owner</li></ol></div>
+    <div class="wwh-c"><b>Why: the problem</b><p>A short payment combines three items with different owners: tax withheld at source, valid commercial claims and genuine disputes. Recorded as one unexplained difference, it has no owner, and receivables grow faster than revenue.</p></div>
+    <div class="wwh-c"><b>When: the trigger</b><p>A distributor receipt is posted below the invoice value. Current state: the difference is investigated by email over several weeks. Target state: every rupee is classified and assigned an owner on the day of receipt.</p></div>
+    <div class="wwh-c"><b>How: the proposed process</b><ol><li>Identify the payer (BR-1)</li><li>Separate statutory TDS (BR-2)</li><li>Validate claims against evidence (BR-3)</li><li>Route the remainder to an owner with an SLA (BR-4 to BR-7)</li></ol></div>
   </div>
-  <p style="margin:16px 0 8px"><a class="cta" href="desk.html">See the requirements running →</a></p>
+  <p style="margin:16px 0 8px"><a class="cta" href="desk.html">Open the executable specification →</a></p>
 </section>
 
 
@@ -88,7 +88,7 @@ details.fold[open]>summary{margin-bottom:14px}
 </section>
 
 <section class="wrap race-wrap" id="race" aria-labelledby="race-h">
-<details class="fold"><summary><b>Watch it</b> · the same ₹20,000, today vs the proposed workflow</summary>
+<details class="fold"><summary><b>Current state vs target state</b> · one ₹20,000 short payment through both processes</summary>
   <div class="race-head">
     <h2 id="race-h" class="kicker">Current process vs future process: the same ₹20,000 short payment</h2>
     <div class="race-ctl">
@@ -132,7 +132,7 @@ details.fold[open]>summary{margin-bottom:14px}
 
 
 <section class="wrap" id="try" aria-labelledby="try-h">
-<details class="fold" id="try-d"><summary><b>Try one rule</b> · change a Finance setting, watch one payment re-classify</summary>
+<details class="fold" id="try-d"><summary><b>Rule parameters</b> · change a Finance-controlled threshold and observe the classification change</summary>
   <h2 id="try-h">Try the rules yourself</h2>
   <p class="sub">The proposed workflow above is driven by rules Finance controls. Change one and watch the payment re-classify.</p>
   <div class="try-grid">
@@ -299,7 +299,7 @@ details.fold[open]>summary{margin-bottom:14px}
 <div class="pop" id="pop" role="tooltip" hidden></div>
 <script src="data.js"></script>
 <script src="app.js"></script>
-<a class="cta" id="float-cta" href="desk.html" style="position:fixed;right:16px;bottom:16px;z-index:30;box-shadow:0 8px 24px -10px rgba(0,0,0,.35);opacity:0;pointer-events:none;transition:opacity .25s">Open the desk →</a>
+<a class="cta" id="float-cta" href="desk.html" style="position:fixed;right:16px;bottom:16px;z-index:30;box-shadow:0 8px 24px -10px rgba(0,0,0,.35);opacity:0;pointer-events:none;transition:opacity .25s">Executable specification →</a>
 <script>(function(){var f=document.getElementById("float-cta"),h=document.querySelector(".wwh");if(!f||!h)return;var on=function(){var v=h.getBoundingClientRect().bottom<0;f.style.opacity=v?1:0;f.style.pointerEvents=v?"auto":"none";};addEventListener("scroll",on,{passive:true});document.addEventListener("toggle",on,true);on();})();</script>
 </body>
 </html>
