@@ -247,14 +247,12 @@
     var autoAmt = 1000 + (c.scheme === "auto" ? SCHEME : 0);
     $("kpi").innerHTML = "<b class='mono'>" + Math.round(autoAmt / GAP * 100) + "%</b> classified with no person involved; the rest has a named owner.";
 
-    if (c.damage === "disp") {
-      $("notify").innerHTML = "<div class='slack'><div class='slack-h'><b>#ar-disputes</b><span>Proposed · mock, not connected to Slack</span></div>" +
-        "<p><b>Case C-3318 assigned to you</b> · Distributor A · INV-1042<br>₹11,000 damage claim · no proof of delivery · 2.6× norm<br>SLA due " + pretty(SLA_DUE) + "</p></div>" +
-        "<div class='cal'><a target='_blank' rel='noopener' href='" + gcal(SLA_TITLE, SLA_DUE, SLA_DETAILS) + "'>Add SLA to Google Calendar</a><button class='linkbtn' data-act='sla-ics'>Download .ics</button><button class='linkbtn' data-act='copy-slack'>Copy as Slack message</button></div>";
-    } else {
-      $("notify").innerHTML = "<div class='slack'><div class='slack-h'><b>#ar-approvals</b><span>Proposed · mock, not connected to Slack</span></div>" +
-        "<p><b>Case C-3318 needs review</b> · Distributor A · INV-1042<br>₹11,000 damage claim · proof attached · 2.6× norm<br>Above ₹10,000: a second approver is required</p></div>";
-    }
+    var cards = [], slackH = function (ch) { return "<div class='slack' style='margin-bottom:8px'><div class='slack-h'><b>" + ch + "</b><span>Proposed · mock, not connected to Slack</span></div>"; };
+    if (c.scheme === "review") cards.push(slackH("#ar-review") + "<p><b>Case C-3317 assigned to you (AR lead)</b> · Distributor A · INV-1042<br>₹8,000 scheme claim · evidence attached · above the " + inr(params.tol) + " auto-accept limit<br>SLA due " + pretty(SLA_DUE) + "</p></div>");
+    if (c.damage === "disp") cards.push(slackH("#ar-disputes") + "<p><b>Case C-3318 assigned to you (area sales manager)</b> · Distributor A · INV-1042<br>₹11,000 damage claim · no proof of delivery · 2.6× norm<br>SLA due " + pretty(SLA_DUE) + "</p></div>");
+    else cards.push(slackH("#ar-approvals") + "<p><b>Case C-3318 needs review</b> · Distributor A · INV-1042<br>₹11,000 damage claim · proof attached · 2.6× norm<br>Above ₹10,000: a second approver is required</p></div>");
+    var quiet = c.scheme === "auto" ? "<p class='small' style='margin:0 0 8px;color:var(--muted)'>₹8,000 scheme claim auto-accepted under the " + inr(params.tol) + " limit: no one is notified, a credit note is issued.</p>" : "";
+    $("notify").innerHTML = quiet + cards.join("") + "<div class='cal'><a target='_blank' rel='noopener' href='" + gcal(SLA_TITLE, SLA_DUE, SLA_DETAILS) + "'>Add SLA to Google Calendar</a><button class='linkbtn' data-act='sla-ics'>Download .ics</button><button class='linkbtn' data-act='copy-slack'>Copy as Slack message</button></div>";
 
     var disputes = [];
     if (c.damage === "disp") disputes.push(["Damage, INV-1042 (this payment)", DAMAGE, 0]);
