@@ -34,12 +34,22 @@ details.fold[open]>summary{margin-bottom:14px}
 #try,#close,#fail,#evolved{padding-top:8px;padding-bottom:8px}
 </style>
 <script>document.addEventListener("click",function(e){var a=e.target.closest(".skills a");if(!a)return;var h=a.getAttribute("href");if(h.charAt(0)!=="#")return;var t=document.querySelector(h);if(!t)return;var d=t.querySelector("details");if(d)d.open=true;if(a.dataset.tab){var b=document.querySelector('[data-spec="'+a.dataset.tab+'"]');if(b)b.click();}});</script>
+<style>
+.wwh{padding-top:8px;padding-bottom:16px}
+.wwh-grid{display:grid;gap:10px;grid-template-columns:1fr}
+@media(min-width:760px){.wwh-grid{grid-template-columns:repeat(3,1fr)}}
+.wwh-c{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.wwh-c b{font-family:var(--serif);font-size:1.15rem;color:var(--accent);display:block;margin-bottom:4px}
+.wwh-c p{margin:0;font-size:.92rem;line-height:1.5}
+.wwh-c ol{margin:0;padding-left:18px;font-size:.92rem;line-height:1.6}
+#why,#race,#spec{padding-top:8px;padding-bottom:8px}
+</style>
 </head>
 <body>
 <header class="wrap hero">
   <p class="eyebrow">Business analysis case study · Rupak Ghanpathi</p>
   <h1>Every rupee needs an owner.</h1>
-  <p class="lede" style="margin-bottom:6px">When a distributor pays less than the invoice, nobody knows why for weeks. I specified the workflow that explains every rupee on day 0.</p>
+  <p class="lede" style="margin-bottom:6px">A business analysis case study in order-to-cash: what to do when a distributor pays less than the invoice.</p>
   <p class="kicker" style="margin:18px 0 8px">Six BA skills, each with its proof · tap one</p>
   <ol class="skills">
     <li><a href="#why"><b>Problem framing</b><span>Receivables +14% vs revenue +8.8%, from filings</span></a></li>
@@ -49,13 +59,23 @@ details.fold[open]>summary{margin-bottom:14px}
     <li><a href="desk.html?uat=1"><b>Stories &amp; UAT</b><span>10 tests you can run: 10 pass</span></a></li>
     <li><a href="#fail" data-open="1"><b>Risk &amp; validation</b><span>Where it fails, and the stop rule</span></a></li>
   </ol>
-  <p style="margin:16px 0 28px"><a class="cta" href="desk.html">See the requirements running →</a></p>
 </header>
+<section class="wrap wwh" aria-label="Why, when and how">
+  <p class="kicker" style="margin:0 0 10px">The assignment, in three questions</p>
+  <div class="wwh-grid">
+    <div class="wwh-c"><b>Why</b><p>A short payment hides three things: tax withheld, a valid claim and a real dispute. Treated as one, nobody owns it, and receivables grow faster than sales.</p></div>
+    <div class="wwh-c"><b>When</b><p>The morning a distributor's payment lands short. Today it is worked out over weeks of email. The design settles it by 09:03 the same day.</p></div>
+    <div class="wwh-c"><b>How</b><ol><li>Identify who paid</li><li>Split out the tax</li><li>Validate claims with evidence</li><li>Give every other rupee an owner</li></ol></div>
+  </div>
+  <p style="margin:16px 0 8px"><a class="cta" href="desk.html">See the requirements running →</a></p>
+</section>
+
 
 <main>
 
 
 <section class="wrap" id="why" aria-labelledby="why-h">
+<details class="fold"><summary><b>The numbers behind it</b> · Cello World's filings, FY25 to FY26</summary>
   <h2 id="why-h">Why this problem</h2>
   <p>The case is built on Cello World Ltd, a consumer products maker selling through more than 4,000 distributors to over 1,50,000 retailers (FY25 investor presentation), mostly on credit. In FY26 its receivables grew faster than its revenue:</p>
   <div class="signal">
@@ -64,9 +84,11 @@ details.fold[open]>summary{margin-bottom:14px}
     <div><b class="mono">≈ ₹34 Cr</b><span>above revenue pace (estimate)</span></div>
   </div>
   <p class="note">₹658 Cr grown at 8.8% ≈ ₹716 Cr, against ₹750 Cr actual. An estimate, not a measured backlog; receivables also rise through credit expansion, channel mix or timing. It justifies discovery, not a diagnosis. In scope: receipts, deductions, their evidence, ownership and settlement. Out of scope: credit-limit policy, collections strategy and ERP replacement.</p>
+</details>
 </section>
 
 <section class="wrap race-wrap" id="race" aria-labelledby="race-h">
+<details class="fold"><summary><b>Watch it</b> · the same ₹20,000, today vs the proposed workflow</summary>
   <div class="race-head">
     <h2 id="race-h" class="kicker">Current process vs future process: the same ₹20,000 short payment</h2>
     <div class="race-ctl">
@@ -104,6 +126,7 @@ details.fold[open]>summary{margin-bottom:14px}
   <div class="verdict" id="verdict" hidden>
     <p><b class="mono">31 days</b> and 9 emails, still unexplained, versus <b class="mono">every rupee</b> explained and owned by 09:03 on day 0. Nothing written off.</p>
   </div>
+</details>
 </section>
 
 
@@ -160,7 +183,7 @@ details.fold[open]>summary{margin-bottom:14px}
 
 
 <section class="wrap" id="spec" aria-labelledby="spec-h">
-  <details class="specd"><summary style="cursor:pointer"><h2 id="spec-h" style="display:inline">The specification</h2> <span style="color:var(--muted);font-size:.9rem">· rules, reason codes, traceability, stories, UAT, RACI (tap to open)</span></summary>
+  <details class="fold"><summary><b id="spec-h">The specification</b> · rules, reason codes, traceability, stories, UAT, RACI</summary>
   <p class="sub">For the business reader: the rules, requirements and tests behind the prototype. Every requirement traces to a pain point or research finding and forward to a test.</p>
   <div class="tabs" role="tablist" aria-label="Specification">
     <button role="tab" aria-selected="true" data-spec="rules">Business rules</button>
