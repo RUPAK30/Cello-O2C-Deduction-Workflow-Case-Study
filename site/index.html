@@ -64,6 +64,36 @@ details .in{padding:0 16px 14px;font-size:.9rem}details ul{margin:0;padding-left
 .how{font-size:.74rem;color:var(--mut);margin:8px 0 0}
 footer{padding:24px 0 40px;font-size:.76rem;color:var(--mut)}footer a{color:var(--ink2)}
 @media(max-width:560px){.calc label{grid-template-columns:1fr}.out{grid-template-columns:1fr}}
+
+.hero{text-align:left;padding:40px 0 26px}
+.hg{display:grid;gap:28px;align-items:center}@media(min-width:900px){.hg{grid-template-columns:1.05fr .95fr}}
+.hero h1{margin:14px 0 12px;max-width:none}.hero .lead{margin:0 0 20px}.hero .btns,.hero .chips{justify-content:flex-start}
+.col{max-width:1040px}
+.app{background:#fff;border:1px solid var(--line);border-radius:22px;box-shadow:0 30px 60px -30px rgba(4,120,87,.45);overflow:hidden;transform:rotate(.6deg);transition:transform .4s}
+.app:hover{transform:rotate(0) translateY(-4px)}
+.bar{display:flex;align-items:center;gap:6px;padding:10px 14px;border-bottom:1px solid var(--line);background:#FAFDFB;font-size:.78rem;color:var(--mut)}
+.bar i{width:8px;height:8px;border-radius:50%;background:#E5E7EB}.bar span{margin-left:8px}
+.apph{display:flex;justify-content:space-between;align-items:baseline;padding:14px 16px 6px}
+.apph b{font-size:1.5rem;letter-spacing:-.02em}.apph small{color:var(--mut);font-size:.78rem}
+.case{display:grid;grid-template-columns:1fr auto;gap:4px 10px;margin:8px 14px;padding:11px 12px;border:1px solid var(--line);border-radius:14px;font-size:.84rem}
+.case b{font-variant-numeric:tabular-nums}
+.tag{font-size:.68rem;font-weight:600;padding:2px 8px;border-radius:999px;justify-self:start}
+.t1{background:#ECFDF5;color:#047857}.t2{background:#FFF7E6;color:#B45309}.t3{background:#EEF2FF;color:#4338CA}
+.who{color:var(--mut);font-size:.76rem}
+.sla{grid-column:1/-1;height:5px;border-radius:9px;background:#F1F5F3;overflow:hidden}.sla i{display:block;height:100%;border-radius:9px;background:linear-gradient(90deg,#10B981,#D97706)}
+.appf{display:flex;justify-content:space-between;padding:10px 16px 14px;font-size:.78rem;color:var(--mut)}.appf a{color:var(--green-d);font-weight:600;text-decoration:none}
+.seg{display:flex;justify-content:center;margin:26px 0 6px}
+.seg div{display:inline-flex;background:#fff;border:1px solid var(--line);border-radius:999px;padding:4px;box-shadow:0 8px 20px -14px rgba(4,120,87,.5)}
+.seg button{font:inherit;font-weight:600;font-size:.9rem;border:0;background:none;padding:9px 18px;border-radius:999px;cursor:pointer;color:var(--ink2)}
+.seg button.on{background:linear-gradient(135deg,#047857,#10B981);color:#fff}
+.pane[hidden]{display:none}
+.screens{display:grid;gap:14px}@media(min-width:760px){.screens{grid-template-columns:repeat(3,1fr)}}
+.scr{background:#fff;border:1px solid var(--line);border-radius:18px;padding:16px;box-shadow:0 18px 36px -30px rgba(4,120,87,.5)}
+.scr .n{font-size:.7rem;font-weight:700;color:var(--gold);letter-spacing:.08em}
+.scr h3{margin:4px 0 6px;font-size:1rem}.scr p{margin:0 0 10px;font-size:.86rem;color:var(--ink2)}
+.mini{border:1px dashed var(--line);border-radius:12px;padding:10px;font-size:.78rem;background:#FAFDFB}
+.mini div{display:flex;justify-content:space-between;padding:3px 0}
+.mini .ok{color:#047857;font-weight:600}.mini .no{color:#B91C1C;font-weight:600}
 </style>
 </head>
 <body>
@@ -73,14 +103,31 @@ footer{padding:24px 0 40px;font-size:.76rem;color:var(--mut)}footer a{color:var(
 </div></header>
 
 <main class="col">
-<section class="hero">
-  <span class="pill">Order-to-cash · BA case study, built and testable</span>
-  <h1>Distributors pay less than the bill. <em>I gave every missing rupee an owner, rules and a working product.</em></h1>
-  <p class="lead">A live finance-ops problem taken from evidence to a product you can click through: who decides, what data flows, which rules apply, and 11 tests that prove it.</p>
-  <div class="btns"><a class="btn g" href="desk.html">Try the product →</a><a class="btn" href="desk.html?uat=1">Run the 11 tests</a><a class="btn" href="brd.html">Read the BRD</a></div>
-  <div class="chips"><span>4 owners mapped</span><span>8 business rules</span><span>Maker-checker above ₹10,000</span><span>No auto write-offs</span><span>Jira-ready stories</span></div>
-</section>
-
+<section class="hero"><div class="hg">
+ <div>
+  <span class="pill">Order-to-cash · a working product + the thinking behind it</span>
+  <h1>Distributors pay less than the bill. <em>Every Rupee gives every missing rupee an owner and an ending.</em></h1>
+  <p class="lead">Upload a bank statement, see every gap labelled and owned, approve it, close it with a GST credit note. Built end to end by a BA, with 8 rules and 11 tests.</p>
+  <div class="btns"><a class="btn g" href="desk.html">Try the product →</a><a class="btn" href="desk.html?uat=1">Run the 11 tests</a></div>
+  <div class="chips"><span>4 owners</span><span>8 rules</span><span>Maker-checker &gt; ₹10,000</span><span>No auto write-offs</span></div>
+ </div>
+ <a class="app" href="desk.html" style="text-decoration:none;color:inherit;display:block" aria-label="Open the product">
+  <div class="bar"><i></i><i></i><i></i><span>Every Rupee · today's gaps</span></div>
+  <div class="apph"><b>₹16,410</b><small>short-paid · 3 gaps · 3 owners</small></div>
+  <div class="case"><b>₹12,400</b><span class="tag t2">Scheme · no budget</span><span class="who">Owner: Regional sales head</span><span class="who">1 day left</span><div class="sla"><i style="width:70%"></i></div></div>
+  <div class="case"><b>₹3,150</b><span class="tag t3">Damage · needs checker</span><span class="who">Owner: Checker</span><span class="who">2 days left</span><div class="sla"><i style="width:45%"></i></div></div>
+  <div class="case"><b>₹860</b><span class="tag t1">TDS · matched</span><span class="who">Owner: Finance ops</span><span class="who">Closed ✓</span><div class="sla"><i style="width:100%"></i></div></div>
+  <div class="appf"><span>Sample data</span><b style="color:#047857">Open the product →</b></div>
+ </a>
+</div></section>
+<div class="seg"><div role="tablist"><button class="on" data-p="prod">The product</button><button data-p="think">The thinking</button></div></div>
+<div class="pane" id="prod">
+ <div class="screens blk">
+  <div class="scr"><span class="n">STEP 1</span><h3>Upload and match</h3><p>Bank statement in; each payment matched to its bill; every gap flagged.</p><div class="mini"><div><span>Bill #4417</span><span>₹11,800</span></div><div><span>Paid</span><span>₹10,620</span></div><div><span>Gap</span><span class="no">₹1,180</span></div></div></div>
+  <div class="scr"><span class="n">STEP 2</span><h3>Label, own, approve</h3><p>8 rules tag the reason and route it. Above ₹10,000, a second person approves.</p><div class="mini"><div><span>Reason</span><span>Scheme claim</span></div><div><span>Maker</span><span class="ok">Recommended</span></div><div><span>Self-approve</span><span class="no">Blocked</span></div></div></div>
+  <div class="scr"><span class="n">STEP 3</span><h3>Close it</h3><p>Fair: GST credit note. Unfair: recovery. Logged with a reference.</p><div class="mini"><div><span>Credit note</span><span>₹1,180</span></div><div><span>GST recovered</span><span class="ok">₹180</span></div><div><span>Reference</span><span>CN-0193</span></div></div></div>
+ </div>
+</div><div class="pane" id="think" hidden>
 <div class="card blk">
   <p class="k">What this shows about how I work</p>
   <div class="grid4">
@@ -128,6 +175,7 @@ footer{padding:24px 0 40px;font-size:.76rem;color:var(--mut)}footer a{color:var(
 <li><b>BR-7</b> Flag the next order for credit review when disputes age or pile up.</li>
 <li><b>BR-8</b> Unbudgeted scheme claims go to the regional sales head in 3 days.</li></ul></div></details>
 
+</div>
 <div class="card blk calc">
   <p class="k">What it's worth · try your own numbers</p>
   <label>Monthly billing to distributors (₹ lakh)<input id="bill" type="number" min="0" value="500"></label>
@@ -152,6 +200,7 @@ var f=function(x){return x>=100?'₹'+(x/100).toFixed(2).replace(/\.00$/,'')+' c
 function run(){var g=function(i){return +document.getElementById(i).value||0};var s=g('bill')*g('pct')/100*g('days')/30;document.getElementById('o1').textContent=f(s);document.getElementById('o2').textContent=f(s*g('rate')/100);}
 ['bill','pct','days','rate'].forEach(function(i){document.getElementById(i).addEventListener('input',run)});run();
 })();
+document.querySelectorAll('.seg button').forEach(function(b){b.onclick=function(){document.querySelectorAll('.seg button').forEach(function(x){x.classList.toggle('on',x===b)});document.querySelectorAll('.pane').forEach(function(p){p.hidden=p.id!==b.dataset.p})}});
 </script>
 </body>
 </html>
