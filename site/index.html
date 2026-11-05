@@ -108,6 +108,17 @@ footer{margin-top:60px;border-top:1px solid var(--line);background:#fff;padding:
 .fl{display:flex;flex-wrap:wrap;justify-content:center;gap:4px 18px;margin-bottom:22px}.fl a{text-decoration:none;color:var(--ink2)}.fl a:hover{color:var(--gd)}
 .fb{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;padding-top:16px;border-top:1px solid var(--line);font-size:.76rem;color:var(--mut)}.fb a{color:var(--ink2)}
 @media(max-width:560px){.rows button{grid-template-columns:78px 1fr;}.rows .st{grid-column:2}.calc label{grid-template-columns:1fr}.qa div{grid-template-columns:1fr;gap:2px}}
+
+.lens{margin:8px 0 0}.lens .lh{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}
+.lens h2{margin:0;font-size:1.35rem}.seg{display:inline-flex;background:#fff;border:1px solid rgba(15,31,26,.1);border-radius:999px;padding:4px;gap:2px;flex-wrap:wrap}
+.seg button{border:0;background:none;font:inherit;font-size:.86rem;font-weight:550;padding:8px 14px;border-radius:999px;cursor:pointer;color:#3E5049}
+.seg button[aria-pressed=true]{background:linear-gradient(180deg,#1E3A31,#0F1F1A);color:#fff}
+.lcards{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.lcard{background:rgba(255,255,255,.85);border:1px solid rgba(15,31,26,.08);border-radius:18px;padding:18px}
+.lcard small{display:block;font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;color:#0E7490;font-weight:700;margin-bottom:6px}.lcard p{margin:0;font-size:.95rem;line-height:1.5}
+.forchip{display:inline-flex;gap:8px;align-items:center;margin:0 0 14px;padding:6px 14px;border-radius:999px;background:#ECFEFF;border:1px solid #A5E3EE;color:#155E75;font-size:.85rem;font-weight:600}
+.ask{display:flex;gap:8px;margin:12px 0 4px}.ask input{flex:1;min-width:0;height:44px;border-radius:12px;border:1px solid rgba(15,31,26,.15);padding:0 14px;font:inherit;font-size:.92rem;background:#fff}
+.ask input:focus{outline:2px solid #5EEAD4;border-color:transparent}
+@media(max-width:820px){.lcards{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -120,6 +131,7 @@ footer{margin-top:60px;border-top:1px solid var(--line);background:#fff;padding:
 
 <main class="col">
 <section class="hero">
+  <span class="forchip" id="forchip" hidden></span>
   <span class="eye"><b></b>A finance-ops case study, built as a working product</span>
   <h1>Every short-paid rupee needs <em>a reason, an owner and an ending.</em></h1>
   <p class="lead">Distributors short-pay; brands lose track. I mapped the owners, wrote the rules and built a product finance ops could run tomorrow: 8 rules, 11 tests, maker-checker.</p>
@@ -139,6 +151,15 @@ footer{margin-top:60px;border-top:1px solid var(--line);background:#fff;padding:
       <div class="ctl"><button class="btn g sm" id="nx" type="button">Next step <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5 3l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button><button class="btn sm" id="rs" type="button">Replay</button><a class="btn sm" href="desk.html">Do it in the product</a></div>
     </div>
   </div>
+</section>
+
+<section class="sec lens" id="lens">
+  <div class="lh"><h2 id="lensh">Read it from your side of the table</h2>
+  <div class="seg" role="group" aria-label="Your side">
+    <button type="button" data-l="saas" aria-pressed="true">I build finance software</button>
+    <button type="button" data-l="brand" aria-pressed="false">I run finance at a brand</button>
+    <button type="button" data-l="bank" aria-pressed="false">I'm at a bank or NBFC</button></div></div>
+  <div class="lcards"><div class="lcard"><small>Where you meet this</small><p id="l1"></p></div><div class="lcard"><small>My first 30 days</small><p id="l2"></p></div><div class="lcard"><small>The question I'd ask you</small><p id="l3"></p></div></div>
 </section>
 
 <section class="sec" id="calc">
@@ -203,13 +224,14 @@ footer{margin-top:60px;border-top:1px solid var(--line);background:#fff;padding:
       <p>A portfolio case study, not a company. No brand uses it yet.</p>
       <p class="sig">— Rupak</p></div></div>
     <div class="reply">
-      <h3>Building for finance ops or fintech?</h3>
-      <p>One tap, email pre-filled.</p>
+      <h3 id="rh">Building for finance ops or fintech?</h3>
+      <p id="rp">One tap, email pre-filled.</p>
       <div class="chips">
-        <a class="chip p" href="mailto:rupakr2g@gmail.com?subject=Every%20Rupee%20%E2%80%94%20let%27s%20talk">Let's talk this week</a>
-        <a class="chip" href="mailto:rupakr2g@gmail.com?subject=Every%20Rupee%20%E2%80%94%20a%20question">Ask me a question</a>
-        <a class="chip" href="mailto:rupakr2g@gmail.com?subject=Every%20Rupee%20%E2%80%94%20not%20a%20fit%2C%20here%27s%20why">Not a fit, here's why</a>
+        <a class="chip p" id="m1" href="#">Let's talk this week</a>
+        <a class="chip" id="m3" href="#">Not a fit, here's why</a>
+        <a class="chip" id="m4" href="#">Forward to a colleague</a>
       </div>
+      <form class="ask" id="askf"><input id="askq" maxlength="200" placeholder="Or ask one question. I reply within a day." aria-label="Your question"><button class="btn g sm" type="submit">Ask</button></form>
       <p class="small">Open to Business Analyst and Product roles in fintech, BFSI and finance software · Immediate joiner · <a href="https://rupak-lemon.vercel.app">Portfolio</a> · <a href="case-study.html">What I changed, and why</a></p>
     </div>
   </div>
@@ -251,6 +273,30 @@ document.getElementById('rs').onclick=function(){step=0;draw()};draw();
 var f=function(x){return x>=100?'₹'+(x/100).toFixed(2).replace(/\.00$/,'')+' crore':'₹'+x.toFixed(1).replace(/\.0$/,'')+' lakh'};
 function run(){var v=function(i){return +document.getElementById(i).value||0};var s=v('bill')*v('pct')/100*v('days')/30;document.getElementById('o1').textContent=f(s);document.getElementById('o2').textContent=f(s*v('rate')/100);}
 ['bill','pct','days','rate'].forEach(function(i){document.getElementById(i).addEventListener('input',run)});run();
+})();
+</script>
+<script>
+(function(){
+var L={saas:{h:'You build finance software',a:'Your customers\' AR teams live in this queue. Every unexplained deduction is a ticket, a manual match or a churn reason for your product.',b:'Sit with support and implementation, map the top deduction types your customers raise, and write the rules and UAT cases for one of them.',c:'Which deduction type creates the most tickets or manual work for your customers today?'},
+brand:{h:'You run finance at a brand',a:'Short-payments sit in AR with no owner, and since 1 Nov 2026 every untracked GST credit note is tax you have paid on money you never received.',b:'Pull 90 days of short-payments, sort them by reason and owner, and show you which ones should have closed themselves under a rule.',c:'Who owns an unexplained short-payment in your team today, and how long does a valid claim take to settle?'},
+bank:{h:'You\'re at a bank or NBFC',a:'Distributor finance and receivables products depend on clean collections. Unexplained deductions blur the picture a lender relies on.',b:'Map where deduction data enters your flows, then write the BRD and test cases for one control gap, the way I did for 4–5 SOX audits at HDFC Bank.',c:'Where does a disputed or short-paid invoice break your current underwriting or collection flow?'}};
+var P=new URLSearchParams(location.search),clean=function(x,n){return (x||'').replace(/[<>"]/g,'').trim().slice(0,n)};
+var co=clean(P.get('for'),40),nm=clean(P.get('name'),30),ln=L[P.get('lens')]?P.get('lens'):'saas';
+var btns=document.querySelectorAll('.seg button');
+function set(k){ln=k;[].forEach.call(btns,function(b){b.setAttribute('aria-pressed',b.dataset.l===k)});
+ document.getElementById('l1').textContent=L[k].a;document.getElementById('l2').textContent=L[k].b;document.getElementById('l3').textContent=L[k].c;mail();}
+[].forEach.call(btns,function(b){b.onclick=function(){set(b.dataset.l)}});
+var E='rupakr2g@gmail.com',U=location.origin+location.pathname;
+function mt(sub,body,to){return 'mailto:'+(to===undefined?E:to)+'?subject='+encodeURIComponent(sub)+'&body='+encodeURIComponent(body)}
+function mail(){var tag=co?' ('+co+')':'';var hi='Hi Rupak,\n\n';
+ document.getElementById('m1').href=mt('Every Rupee: let\'s talk'+tag,hi+'Your question: '+L[ln].c+'\nShort answer: \n\nFree for 20 minutes on: ');
+ document.getElementById('m3').href=mt('Every Rupee: not a fit'+tag,hi+'Not a fit right now, because: ');
+ document.getElementById('m4').href=mt('Worth 90 seconds: Every Rupee','A BA built a working deduction workflow, with rules, tests and the new GST credit-note rule:\n'+U+(co?'?for='+encodeURIComponent(co):'')+'\n',''); }
+document.getElementById('askf').onsubmit=function(e){e.preventDefault();var q=document.getElementById('askq').value.trim();location.href=mt('Every Rupee: a question'+(co?' ('+co+')':''),'Hi Rupak,\n\n'+(q||''))};
+if(co){var c=document.getElementById('forchip');c.textContent='Prepared for '+(nm?nm+' and ':'')+'the '+co+' team';c.hidden=false;
+ document.getElementById('lensh').textContent='How this maps to '+co;document.getElementById('rh').textContent=(nm?nm+', is':'Is')+' this a problem at '+co+'?';
+ document.getElementById('rp').textContent='If yes, one tap. If no, tell me why. Both help.';document.title='Every Rupee · for '+co;}
+set(ln);
 })();
 </script>
 </body>
