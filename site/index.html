@@ -3,327 +3,157 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Distributor Short-Payment Reconciliation · BA Case Study</title>
-<meta name="description" content="Business analysis case study by Rupak Ghanpathi: current-state analysis, business rules, user stories, RACI and executable acceptance tests for distributor short-payment reconciliation.">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Distributor short-payment reconciliation: a business analysis case study">
-<meta property="og:description" content="Problem statement, current and target process, eight business rules, user stories and ten executable UAT cases.">
-<meta property="og:url" content="https://everyrupee-o2c.vercel.app/">
-<meta property="og:image" content="https://everyrupee-o2c.vercel.app/og.png">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
-<meta name="twitter:card" content="summary_large_image">
+<title>Every Rupee · Every missing rupee gets a reason, an owner and an ending</title>
+<meta name="description" content="Distributors pay less than the bill. Every Rupee gives every missing rupee a reason, an owner and an ending, and tracks the GST credit note that closes it.">
+<meta property="og:title" content="Every Rupee">
+<meta property="og:description" content="Distributors pay less than the bill. Every missing rupee gets a reason, an owner and an ending.">
+<meta property="og:image" content="og.png">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,600&display=swap" rel="stylesheet">
 <style>
-.skills{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:1fr 1fr;gap:8px;counter-reset:k}
-@media(min-width:760px){.skills{grid-template-columns:repeat(3,1fr)}}
-.skills a{display:block;height:100%;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 12px;text-decoration:none;color:var(--ink)}
-.skills a:hover{border-color:var(--accent)}
-.skills b{display:block;font-size:.92rem;color:var(--accent)}
-.skills span{display:block;font-size:.8rem;color:var(--muted);line-height:1.35;margin-top:2px}
-.cta{display:inline-block;background:var(--accent);color:#fff;text-decoration:none;padding:12px 18px;border-radius:10px;font-weight:600}
-details.fold>summary{cursor:pointer;list-style:none;padding:14px 16px;background:var(--surface);border:1px solid var(--line);border-radius:12px;font-size:.95rem}
-details.fold>summary::after{content:" +";color:var(--accent);font-weight:700}
-details.fold[open]>summary::after{content:" −"}
-details.fold>summary::-webkit-details-marker{display:none}
-details.fold[open]>summary{margin-bottom:14px}
-#try,#close,#fail,#evolved{padding-top:8px;padding-bottom:8px}
+:root{--ink:#111827;--ink2:#4B5563;--mut:#6B7280;--line:#E5E7EB;--green:#059669;--green-s:#ECFDF5;--amber:#B45309;--amber-s:#FFFBEB;--bg:#FFFFFF;--soft:#F9FAFB}
+*{box-sizing:border-box}html,body{overflow-x:clip}html{scroll-behavior:smooth}
+body{margin:0;font-family:Inter,system-ui,sans-serif;color:var(--ink);background:var(--bg);line-height:1.55;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+.col{max-width:720px;margin:0 auto;padding:0 20px}
+header{border-bottom:1px solid var(--line);position:sticky;top:0;background:rgba(255,255,255,.9);backdrop-filter:blur(10px);z-index:10}
+header .col{max-width:960px;display:flex;justify-content:space-between;align-items:center;height:60px}
+.logo{display:flex;align-items:center;gap:9px;text-decoration:none;font-weight:600}
+.logo small{display:block;font-weight:400;color:var(--mut);font-size:.72rem;line-height:1}
+nav{display:flex;gap:6px;align-items:center}nav a{font-size:.86rem;text-decoration:none;color:var(--ink2);padding:7px 10px;border-radius:8px}nav a:hover{background:var(--soft)}
+nav a.pri{background:var(--green);color:#fff}
+@media(max-width:620px){nav a.h{display:none}}
+section{padding:44px 0;border-bottom:1px solid var(--line)}
+.k{font-size:.74rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--green);margin:0 0 10px}
+h1{font-family:'Source Serif 4',Georgia,serif;font-size:clamp(1.9rem,4.6vw,2.7rem);line-height:1.15;letter-spacing:-.02em;margin:0 0 14px;font-weight:600}
+h1 em{font-style:normal;color:var(--green)}
+h2{font-size:1.3rem;letter-spacing:-.02em;margin:0 0 16px}
+.lead{font-size:1.08rem;color:var(--ink2);margin:0 0 22px}
+.btns{display:flex;gap:10px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:11px 18px;border-radius:10px;font-weight:600;font-size:.93rem;text-decoration:none;border:1px solid var(--line);background:#fff}
+.btn.g{background:var(--green);border-color:var(--green);color:#fff}
+.btn:hover{transform:translateY(-1px)}
+/* why now */
+.facts{list-style:none;margin:0;padding:0;display:grid;gap:12px}
+.facts li{display:grid;grid-template-columns:110px 1fr;gap:14px;align-items:start;padding:14px 16px;border:1px solid var(--line);border-radius:12px}
+.facts b{font-size:.8rem;text-transform:uppercase;letter-spacing:.06em;color:var(--green);padding-top:2px}
+.facts li.new{background:var(--amber-s);border-color:#FDE68A}.facts li.new b{color:var(--amber)}
+.facts span{font-size:.98rem}.facts small{display:block;color:var(--mut);font-size:.76rem;margin-top:3px}
+/* example */
+.flow{list-style:none;margin:0;padding:0;position:relative}
+.flow:before{content:"";position:absolute;left:15px;top:8px;bottom:8px;width:2px;background:var(--line)}
+.flow li{position:relative;padding:0 0 16px 46px}
+.flow li:before{content:"";position:absolute;left:8px;top:5px;width:16px;height:16px;border-radius:50%;background:#fff;border:2px solid var(--green)}
+.flow li.bad:before{border-color:#DC2626;background:#FEF2F2}
+.flow li.end:before{background:var(--green)}
+.flow b{font-variant-numeric:tabular-nums}
+.flow .t{font-size:.98rem}.flow .s{display:block;color:var(--mut);font-size:.84rem}
+.warn{margin:6px 0 0;padding:12px 16px;border-radius:10px;background:var(--amber-s);border:1px solid #FDE68A;font-size:.93rem}
+/* steps */
+.steps{list-style:none;margin:0;padding:0;counter-reset:s;display:grid;gap:10px}
+.steps li{counter-increment:s;display:grid;grid-template-columns:32px 1fr;gap:12px;align-items:start;font-size:.98rem}
+.steps li:before{content:counter(s);width:28px;height:28px;border-radius:8px;background:var(--green-s);color:var(--green);font-weight:700;display:grid;place-items:center;font-size:.86rem}
+.steps .s{display:block;color:var(--mut);font-size:.84rem}
+/* calculator */
+.calc{border:1px solid var(--line);border-radius:14px;padding:18px;background:var(--soft)}
+.calc label{display:grid;grid-template-columns:1fr 150px;gap:12px;align-items:center;padding:8px 0;font-size:.93rem;border-bottom:1px dashed var(--line)}
+.calc input{font:inherit;padding:8px 10px;border:1px solid #D1D5DB;border-radius:8px;width:100%;text-align:right;background:#fff}
+.out{margin-top:16px;display:grid;gap:10px}
+.out div{background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.out b{display:block;font-size:1.6rem;letter-spacing:-.02em;color:var(--green);font-variant-numeric:tabular-nums}
+.out span{font-size:.86rem;color:var(--ink2)}
+.how{font-size:.78rem;color:var(--mut);margin:12px 0 0}
+.honest{font-size:.84rem;color:var(--mut)}
+footer{padding:28px 0 40px;font-size:.8rem;color:var(--mut)}
+footer a{color:var(--ink2)}
+@media(max-width:560px){.facts li{grid-template-columns:1fr;gap:4px}.calc label{grid-template-columns:1fr}}
 </style>
-<script>document.addEventListener("click",function(e){var a=e.target.closest(".skills a");if(!a)return;var h=a.getAttribute("href");if(h.charAt(0)!=="#")return;var t=document.querySelector(h);if(!t)return;var d=t.querySelector("details");if(d)d.open=true;if(a.dataset.tab){var b=document.querySelector('[data-spec="'+a.dataset.tab+'"]');if(b)b.click();}});</script>
-<style>
-.wwh{padding-top:8px;padding-bottom:16px}
-.wwh-grid{display:grid;gap:10px;grid-template-columns:1fr}
-@media(min-width:760px){.wwh-grid{grid-template-columns:repeat(3,1fr)}}
-.wwh-c{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
-.wwh-c b{font-family:var(--serif);font-size:1.15rem;color:var(--accent);display:block;margin-bottom:4px}
-.wwh-c p{margin:0;font-size:.92rem;line-height:1.5}
-.wwh-c ol{margin:0;padding-left:18px;font-size:.92rem;line-height:1.6}
-#why,#race,#spec{padding-top:8px;padding-bottom:8px}
-</style>
-<link rel="stylesheet" href="product.css">
 </head>
 <body>
-<header class="appbar"><div class="in"><a class="logo" href="./"><svg width="30" height="30" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="Every rupee, split and owned"><circle cx="16" cy="16" r="13" fill="none" stroke="#64748B" stroke-width="4.5" stroke-dasharray="2.48 79.20" stroke-dashoffset="0.00" transform="rotate(-90 16 16)"/><circle cx="16" cy="16" r="13" fill="none" stroke="#059669" stroke-width="4.5" stroke-dasharray="31.07 50.61" stroke-dashoffset="-4.08" transform="rotate(-90 16 16)"/><circle cx="16" cy="16" r="13" fill="none" stroke="#D97706" stroke-width="4.5" stroke-dasharray="43.32 38.36" stroke-dashoffset="-36.76" transform="rotate(-90 16 16)"/><text x="16" y="21.2" text-anchor="middle" font-family="Inter,Arial,sans-serif" font-weight="700" font-size="14" fill="#111827">₹</text></svg><span class="lw"><b>Every Rupee</b><small>Short-payment reconciliation</small></span></a><nav><a href="./" class="hide-s on">Overview</a><a href="brd.html" class="hide-s">BRD</a><a href="https://github.com/RUPAK30/Cello-O2C-Deduction-Workflow-Case-Study" class="hide-s">GitHub</a><a href="desk.html" class="pri">Executable spec</a></nav></div></header>
+<header><div class="col">
+  <a class="logo" href="./"><svg width="28" height="28" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="Every Rupee"><circle cx="16" cy="16" r="13" fill="none" stroke="#64748B" stroke-width="4.5" stroke-dasharray="2.48 79.20" transform="rotate(-90 16 16)"/><circle cx="16" cy="16" r="13" fill="none" stroke="#059669" stroke-width="4.5" stroke-dasharray="31.07 50.61" stroke-dashoffset="-4.08" transform="rotate(-90 16 16)"/><circle cx="16" cy="16" r="13" fill="none" stroke="#D97706" stroke-width="4.5" stroke-dasharray="43.32 38.36" stroke-dashoffset="-36.76" transform="rotate(-90 16 16)"/><text x="16" y="21.2" text-anchor="middle" font-family="Inter,Arial,sans-serif" font-weight="700" font-size="14" fill="#111827">₹</text></svg><span>Every Rupee<small>Short-payment reconciliation</small></span></a>
+  <nav><a class="h" href="case-study.html">Full case study</a><a class="h" href="brd.html">BRD</a><a class="pri" href="desk.html">Try the product</a></nav>
+</div></header>
 
-<header class="wrap hero">
-  <div class="hero-grid"><div>
-  <p class="eyebrow">Business analysis case study · Rupak Ghanpathi</p>
-  <h1>Distributor short-payment reconciliation</h1>
-  <p class="lede" style="margin-bottom:6px">How a manufacturer should reconcile distributor payments that arrive below the invoice: process, rules, stories and executable tests.</p>
-  </div>
-  <a class="preview" href="desk.html" aria-label="Open the executable specification">
-    <div class="pv-h"><b>Reconciliation desk</b><span class="pv-chip">Day 0 · sample data</span></div>
-    <div class="pv-k"><div><span>Short-paid</span><b>₹58,457</b></div><div><span>By rule</span><b>26%</b></div><div><span>Unowned</span><b class="ok">₹0</b></div></div>
-    <div class="pv-bar"><i style="width:4%;background:#64748B"></i><i style="width:22%;background:#B7791F"></i><i style="width:74%;background:#C2410C"></i></div>
-    <ul class="pv-l">
-      <li><code>C-3302</code><span>Damage · no proof</span><b>₹11,000</b><em class="w">Area sales mgr</em></li>
-      <li><code>C-3304</code><span>Scheme · above limit</span><b>₹12,000</b><em class="w">2nd approver</em></li>
-      <li><code>C-3301</code><span>Scheme · evidenced</span><b>₹8,000</b><em class="g">Auto · CN-201</em></li>
-    </ul>
-    <div class="pv-f"><span class="pv-chip g">UAT 11 / 11 passing</span><span>Open →</span></div>
-  </a>
-  </div>
-  <div class="money" aria-label="Where every rupee of a ₹20,000 short payment goes">
-    <div class="m-in"><span>Invoice ₹10,00,000 · received ₹9,80,000</span><b>₹20,000 short</b></div>
-    <div class="m-arrow">→</div>
-    <div class="m-s m-tds"><b>₹1,000</b><span>TDS withheld · claimed as tax credit (Form 26AS)</span></div>
-    <div class="m-s m-acc"><b>₹8,000</b><span>Valid scheme claim · settled by credit note</span></div>
-    <div class="m-s m-dis"><b>₹11,000</b><span>Unproven damage claim · owner + 7-day SLA</span></div>
-  </div>
-  <p class="kicker" style="margin:18px 0 8px">Six BA skills, each with its proof · tap one</p>
-  <ol class="skills">
-    <li><a href="#why"><b>Problem framing</b><span>Problem statement from public filings</span></a></li>
-    <li><a href="#race"><b>Process mapping</b><span>Current state vs target state</span></a></li>
-    <li><a href="#spec" data-tab="raci"><b>Stakeholders &amp; RACI</b><span>Six roles mapped to each step</span></a></li>
-    <li><a href="desk.html#rules"><b>Business rules</b><span>Eight rules and a decision table</span></a></li>
-    <li><a href="desk.html?uat=1"><b>Stories &amp; UAT</b><span>Eleven acceptance tests, executable</span></a></li>
-    <li><a href="#fail" data-open="1"><b>Risk &amp; validation</b><span>Risks, assumptions and a stop rule</span></a></li>
+<main class="col">
+<section>
+  <p class="k">For finance teams at FMCG brands</p>
+  <h1>Distributors pay less than the bill. <em>Every missing rupee needs a reason, an owner and an ending.</em></h1>
+  <p class="lead">Every Rupee matches each payment to its bill, labels every gap, gives it an owner and a deadline, and closes it with a GST credit note or a recovery.</p>
+  <div class="btns"><a class="btn g" href="desk.html">Try the product →</a><a class="btn" href="#calc">What is it costing you?</a></div>
+</section>
+
+<section id="why">
+  <p class="k">Why now</p>
+  <h2>Three things are true today</h2>
+  <ul class="facts">
+    <li><b>Squeezed</b><span>Distributors say they earn ₹3.5–5 on every ₹100, and costs keep rising. So every rupee stuck in an unsettled claim hurts.<small>All India Consumer Products Distributors Federation, June 2026</small></span></li>
+    <li><b>Slow</b><span>Distributor claims take 45–90 days to settle, and about 1 in 3 are rejected, mostly over paperwork. So distributors cut the money from their next payment instead.<small>Vendor-reported figures (Spirestock, Dec 2025)</small></span></li>
+    <li class="new"><b>New rule</b><span>From 1 Nov 2026, a brand gets GST back on an after-sale discount only with a proper GST credit note, and only once the distributor adjusts his tax credit.<small>Finance Act 2026, CBIC Notification 03/2026</small></span></li>
+  </ul>
+</section>
+
+<section id="example">
+  <p class="k">One example</p>
+  <h2>₹1,180 goes missing. Here's how it ends.</h2>
+  <ul class="flow">
+    <li><span class="t">Brand bills the distributor <b>₹11,800</b></span><span class="s">₹10,000 goods + ₹1,800 GST</span></li>
+    <li class="bad"><span class="t">Distributor pays <b>₹10,620</b>. <b>₹1,180 is missing.</b></span><span class="s">He took off a 10% festival discount himself.</span></li>
+    <li><span class="t">Every Rupee labels it: <b>scheme claim</b>. Owner: Priya. Due: Friday.</span><span class="s">Valid scheme, so it's approved.</span></li>
+    <li><span class="t">Closed with a <b>GST credit note of ₹1,180</b></span><span class="s">₹1,000 discount + ₹180 GST</span></li>
+    <li class="end"><span class="t">Distributor adjusts his tax credit → brand recovers <b>₹180 GST</b></span><span class="s">Next step on the roadmap: track each note as sent → accepted → adjusted.</span></li>
+  </ul>
+  <p class="warn">Lose track of the credit note, and the brand pays that ₹180 of tax on money it never received. Multiply by thousands of claims.</p>
+</section>
+
+<section id="how">
+  <p class="k">How it works</p>
+  <h2>Five steps, for every gap</h2>
+  <ol class="steps">
+    <li><span>Payment arrives<span class="s">The bank statement is matched to open bills.</span></span></li>
+    <li><span>Gap found<span class="s">Every short-payment is flagged automatically.</span></span></li>
+    <li><span>Reason labelled<span class="s">8 business rules: scheme, damage, TDS and more.</span></span></li>
+    <li><span>Owner and deadline<span class="s">A second approver above ₹10,000. Unbudgeted schemes go to the regional sales head.</span></span></li>
+    <li><span>Closed<span class="s">GST credit note if fair, recovery if not. Logged with a reference.</span></span></li>
   </ol>
-</header>
-<section class="wrap wwh" aria-label="Why, when and how">
-  <p class="kicker" style="margin:0 0 10px">Problem, trigger and proposed process</p>
-  <div class="wwh-grid">
-    <div class="wwh-c"><b>Why: the problem</b><p>One short payment mixes tax withheld, valid claims and disputes. Recorded as a single difference, it has no owner, and receivables outgrow revenue. Distributors short-pay partly because their claims take months to settle; settling valid claims fast removes the reason.</p></div>
-    <div class="wwh-c"><b>When: the trigger</b><p>A receipt posts below the invoice value.<br><span class="mini">Today</span> weeks of email.<br><span class="mini">Target</span> every rupee classified and owned the same day.</p></div>
-    <div class="wwh-c"><b>How: the proposed process</b><ol><li>Identify the payer (BR-1)</li><li>Separate statutory TDS (BR-2)</li><li>Validate claims against evidence (BR-3)</li><li>Route the remainder to an owner with an SLA (BR-4 to BR-7)</li></ol></div>
-  </div>
-  <p style="margin:16px 0 8px"><a class="cta" href="desk.html">Open the executable specification →</a></p>
 </section>
 
-
-<main>
-
-
-<section class="wrap" id="why" aria-labelledby="why-h">
-<details class="fold"><summary><b>The numbers behind it</b> · Cello World's filings, FY25 to FY26</summary>
-  <h2 id="why-h">Why this problem</h2>
-  <p>The case is built on Cello World Ltd, a consumer products maker selling through more than 4,000 distributors to over 1,50,000 retailers (FY25 investor presentation), mostly on credit. In FY26 its receivables grew faster than its revenue:</p>
-  <div class="signal">
-    <div><b class="mono">+14.0%</b><span>Receivables, ₹658 Cr → ₹750 Cr</span></div>
-    <div><b class="mono">+8.8%</b><span>Revenue, ₹2,136 Cr → ₹2,324 Cr</span></div>
-    <div><b class="mono">≈ ₹34 Cr</b><span>above revenue pace (estimate)</span></div>
+<section id="calc">
+  <p class="k">Your numbers</p>
+  <h2>How much of your cash is stuck?</h2>
+  <div class="calc">
+    <label>Monthly billing to distributors (₹ lakh)<input id="bill" type="number" min="0" value="500"></label>
+    <label>Share that arrives short-paid (%)<input id="pct" type="number" min="0" max="100" step="0.5" value="3"></label>
+    <label>Days to settle a gap<input id="days" type="number" min="0" value="60"></label>
+    <label>Your cost of money (% a year)<input id="rate" type="number" min="0" step="0.5" value="12"></label>
+    <div class="out">
+      <div><b id="o1">–</b><span>stuck in unresolved gaps at any time</span></div>
+      <div><b id="o2">–</b><span>what that costs you each year in interest</span></div>
+    </div>
+    <p class="how">How it's worked out: monthly billing × share short-paid × (days ÷ 30) = cash stuck; × your cost of money = yearly cost. Defaults are examples, so change them to your own.</p>
   </div>
-  <p class="note">₹658 Cr grown at 8.8% ≈ ₹716 Cr, against ₹750 Cr actual. An estimate, not a measured backlog; receivables also rise through credit expansion, channel mix or timing. It justifies discovery, not a diagnosis. In scope: receipts, deductions, their evidence, ownership and settlement. Out of scope: credit-limit policy, collections strategy and ERP replacement.</p>
-</details>
 </section>
 
-<section class="wrap race-wrap" id="race" aria-labelledby="race-h">
-<details class="fold"><summary><b>Current state vs target state</b> · one ₹20,000 short payment through both processes</summary>
-  <div class="race-head">
-    <h2 id="race-h" class="kicker">Current process vs future process: the same ₹20,000 short payment</h2>
-    <div class="race-ctl">
-      <button class="btn small" id="r-play" aria-label="Pause">Pause</button>
-      <button class="btn small" id="r-step">Step</button>
-      <button class="btn small" id="r-replay">Replay</button>
-    </div>
-  </div>
-  <p class="sub">Invoice ₹10,00,000, paid ₹9,80,000 with no explanation. Amounts and timings are illustrative.</p>
-  <div class="progress" aria-hidden="true"><span id="r-prog"></span></div>
-
-  <div class="race">
-    <div class="lane asis">
-      <div class="lane-h"><span class="lane-t">Today (hypothesised)</span><span class="lane-sub">email and spreadsheets</span></div>
-      <div class="meter">
-        <div><span>Unexplained</span><b class="mono warn" id="a-unexp">₹20,000</b></div>
-        <div><span>Elapsed</span><b class="mono" id="a-time">Day 0</b></div>
-        <div><span>Emails</span><b class="mono" id="a-emails">0</b></div>
-      </div>
-      <ol class="feed" id="a-feed"></ol>
-    </div>
-    <div class="lane tobe">
-      <div class="lane-h"><span class="lane-t">Proposed workflow</span><span class="lane-sub">rules first, people for exceptions</span></div>
-      <div class="meter">
-        <div><span>Unexplained</span><b class="mono" id="b-unexp">₹20,000</b></div>
-        <div><span>Elapsed</span><b class="mono" id="b-time">09:02</b></div>
-        <div><span>Owner</span><b class="mono" id="b-owner">–</b></div>
-      </div>
-      <div class="bar" id="bar" aria-hidden="true"></div>
-      <ul class="legend" id="legend"></ul>
-      <ol class="feed" id="b-feed"></ol>
-    </div>
-  </div>
-
-  <div class="verdict" id="verdict" hidden>
-    <p><b class="mono">31 days</b> and 9 emails, still unexplained, versus <b class="mono">every rupee</b> explained and owned by 09:03 on day 0. Nothing written off.</p>
-  </div>
-</details>
-</section>
-
-
-
-<section class="wrap" id="try" aria-labelledby="try-h">
-<details class="fold" id="try-d"><summary><b>Rule parameters</b> · change a Finance-controlled threshold and observe the classification change</summary>
-  <h2 id="try-h">Try the rules yourself</h2>
-  <p class="sub">The proposed workflow above is driven by rules Finance controls. Change one and watch the payment re-classify.</p>
-  <div class="try-grid">
-    <div class="card">
-      <h3>Finance's settings</h3>
-      <label class="param"><span>Auto-accept limit for evidenced claims: <b class="mono" id="tol-out">₹10,000</b></span>
-        <input type="range" id="tol" min="5000" max="15000" step="1000" value="10000"></label>
-      <label class="check"><input type="checkbox" id="pod"> Distributor attached <button class="term" data-term="pod" type="button">proof of delivery</button> for the damage claim</label>
-      <table class="mini">
-        <tbody id="result-rows"></tbody>
-      </table>
-      <p class="kpi" id="kpi"></p>
-    </div>
-    <div class="card">
-      <h3>Try to break the controls</h3>
-      <p class="sub">Each attempt should be blocked and logged.</p>
-      <div class="break-grid">
-        <button class="btn" data-break="noreason">Close a case without a reason</button>
-        <button class="btn" data-break="nopod">Accept damage without proof of delivery</button>
-        <button class="btn" data-break="self">Approve your own case above ₹10,000</button>
-        <button class="btn" data-break="writeoff">Write off the unexplained remainder</button>
-      </div>
-      <div id="blocked" class="blocked" role="status" aria-live="polite"></div>
-    </div>
-    <div class="card">
-      <h3>What the owner receives</h3>
-      <div id="notify"></div>
-    </div>
-    <div class="card">
-      <h3>Credit check on the next order</h3>
-      <table class="mini"><tbody id="credit-rows"></tbody></table>
-      <p class="flag" id="credit-flag"></p>
-      <p class="sub">Rule: disputes over ₹20,000 or older than 45 days (illustrative). A flag for the credit controller, not an automatic block.</p>
-    </div>
-    <div class="card">
-      <h3>Next month: paid in full</h3>
-      <p>The ₹8,000 scheme benefit is issued upfront as credit note CN-0213 and reported to the <button class="term" data-term="irp">IRP</button> by <b id="irp-date"></b>. The distributor pays ₹10,00,000 − ₹8,000 − ₹1,000 expected TDS = <b class="mono">₹9,91,000</b>. Exact match; no case opened.</p>
-      <div class="cal"><a id="irp-gcal" target="_blank" rel="noopener">Add IRP deadline to Google Calendar</a><button class="linkbtn" id="irp-ics">Download .ics</button></div>
-    </div>
-    <div class="card">
-      <h3>Audit trail</h3>
-      <ol class="audit" id="audit"></ol>
-    </div>
-  </div>
-</details>
-</section>
-
-
-
-<section class="wrap" id="spec" aria-labelledby="spec-h">
-  <details class="fold"><summary><b id="spec-h">The specification</b> · rules, reason codes, traceability, stories, UAT, RACI</summary>
-  <p class="sub">For the business reader: the rules, requirements and tests behind the prototype. Every requirement traces to a pain point or research finding and forward to a test.</p>
-  <div class="tabs" role="tablist" aria-label="Specification">
-    <button role="tab" aria-selected="true" data-spec="rules">Business rules</button>
-    <button role="tab" aria-selected="false" data-spec="codes">Reason codes</button>
-    <button role="tab" aria-selected="false" data-spec="trace">Traceability</button>
-    <button role="tab" aria-selected="false" data-spec="stories">User stories</button>
-    <button role="tab" aria-selected="false" data-spec="uat">UAT</button>
-    <button role="tab" aria-selected="false" data-spec="raci">RACI</button>
-  </div>
-  <div class="pane">
-    <div data-pane="rules">
-      <div class="tbl-wrap"><table class="rules"><thead><tr><th>ID</th><th>Layer</th><th>Rule</th></tr></thead><tbody id="rules-body"></tbody></table></div>
-      <p class="note">Tax rules summarised for illustration; they change. Check current rules.</p>
-    </div>
-    <div data-pane="codes" hidden>
-      <div class="tbl-wrap"><table class="rules"><thead><tr><th>Reason code</th><th>Required evidence</th><th>Valid when</th></tr></thead><tbody id="codes-body"></tbody></table></div>
-    </div>
-    <div data-pane="trace" hidden>
-      <div class="tbl-wrap"><table id="trace-table"><thead><tr><th>Pain point or research finding</th><th>Requirement</th><th>Test</th></tr></thead><tbody>
-        <tr><td>P1 No remittance detail. Virtual accounts tag each payment to its payer automatically <small>(open.money)</small></td><td>BR-1, US-1</td><td>UAT-01</td></tr>
-        <tr><td>TDS treated as a loss is a leading cause of reconciliation differences <small>(invoicedataextraction.com guide)</small></td><td>BR-2, US-2</td><td>UAT-02</td></tr>
-        <tr><td>90–95% of deduction value is typically valid; 5–10% invalid <small>(HighRadius)</small>. Unstructured claims can over-pay 5–12% of scheme spend <small>(Terra Insight)</small></td><td>BR-3, US-3</td><td>UAT-03, UAT-05</td></tr>
-        <tr><td>P2 Unstructured reasons; P3 unclear owner. Average dispute resolution about 41 days; 44% of companies have no resolution deadline <small>(HighRadius; Attain Consulting 2021 survey)</small></td><td>US-4</td><td>UAT-04, UAT-08</td></tr>
-        <tr><td>P4 Weak approval trail</td><td>BR-4, BR-5, US-5</td><td>UAT-06, UAT-07</td></tr>
-        <tr><td>Missed credit-note windows leak GST <small>(Terra Insight example, illustrative)</small></td><td>BR-6, US-6</td><td>UAT-09</td></tr>
-        <tr><td>P5 Late visibility; old deductions compound with new credit exposure</td><td>BR-7, US-7</td><td>UAT-10</td></tr>
-      </tbody></table></div>
-      <p class="note">Select an ID to open its definition.</p>
-    </div>
-    <div data-pane="stories" hidden>
-      <ol class="stories" id="stories"></ol>
-      <p class="exports"><button class="btn small" id="dl-stories">Download for JIRA (CSV)</button></p>
-    </div>
-    <div data-pane="uat" hidden>
-      <div class="tbl-wrap"><table><thead><tr><th>ID</th><th>Traces to</th><th>Scenario</th><th>Expected result</th></tr></thead><tbody id="uat"></tbody></table></div>
-      <p class="exports"><button class="btn small" id="dl-uat">Download test cases (CSV)</button></p>
-    </div>
-    <div data-pane="raci" hidden>
-      <div class="tbl-wrap"><table class="raci"><thead><tr><th>Activity</th><th>AR exec</th><th>AR lead</th><th>Controller</th><th>Sales</th><th>IT / ERP</th><th>Audit</th></tr></thead><tbody>
-        <tr><td>Match payments to invoices</td><td>R</td><td>A</td><td>I</td><td></td><td>C</td><td></td></tr>
-        <tr><td>Investigate a difference</td><td>R</td><td>A</td><td></td><td>C</td><td></td><td></td></tr>
-        <tr><td>Confirm a scheme or damage claim</td><td>C</td><td></td><td></td><td>R</td><td></td><td></td></tr>
-        <tr><td>Approve a deduction or write-off</td><td></td><td>R</td><td>A</td><td>C</td><td></td><td>I</td></tr>
-        <tr><td>Post the adjustment in the ERP</td><td>R</td><td>A</td><td></td><td></td><td>C</td><td></td></tr>
-        <tr><td>Report exception ageing</td><td>R</td><td>A</td><td>I</td><td>I</td><td></td><td>I</td></tr>
-      </tbody></table></div>
-      <p class="note">R = does the work, A = accountable, C = consulted, I = informed. The distributor is the external party in every exception.</p>
-    </div>
-  </div>
-</details>
-</section>
-
-<section class="wrap" id="close" aria-label="Trade-offs, metrics and validation">
-<details class="fold" id="close-d"><summary><b>Trade-offs, the one metric, and how I'd validate it</b></summary>
-  <div class="close-grid">
-    <div>
-      <h2>Trade-offs I chose</h2>
-      <ul class="plain">
-        <li><b>Control before speed:</b> ownership and approvals first, automation second.</li>
-        <li><b>Strict matching at launch:</b> fewer auto-matches, zero wrong ones.</li>
-        <li><b>ERP stays the system of record:</b> a workflow layer (proposed: a platform such as ServiceNow) posts only approved outcomes.</li>
-        <li><b>No automatic write-offs:</b> small items may wait for a person.</li>
-        <li><b>Automate only the evidenced majority:</b> needs a Finance-approved tolerance.</li>
-        <li><b>Prevent before you reconcile:</b> Sales must agree scheme budgets upfront.</li>
-      </ul>
-    </div>
-    <div>
-      <h2>How I'd measure it</h2>
-      <p><b>One number decides it:</b> the share of short-paid rupees with a class and an owner on the day the payment arrives. Target: all of them.</p>
-      <p>It should move one business outcome: receivables growing faster than revenue (₹658 Cr → ₹750 Cr against +8.8% revenue).</p>
-      <p style="font-size:.88rem;color:var(--muted)">Guardrails, not goals: zero wrong write-offs; credit notes reported within 30 days.</p>
-    </div>
-    <div>
-      <h2>How I'd validate it</h2>
-      <ul class="plain">
-        <li>Five 45-minute interviews: AR executive, AR lead, Finance Controller, area sales manager, ERP owner</li>
-        <li>One month of anonymised receipts</li>
-        <li><b>Stop rule:</b> if gaps are rare or close within days, stop and redirect to wherever finance spends the most manual effort.</li>
-      </ul>
-    </div>
-  </div>
-  <p class="downloads"><a href="Cello_O2C_Case_Study.pdf">Full case study (PDF)</a><a href="Cello_O2C_One_Pager.pdf">One-pager (PDF)</a><a href="Cello_O2C_BRD.pdf">Business requirements document (PDF)</a></p>
-</details>
-</section>
-
-<section class="wrap" id="fail" aria-labelledby="fail-h">
-<details class="fold" id="fail-d"><summary><b>Where this would fail</b> · three risks and the design answer to each</summary>
-  <h2 id="fail-h">Where this would fail</h2>
-  <div class="close-grid">
-    <div><h3>Distributors keep paying the old account</h3><p>Virtual accounts only identify the payer if they are used. <b>Design answer:</b> the old account stays open for a quarter with receipts matched by the oldest-invoice rule, and Sales gets a weekly list of distributors still using it.</p></div>
-    <div><h3>Scheme rules change mid-quarter</h3><p>Auto-acceptance is only as good as the budget it checks. <b>Design answer:</b> no scheme is valid until Sales enters it with dates and a budget; claims against an unentered scheme go to a person, never through.</p></div>
-    <div><h3>Sales overrides the credit flag</h3><p>A flag nobody respects is noise. <b>Design answer:</b> the flag never blocks an order, but every override is logged with a name, and overrides per area appear in the monthly review.</p></div>
-  </div>
-</details>
-</section>
-
-<section class="wrap" id="evolved" aria-labelledby="evo-h">
-<details class="fold" id="evolved-d"><summary><b>How this evolved</b> · v1 assignment → v2 research → v3 executable spec</summary>
-  <h2 id="evo-h">How this evolved</h2>
-  <ol class="plain">
-    <li><b>v1 · The assignment.</b> A deduction workflow: a case with a reason code and owner, SLA routing, maker-checker, ERP as system of record.</li>
-    <li><b>v2 · The research.</b> TDS treated as a loss, 90–95% of deduction value usually valid, missed credit-note windows: answered by four layers (Identify, Split, Validate, Prevent).</li>
-    <li><b>v3 · An executable specification.</b> The page had become a long read. The rules now run as a desk: the ten UAT cases execute against it and report pass or fail, and every action is traced to its rule, story and test. The full specification sits behind one tap.</li>
-  </ol>
-</details>
+<section>
+  <p class="k">See it work</p>
+  <h2>Do the job yourself in 2 minutes</h2>
+  <p class="lead" style="margin-bottom:16px">Open the product, load the sample statement, and close every gap as the finance team, the checker and the sales head.</p>
+  <div class="btns"><a class="btn g" href="desk.html">Try the product →</a><a class="btn" href="desk.html?uat=1">Run the 11 tests</a><a class="btn" href="brd.html">Read the BRD</a></div>
+  <p class="honest" style="margin-top:18px">A working prototype with sample data, built by Rupak Ghanpathi from public filings and industry research. It isn't connected to any ERP or bank and doesn't file GST. Tax rules are summarised for illustration; check current law.</p>
 </section>
 </main>
 
-<footer class="wrap foot">
-  <p>Self-initiated. Built from Cello World Ltd's public filings (FY26 consolidated, FY25 restated) and public industry research. Internal processes are hypotheses, not confirmed company practice. Tools such as virtual accounts, Slack or a workflow platform are proposals, not claims about Cello's systems. Tax rules are summarised for illustration and change; check current law.</p>
-  <p><a href="https://www.linkedin.com/in/rupak-ghanpathi">LinkedIn</a> · <a href="https://github.com/RUPAK30">GitHub</a></p>
+<footer class="col">
+  <p>Sources: <a href="https://www.outlookbusiness.com/news/fmcg-distributors-association-warns-of-protests-over-margins">AICPDF margins (Outlook Business, Jun 2026)</a> · <a href="https://spirestock.com/blog/distributor-claims-settlement-fmcg-india">Claims settlement (Spirestock, vendor)</a> · <a href="https://taxguru.in/goods-and-service-tax/post-sale-discounts-ids-refunds-gst-1-november-2026.html">GST post-sale discounts from 1 Nov 2026 (TaxGuru)</a></p>
+  <p>Systems of record record what happened; they don't help at the moment a person has to decide something messy. <a href="https://lull-hr.vercel.app/">Viraam</a> ends the meeting · <a href="https://everyrupee-o2c.vercel.app/">Every Rupee</a> owns the short-paid difference · <a href="https://tentoday.vercel.app/">Ten Today</a> unblocks the approval. By Rupak Ghanpathi · <a href="https://rupak-lemon.vercel.app">Portfolio</a> · <a href="https://github.com/RUPAK30/Cello-O2C-Deduction-Workflow-Case-Study">GitHub</a></p>
 </footer>
-<div class="pop" id="pop" role="tooltip" hidden></div>
-<script src="data.js"></script>
-<script src="app.js"></script>
-<script>(function(){var f=document.getElementById("float-cta"),h=document.querySelector(".wwh");if(!f||!h)return;var on=function(){var v=h.getBoundingClientRect().bottom<0;f.style.opacity=v?1:0;f.style.pointerEvents=v?"auto":"none";};addEventListener("scroll",on,{passive:true});document.addEventListener("toggle",on,true);on();})();</script>
-<p style="max-width:1080px;margin:0 auto;padding:18px 16px 36px;font-size:.8rem;color:#6B7280">Systems of record (the ERP, the CRM, the calendar) record what happened. They don't help at the moment a person has to decide something messy. Three layers for those moments, without replacing the system underneath: <a href="https://lull-hr.vercel.app/">Viraam</a> ends the meeting · <a href="https://everyrupee-o2c.vercel.app/">Every Rupee</a> owns the short-paid difference · <a href="https://tentoday.vercel.app/">Ten Today</a> unblocks the approval. By Rupak Ghanpathi.</p>
+<script>
+(function(){
+var f=function(x){return x>=100?'₹'+(x/100).toFixed(2).replace(/\.00$/,'')+' crore':'₹'+x.toFixed(1).replace(/\.0$/,'')+' lakh'};
+function run(){var b=+document.getElementById('bill').value||0,p=+document.getElementById('pct').value||0,d=+document.getElementById('days').value||0,r=+document.getElementById('rate').value||0;
+var stuck=b*p/100*d/30,cost=stuck*r/100;document.getElementById('o1').textContent=f(stuck);document.getElementById('o2').textContent=f(cost);}
+['bill','pct','days','rate'].forEach(function(i){document.getElementById(i).addEventListener('input',run)});run();
+})();
+</script>
 </body>
 </html>
