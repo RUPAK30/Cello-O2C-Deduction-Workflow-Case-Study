@@ -10,81 +10,60 @@
 <meta property="og:image" content="og.png">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,600&display=swap" rel="stylesheet">
-<style>
-:root{--ink:#111827;--ink2:#4B5563;--mut:#6B7280;--line:#E5E7EB;--green:#059669;--green-s:#ECFDF5;--amber:#B45309;--amber-s:#FFFBEB;--red:#B91C1C;--bg:#FFFFFF;--soft:#F9FAFB}
+<style>:root{--ink:#0F1F1A;--ink2:#40514A;--mut:#6B7A73;--line:#DCE9E3;--green:#059669;--green-d:#047857;--gold:#D97706;--gold-s:#FFF7E6;--bg:#F7FBF9}
 *{box-sizing:border-box}html,body{overflow-x:clip}html{scroll-behavior:smooth}
-body{margin:0;font-family:Inter,system-ui,sans-serif;color:var(--ink);background:var(--bg);line-height:1.55;-webkit-font-smoothing:antialiased}
-a{color:inherit}
-.col{max-width:720px;margin:0 auto;padding:0 20px}
-header{border-bottom:1px solid var(--line);position:sticky;top:0;background:rgba(255,255,255,.92);backdrop-filter:blur(10px);z-index:10}
-header .col{max-width:960px;display:flex;justify-content:space-between;align-items:center;height:60px}
-.logo{display:flex;align-items:center;gap:9px;text-decoration:none;font-weight:600}
-.logo small{display:block;font-weight:400;color:var(--mut);font-size:.72rem;line-height:1}
-nav{display:flex;gap:6px;align-items:center}nav a{font-size:.86rem;text-decoration:none;color:var(--ink2);padding:7px 10px;border-radius:8px}nav a:hover{background:var(--soft)}
-nav a.pri{background:var(--green);color:#fff}
+body{margin:0;font-family:Inter,system-ui,sans-serif;color:var(--ink);background:var(--bg);line-height:1.5;-webkit-font-smoothing:antialiased}
+a{color:inherit}.col{max-width:820px;margin:0 auto;padding:0 20px}
+header{position:sticky;top:0;z-index:10;background:rgba(255,255,255,.75);backdrop-filter:blur(14px);border-bottom:1px solid rgba(5,150,105,.12)}
+header .col{max-width:980px;display:flex;justify-content:space-between;align-items:center;height:58px}
+.logo{display:flex;align-items:center;gap:9px;text-decoration:none;font-weight:600}.logo small{display:block;font-weight:400;color:var(--mut);font-size:.72rem;line-height:1}
+nav{display:flex;gap:6px;align-items:center}nav a{font-size:.86rem;text-decoration:none;color:var(--ink2);padding:7px 10px;border-radius:999px}
+nav a.pri{background:linear-gradient(135deg,#047857,#10B981 60%,#6EE7B7);color:#fff;box-shadow:0 6px 16px -8px rgba(5,150,105,.7)}
 @media(max-width:620px){nav a.h{display:none}}
-section{padding:40px 0;border-bottom:1px solid var(--line)}
-.k{font-size:.74rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--green);margin:0 0 10px}
-h1{font-family:'Source Serif 4',Georgia,serif;font-size:clamp(1.85rem,4.4vw,2.6rem);line-height:1.15;letter-spacing:-.02em;margin:0 0 14px;font-weight:600}
-h1 em{font-style:normal;color:var(--green)}
-h2{font-size:1.28rem;letter-spacing:-.02em;margin:0 0 6px}
-.sub{color:var(--mut);margin:0 0 18px;font-size:.95rem}
-.lead{font-size:1.06rem;color:var(--ink2);margin:0 0 22px}
-.btns{display:flex;gap:10px;flex-wrap:wrap}
-.btn{display:inline-flex;align-items:center;gap:6px;padding:11px 18px;border-radius:10px;font-weight:600;font-size:.93rem;text-decoration:none;border:1px solid var(--line);background:#fff}
-.btn.g{background:var(--green);border-color:var(--green);color:#fff}
-.proofbar{display:flex;flex-wrap:wrap;gap:8px;margin:20px 0 0}
-.proofbar span{font-size:.8rem;padding:5px 10px;border-radius:999px;background:var(--green-s);color:#065F46;font-weight:500}
-/* facts */
-.facts{list-style:none;margin:0;padding:0;display:grid;gap:10px}
-.facts li{display:grid;grid-template-columns:100px 1fr;gap:14px;padding:13px 16px;border:1px solid var(--line);border-radius:12px}
-.facts b{font-size:.76rem;text-transform:uppercase;letter-spacing:.06em;color:var(--green);padding-top:3px}
-.facts li.new{background:var(--amber-s);border-color:#FDE68A}.facts li.new b{color:var(--amber)}
-.facts small{display:block;color:var(--mut);font-size:.75rem;margin-top:3px}
-/* owners */
-.own{display:grid;gap:10px}
-.own div{display:grid;grid-template-columns:44px 1fr;gap:14px;align-items:start;padding:14px 16px;border:1px solid var(--line);border-radius:12px}
-.own i{font-style:normal;width:40px;height:40px;border-radius:10px;display:grid;place-items:center;font-weight:700;font-size:.85rem}
-.own .a i{background:var(--green-s);color:var(--green)}.own .b i{background:#EEF2FF;color:#4338CA}.own .c i{background:var(--amber-s);color:var(--amber)}.own .d i{background:#F3F4F6;color:#374151}
-.own strong{display:block}.own span{color:var(--ink2);font-size:.92rem}.own em{font-style:normal;display:inline-block;margin-top:4px;font-size:.76rem;color:var(--mut)}
-/* data flow */
-.pipe{display:grid;gap:0}
-.stage{border:1px solid var(--line);border-radius:12px;padding:14px 16px}
-.stage h3{margin:0 0 6px;font-size:.78rem;letter-spacing:.07em;text-transform:uppercase;color:var(--mut)}
-.stage ul{margin:0;padding-left:18px}.stage li{font-size:.93rem;margin:2px 0}
-.stage.mid{background:var(--green-s);border-color:#A7F3D0}.stage.mid h3{color:var(--green)}
-.arrow{text-align:center;color:var(--mut);font-size:1.1rem;line-height:1;padding:6px 0}
-/* rules */
-.rules{list-style:none;margin:0;padding:0;display:grid;gap:0;border:1px solid var(--line);border-radius:12px;overflow:hidden}
-.rules li{display:grid;grid-template-columns:74px 1fr;gap:12px;padding:11px 16px;border-bottom:1px solid var(--line);font-size:.93rem}
-.rules li:last-child{border:0}
-.rules b{font-size:.74rem;color:var(--green);padding-top:2px;font-weight:700}
-/* example */
+.hero{position:relative;padding:46px 0 30px;text-align:center}
+.hero:before{content:"";position:absolute;inset:-60px -50vw 0;z-index:-1;background:radial-gradient(40% 60% at 20% 20%,rgba(110,231,183,.45),transparent 70%),radial-gradient(35% 55% at 85% 15%,rgba(253,211,140,.5),transparent 70%),linear-gradient(180deg,#fff,var(--bg))}
+.pill{display:inline-flex;gap:8px;align-items:center;font-size:.78rem;font-weight:600;color:var(--green-d);background:#fff;border:1px solid var(--line);padding:5px 12px;border-radius:999px}
+h1{font-family:'Source Serif 4',Georgia,serif;font-weight:600;font-size:clamp(1.9rem,4.6vw,2.9rem);line-height:1.12;letter-spacing:-.02em;margin:16px auto 12px;max-width:28ch}
+h1 em{font-style:normal;background:linear-gradient(100deg,#047857,#10B981 55%,#D97706);-webkit-background-clip:text;background-clip:text;color:transparent}
+.lead{font-size:1.05rem;color:var(--ink2);max-width:52ch;margin:0 auto 20px}
+.btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:12px 20px;border-radius:999px;font-weight:600;font-size:.93rem;text-decoration:none;background:#fff;border:1px solid var(--line);transition:transform .15s,box-shadow .15s}
+.btn:hover{transform:translateY(-2px);box-shadow:0 10px 22px -12px rgba(4,120,87,.5)}
+.btn.g{color:#fff;border:0;background:linear-gradient(135deg,#047857,#10B981 60%,#6EE7B7);box-shadow:0 10px 22px -10px rgba(5,150,105,.7)}
+.chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:18px}
+.chips span{font-size:.78rem;padding:5px 11px;border-radius:999px;background:rgba(255,255,255,.8);border:1px solid var(--line);color:var(--ink2)}
+.card{background:#fff;border:1px solid var(--line);border-radius:20px;padding:22px;box-shadow:0 18px 40px -32px rgba(4,120,87,.45)}
+.blk{margin:18px 0}
+.k{font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--green);margin:0 0 8px}
+h2{font-size:1.22rem;letter-spacing:-.02em;margin:0 0 14px}
+.grid4{display:grid;gap:10px}@media(min-width:680px){.grid4{grid-template-columns:1fr 1fr}}
+.tile{padding:14px 16px;border-radius:14px;background:linear-gradient(180deg,#fff,#F1FAF6);border:1px solid var(--line)}
+.tile b{display:block;font-size:.95rem}.tile span{font-size:.85rem;color:var(--mut)}
+.facts{display:grid;gap:10px}@media(min-width:680px){.facts{grid-template-columns:repeat(3,1fr)}}
+.fact{padding:14px;border-radius:14px;border:1px solid var(--line);background:#fff}
+.fact b{display:block;font-size:.72rem;letter-spacing:.07em;text-transform:uppercase;color:var(--green);margin-bottom:4px}
+.fact.new{background:var(--gold-s);border-color:#FDE3B5}.fact.new b{color:var(--gold)}
+.fact p{margin:0;font-size:.9rem}.fact small{display:block;color:var(--mut);font-size:.72rem;margin-top:6px}
 .flow{list-style:none;margin:0;padding:0;position:relative}
-.flow:before{content:"";position:absolute;left:15px;top:8px;bottom:8px;width:2px;background:var(--line)}
-.flow li{position:relative;padding:0 0 14px 46px}
-.flow li:before{content:"";position:absolute;left:8px;top:5px;width:16px;height:16px;border-radius:50%;background:#fff;border:2px solid var(--green)}
-.flow li.bad:before{border-color:var(--red);background:#FEF2F2}.flow li.end:before{background:var(--green)}
-.flow .s{display:block;color:var(--mut);font-size:.84rem}
-.flow em{font-style:normal;font-size:.72rem;font-weight:600;padding:1px 7px;border-radius:5px;background:#F3F4F6;color:#374151;margin-left:6px}
-.warn{margin:4px 0 0;padding:12px 16px;border-radius:10px;background:var(--amber-s);border:1px solid #FDE68A;font-size:.92rem}
-/* calc */
-.calc{border:1px solid var(--line);border-radius:14px;padding:16px 18px;background:var(--soft)}
-.calc label{display:grid;grid-template-columns:1fr 140px;gap:12px;align-items:center;padding:7px 0;font-size:.92rem;border-bottom:1px dashed var(--line)}
-.calc input{font:inherit;padding:7px 10px;border:1px solid #D1D5DB;border-radius:8px;width:100%;text-align:right;background:#fff}
-.out{margin-top:14px;display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.out div{background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px 14px}
-.out b{display:block;font-size:1.45rem;letter-spacing:-.02em;color:var(--green)}
-.out span{font-size:.82rem;color:var(--ink2)}
-.how{font-size:.76rem;color:var(--mut);margin:10px 0 0}
-/* me */
-.me{list-style:none;margin:0 0 20px;padding:0;display:grid;gap:10px}
-.me li{padding-left:28px;position:relative;font-size:.97rem}
-.me li:before{content:"✓";position:absolute;left:0;top:0;width:20px;height:20px;border-radius:6px;background:var(--green-s);color:var(--green);font-size:.75rem;font-weight:700;display:grid;place-items:center}
-.me li span{display:block;color:var(--mut);font-size:.86rem}
-.honest{font-size:.82rem;color:var(--mut);margin-top:16px}
-footer{padding:26px 0 40px;font-size:.78rem;color:var(--mut)}footer a{color:var(--ink2)}
-@media(max-width:560px){.facts li,.rules li{grid-template-columns:1fr;gap:3px}.calc label{grid-template-columns:1fr}.out{grid-template-columns:1fr}}
+.flow:before{content:"";position:absolute;left:11px;top:6px;bottom:6px;width:2px;background:linear-gradient(#10B981,#D97706)}
+.flow li{position:relative;padding:0 0 12px 36px;font-size:.95rem}
+.flow li:before{content:"";position:absolute;left:4px;top:4px;width:16px;height:16px;border-radius:50%;background:#fff;border:2px solid var(--green)}
+.flow li.bad:before{border-color:#DC2626}.flow li.end:before{background:var(--green)}
+.flow .s{display:block;color:var(--mut);font-size:.82rem}
+.flow em{font-style:normal;font-size:.7rem;font-weight:600;padding:2px 8px;border-radius:999px;background:#ECFDF5;color:var(--green-d);margin-left:6px}
+.flow em.ck{background:#EEF2FF;color:#4338CA}.flow em.sh{background:var(--gold-s);color:var(--gold)}.flow em.ds{background:#F3F4F6;color:#374151}
+.note{margin:6px 0 0;padding:10px 14px;border-radius:12px;background:var(--gold-s);font-size:.88rem}
+details{border:1px solid var(--line);border-radius:14px;background:#fff;margin:10px 0}
+summary{cursor:pointer;padding:14px 16px;font-weight:600;list-style:none;display:flex;justify-content:space-between}summary::after{content:"+";color:var(--green);font-weight:700}details[open] summary::after{content:"–"}
+details .in{padding:0 16px 14px;font-size:.9rem}details ul{margin:0;padding-left:18px}details li{margin:3px 0}
+.calc label{display:grid;grid-template-columns:1fr 120px;gap:10px;align-items:center;padding:6px 0;font-size:.9rem}
+.calc input{font:inherit;padding:7px 10px;border:1px solid var(--line);border-radius:10px;text-align:right;width:100%}
+.out{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+.out div{padding:12px 14px;border-radius:14px;background:linear-gradient(135deg,#ECFDF5,#FFF7E6)}
+.out b{display:block;font-size:1.4rem;color:var(--green-d)}.out span{font-size:.8rem;color:var(--ink2)}
+.how{font-size:.74rem;color:var(--mut);margin:8px 0 0}
+footer{padding:24px 0 40px;font-size:.76rem;color:var(--mut)}footer a{color:var(--ink2)}
+@media(max-width:560px){.calc label{grid-template-columns:1fr}.out{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -94,104 +73,73 @@ footer{padding:26px 0 40px;font-size:.78rem;color:var(--mut)}footer a{color:var(
 </div></header>
 
 <main class="col">
-<section>
-  <p class="k">Order-to-cash · a BA case study, built</p>
-  <h1>Distributors pay less than the bill. <em>I mapped who owns each missing rupee, wrote the rules, and built it.</em></h1>
-  <p class="lead">A live finance-ops problem, taken from evidence to a working product: ownership, data, rules, approvals and tests. It's how I'd work in a finance or fintech team from week one.</p>
-  <div class="btns"><a class="btn g" href="desk.html">Try the product →</a><a class="btn" href="#owners">See how it's broken down</a></div>
-  <div class="proofbar"><span>4 owners mapped</span><span>8 business rules</span><span>Maker-checker above ₹10,000</span><span>11 tests you can run</span><span>BRD + Jira stories</span></div>
+<section class="hero">
+  <span class="pill">Order-to-cash · BA case study, built and testable</span>
+  <h1>Distributors pay less than the bill. <em>I gave every missing rupee an owner, rules and a working product.</em></h1>
+  <p class="lead">A live finance-ops problem taken from evidence to a product you can click through: who decides, what data flows, which rules apply, and 11 tests that prove it.</p>
+  <div class="btns"><a class="btn g" href="desk.html">Try the product →</a><a class="btn" href="desk.html?uat=1">Run the 11 tests</a><a class="btn" href="brd.html">Read the BRD</a></div>
+  <div class="chips"><span>4 owners mapped</span><span>8 business rules</span><span>Maker-checker above ₹10,000</span><span>No auto write-offs</span><span>Jira-ready stories</span></div>
 </section>
 
-<section id="why">
-  <p class="k">1 · The problem, today</p>
-  <h2>Why short-payments pile up</h2>
-  <p class="sub">Three things are true right now.</p>
-  <ul class="facts">
-    <li><b>Squeezed</b><span>Distributors say they earn ₹3.5–5 on every ₹100, and costs keep rising.<small>All India Consumer Products Distributors Federation, June 2026</small></span></li>
-    <li><b>Slow</b><span>Their claims take 45–90 days to settle, about 1 in 3 rejected. So they cut the money from the next payment instead.<small>Vendor-reported (Spirestock, Dec 2025)</small></span></li>
-    <li class="new"><b>New rule</b><span>From 1 Nov 2026, a brand recovers GST on an after-sale discount only with a proper GST credit note, once the distributor adjusts his tax credit.<small>Finance Act 2026 · CBIC Notification 03/2026</small></span></li>
-  </ul>
-</section>
-
-<section id="owners">
-  <p class="k">2 · Who owns what</p>
-  <h2>Every gap has exactly one owner at each step</h2>
-  <p class="sub">The real failure today isn't the money. It's that nobody owns the gap.</p>
-  <div class="own">
-    <div class="a"><i>FO</i><p style="margin:0"><strong>Finance ops (maker)</strong><span>Matches payments, checks the reason, recommends: credit note or recovery.</span><em>Decides: the reason · Deadline: SLA clock per case</em></p></div>
-    <div class="b"><i>CK</i><p style="margin:0"><strong>Checker</strong><span>Approves anything above ₹10,000. Can't approve their own case.</span><em>Decides: approve or send back</em></p></div>
-    <div class="c"><i>SH</i><p style="margin:0"><strong>Regional sales head</strong><span>Gets scheme claims with no approved budget: a promise made on the ground.</span><em>Decides: charge to trade budget or recover · Deadline: 3 days</em></p></div>
-    <div class="d"><i>DS</i><p style="margin:0"><strong>Distributor</strong><span>Receives the credit note and adjusts his GST input credit.</span><em>Needed for the brand to recover GST</em></p></div>
+<div class="card blk">
+  <p class="k">What this shows about how I work</p>
+  <div class="grid4">
+    <div class="tile"><b>Start from current evidence</b><span>Every fact is dated and sourced; vendor figures are labelled.</span></div>
+    <div class="tile"><b>Make ownership explicit</b><span>Every gap has one owner, one decision, one deadline.</span></div>
+    <div class="tile"><b>Write rules you can test</b><span>8 rules, 11 tests, including the "must be blocked" cases.</span></div>
+    <div class="tile"><b>Build controls in</b><span>Habits from 2.5 years and zero SOX findings at HDFC Bank.</span></div>
   </div>
-</section>
+</div>
 
-<section id="data">
-  <p class="k">3 · How it works at the core</p>
-  <h2>Data in, rules, decisions out</h2>
-  <p class="sub">Nothing is written off by a rule. Everything unclear goes to a person.</p>
-  <div class="pipe">
-    <div class="stage"><h3>In</h3><ul><li>Bank statement (CSV), one virtual account per distributor</li><li>Open invoices</li><li>Approved scheme budgets and claim evidence</li></ul></div>
-    <div class="arrow">↓</div>
-    <div class="stage mid"><h3>Logic</h3><ul><li>Match each receipt to the payer and the oldest open invoice</li><li>Split the gap: TDS, scheme, damage, unexplained</li><li>Auto-accept only with evidence, within budget and tolerance</li><li>Route the rest to an owner, with an SLA</li></ul></div>
-    <div class="arrow">↓</div>
-    <div class="stage"><h3>Out</h3><ul><li>A case queue: every gap with reason, owner, deadline</li><li>Credit notes (fair) or recoveries (unfair), logged with a reference</li><li>Credit flag on the next order when disputes pile up</li></ul></div>
+<div class="blk">
+  <p class="k">The problem, today</p>
+  <div class="facts">
+    <div class="fact"><b>Squeezed</b><p>Distributors earn ₹3.5–5 per ₹100; costs keep rising.</p><small>AICPDF, Jun 2026</small></div>
+    <div class="fact"><b>Slow</b><p>Claims take 45–90 days, ~1 in 3 rejected, so distributors deduct instead.</p><small>Vendor-reported, Dec 2025</small></div>
+    <div class="fact new"><b>New rule</b><p>From 1 Nov 2026, GST back on after-sale discounts only via a GST credit note.</p><small>Finance Act 2026</small></div>
   </div>
-</section>
+</div>
 
-<section id="rules">
-  <p class="k">4 · The rules</p>
-  <h2>8 rules, each one tested</h2>
-  <p class="sub">Plain-language summary. The full wording is in the BRD.</p>
-  <ul class="rules">
-    <li><b>BR-1</b><span>Identify the payer by virtual account; a partial payment settles the oldest invoice first.</span></li>
-    <li><b>BR-2</b><span>Expect TDS where the law applies, and match it to Form 26AS.</span></li>
-    <li><b>BR-3</b><span>Auto-accept a claim only with evidence, within budget and tolerance. Otherwise, a person decides.</span></li>
-    <li><b>BR-4</b><span>Never write off an unexplained gap automatically.</span></li>
-    <li><b>BR-5</b><span>Above ₹10,000, a second person approves. No self-approval.</span></li>
-    <li><b>BR-6</b><span>Settle valid claims as credit notes, reported on time.</span></li>
-    <li><b>BR-7</b><span>When disputes age or pile up, flag the next order for credit review.</span></li>
-    <li><b>BR-8</b><span>A scheme claim with no approved budget goes to the regional sales head within 3 days.</span></li>
-  </ul>
-</section>
-
-<section id="example">
-  <p class="k">5 · One gap, start to finish</p>
-  <h2>₹1,180 goes missing. Here's who does what.</h2>
-  <ul class="flow" style="margin-top:14px">
-    <li>Brand bills the distributor <b>₹11,800</b><span class="s">₹10,000 goods + ₹1,800 GST</span></li>
+<div class="card blk">
+  <p class="k">One gap, start to finish · who owns each step</p>
+  <h2>₹1,180 goes missing. Here's how it ends.</h2>
+  <ul class="flow">
+    <li>Brand bills <b>₹11,800</b> (₹10,000 + ₹1,800 GST)</li>
     <li class="bad">Distributor pays <b>₹10,620</b>: <b>₹1,180 missing</b><span class="s">He took a 10% festival discount himself.</span></li>
-    <li>Labelled <b>scheme claim</b> <em>Finance ops</em><span class="s">The scheme has an approved budget, so it's valid (BR-3).</span></li>
-    <li>Closed with a <b>GST credit note of ₹1,180</b> <em>Finance ops</em><span class="s">₹1,000 discount + ₹180 GST (BR-6).</span></li>
-    <li class="end">Distributor adjusts his tax credit → brand recovers <b>₹180 GST</b> <em>Distributor</em><span class="s">Next on the roadmap: track each note as sent → accepted → adjusted.</span></li>
+    <li>Matched, labelled <b>scheme claim</b>, budget checked <em>Finance ops</em><span class="s">Rules BR-1, BR-3</span></li>
+    <li>Above ₹10,000? A second person approves <em class="ck">Checker</em><span class="s">BR-5 · no self-approval</span></li>
+    <li>Closed with a <b>GST credit note of ₹1,180</b> <em>Finance ops</em><span class="s">BR-6</span></li>
+    <li class="end">Distributor adjusts his tax credit → brand recovers <b>₹180 GST</b> <em class="ds">Distributor</em></li>
   </ul>
-  <p class="warn">No budget behind the scheme? It goes to the regional sales head instead (BR-8): charge it to his budget, or recover it.</p>
-</section>
+  <p class="note">No approved budget behind the scheme? It goes to the regional sales head <b>within 3 days</b>: charge his budget or recover (BR-8).</p>
+</div>
 
-<section id="calc">
-  <p class="k">6 · What it's worth</p>
-  <h2>How much cash is stuck in short-payments?</h2>
-  <div class="calc" style="margin-top:14px">
-    <label>Monthly billing to distributors (₹ lakh)<input id="bill" type="number" min="0" value="500"></label>
-    <label>Share that arrives short-paid (%)<input id="pct" type="number" min="0" max="100" step="0.5" value="3"></label>
-    <label>Days to settle a gap<input id="days" type="number" min="0" value="60"></label>
-    <label>Cost of money (% a year)<input id="rate" type="number" min="0" step="0.5" value="12"></label>
-    <div class="out"><div><b id="o1">–</b><span>stuck at any time</span></div><div><b id="o2">–</b><span>yearly interest cost</span></div></div>
-    <p class="how">Billing × share short-paid × (days ÷ 30) = cash stuck; × cost of money = yearly cost. Defaults are examples, so change them.</p>
-  </div>
-</section>
+<details><summary>How it works at the core: data in → logic → out</summary><div class="in"><ul>
+<li><b>In:</b> bank statement (one virtual account per distributor), open invoices, scheme budgets, claim evidence</li>
+<li><b>Logic:</b> match payer and oldest invoice · split the gap (TDS, scheme, damage, unexplained) · auto-accept only with evidence, within budget and tolerance · route the rest with an SLA</li>
+<li><b>Out:</b> a case queue with reason, owner and deadline · credit notes or recoveries with references · credit flag when disputes pile up</li></ul></div></details>
+<details><summary>The 8 rules in plain English</summary><div class="in"><ul>
+<li><b>BR-1</b> Identify the payer; a partial payment settles the oldest invoice first.</li>
+<li><b>BR-2</b> Expect TDS where the law applies; match it to Form 26AS.</li>
+<li><b>BR-3</b> Auto-accept only with evidence, within budget and tolerance.</li>
+<li><b>BR-4</b> Never write off an unexplained gap automatically.</li>
+<li><b>BR-5</b> Above ₹10,000, a second person approves.</li>
+<li><b>BR-6</b> Settle valid claims as credit notes, reported on time.</li>
+<li><b>BR-7</b> Flag the next order for credit review when disputes age or pile up.</li>
+<li><b>BR-8</b> Unbudgeted scheme claims go to the regional sales head in 3 days.</li></ul></div></details>
 
-<section>
-  <p class="k">7 · What this shows</p>
-  <h2>How I'd work in your team</h2>
-  <ul class="me" style="margin-top:14px">
-    <li>Start from current evidence, not assumptions<span>Every claim on this page has a dated source, and vendor figures are labelled.</span></li>
-    <li>Make ownership explicit<span>Every gap has one owner, one decision and one deadline.</span></li>
-    <li>Turn rules into logic someone can test<span>8 rules, 11 test cases, including the "this must be blocked" cases.</span></li>
-    <li>Build controls in, not on top<span>Maker-checker, no auto write-offs, audit references. Habits from 2.5 years and zero SOX findings at HDFC Bank.</span></li>
-  </ul>
-  <div class="btns"><a class="btn g" href="desk.html">Try the product →</a><a class="btn" href="desk.html?uat=1">Run the 11 tests</a><a class="btn" href="brd.html">Read the BRD</a><a class="btn" href="https://rupak-lemon.vercel.app">About me</a></div>
-  <p class="honest">A working prototype with sample data, built from public filings and industry research. Not connected to any ERP or bank; it doesn't file GST. Tax rules are summarised for illustration; check current law.</p>
-</section>
+<div class="card blk calc">
+  <p class="k">What it's worth · try your own numbers</p>
+  <label>Monthly billing to distributors (₹ lakh)<input id="bill" type="number" min="0" value="500"></label>
+  <label>Share short-paid (%)<input id="pct" type="number" min="0" step="0.5" value="3"></label>
+  <label>Days to settle<input id="days" type="number" min="0" value="60"></label>
+  <label>Cost of money (% a year)<input id="rate" type="number" min="0" step="0.5" value="12"></label>
+  <div class="out"><div><b id="o1">–</b><span>cash stuck at any time</span></div><div><b id="o2">–</b><span>yearly interest cost</span></div></div>
+  <p class="how">Billing × share × (days ÷ 30) = cash stuck; × cost of money = yearly cost. Defaults are examples.</p>
+</div>
+
+<div class="btns blk" style="margin-bottom:8px"><a class="btn g" href="desk.html">Try the product →</a><a class="btn" href="https://rupak-lemon.vercel.app">About me</a></div>
+<p style="text-align:center;font-size:.8rem;color:var(--mut);margin:0 0 20px">Working prototype with sample data. Not connected to any ERP or bank; doesn't file GST. Tax rules summarised for illustration.</p>
 </main>
 
 <footer class="col">
