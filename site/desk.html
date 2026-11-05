@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Executable Specification · Distributor Short-Payment Reconciliation</title>
-<meta name="description" content="A working prototype: load a bank statement and watch every short-paid rupee get classified, owned and settled under seven business rules. Synthetic data, runs in your browser.">
+<meta name="description" content="A working prototype: load a bank statement and watch every short-paid rupee get classified, owned and settled under eight business rules. Synthetic data, runs in your browser.">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -100,9 +100,22 @@ h1{font-family:'Source Serif 4',Georgia,serif;letter-spacing:-.02em}
 .card,.panel{border-color:#DCE9E3!important;box-shadow:0 14px 34px -30px rgba(4,120,87,.5)!important}
 select,input{border-radius:10px!important}
 </style>
+<style>
+.appbar .dnav a{border-radius:8px!important;font-size:.88rem;white-space:nowrap}
+.appbar .dnav a.pri{background:linear-gradient(180deg,#1E3A31,#0F1F1A)!important;color:#fff!important;border-radius:9px!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.14)}
+.btn{height:40px;padding:0 16px!important;border-radius:10px!important;display:inline-flex!important;align-items:center;gap:8px;background:#fff!important;border:1px solid rgba(15,31,26,.12)!important;box-shadow:0 1px 2px rgba(15,31,26,.06),inset 0 -1px 0 rgba(15,31,26,.04)!important}
+.btn.small{height:34px;padding:0 12px!important;border-radius:9px!important}
+.btn.primary{background:linear-gradient(180deg,#1E3A31,#0F1F1A)!important;color:#fff!important;border:1px solid #0B1612!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.14),0 8px 20px -10px rgba(15,31,26,.7)!important}
+.btn.primary:hover{background:linear-gradient(180deg,#0A7A5A,#047857)!important}
+.btn:hover{transform:translateY(-1px);box-shadow:0 6px 16px -8px rgba(15,31,26,.25)!important}
+.pnote{display:flex;gap:10px;align-items:flex-start;margin:4px 0 14px;padding:10px 14px;border-radius:12px;background:#0F1F1A;color:#CFE3DA;font-size:.84rem}
+.pnote svg{width:18px;height:18px;color:#6EE7B7;flex:none;margin-top:1px}.pnote b{color:#fff}
+.dfoot{margin-top:40px;border-top:1px solid #DCE9E3;background:#fff;padding:20px 0;font-size:.8rem;color:#6B7A73}
+.dfoot .dk{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}.dfoot a{color:#40514A}
+</style>
 </head>
 <body>
-<header class="appbar"><div class="in"><a class="logo" href="./"><svg width="30" height="30" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="Every rupee, split and owned"><circle cx="16" cy="16" r="13" fill="none" stroke="#64748B" stroke-width="4.5" stroke-dasharray="2.48 79.20" stroke-dashoffset="0.00" transform="rotate(-90 16 16)"/><circle cx="16" cy="16" r="13" fill="none" stroke="#059669" stroke-width="4.5" stroke-dasharray="31.07 50.61" stroke-dashoffset="-4.08" transform="rotate(-90 16 16)"/><circle cx="16" cy="16" r="13" fill="none" stroke="#D97706" stroke-width="4.5" stroke-dasharray="43.32 38.36" stroke-dashoffset="-36.76" transform="rotate(-90 16 16)"/><text x="16" y="21.2" text-anchor="middle" font-family="Inter,Arial,sans-serif" font-weight="700" font-size="14" fill="#111827">₹</text></svg><span class="lw"><b>Every Rupee</b><small>Short-payment reconciliation</small></span></a><nav><a href="./" class="hide-s">Overview</a><a href="brd.html" class="hide-s">BRD</a><a href="https://github.com/RUPAK30/Cello-O2C-Deduction-Workflow-Case-Study" class="hide-s">GitHub</a><a href="desk.html" class="on">The product</a></nav></div></header>
+<header class="appbar"><div class="in"><a class="logo" href="./"><svg width="30" height="30" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="Every rupee, split and owned"><circle cx="16" cy="16" r="13" fill="none" stroke="#64748B" stroke-width="4.5" stroke-dasharray="2.48 79.20" stroke-dashoffset="0.00" transform="rotate(-90 16 16)"/><circle cx="16" cy="16" r="13" fill="none" stroke="#059669" stroke-width="4.5" stroke-dasharray="31.07 50.61" stroke-dashoffset="-4.08" transform="rotate(-90 16 16)"/><circle cx="16" cy="16" r="13" fill="none" stroke="#D97706" stroke-width="4.5" stroke-dasharray="43.32 38.36" stroke-dashoffset="-36.76" transform="rotate(-90 16 16)"/><text x="16" y="21.2" text-anchor="middle" font-family="Inter,Arial,sans-serif" font-weight="700" font-size="14" fill="#111827">₹</text></svg><span class="lw"><b>Every Rupee</b><small>Short-payment reconciliation</small></span></a><nav class="dnav"><a href="./">Overview</a><a href="case-study.html" class="hide-s">Case study</a><a href="Cello_O2C_BRD.pdf" class="hide-s">BRD</a><a href="#privacy-note" class="hide-s">Privacy</a><a href="https://rupak-lemon.vercel.app" class="pri">About Rupak</a></nav></div></header>
 
 <div class="dk">
   
@@ -114,6 +127,7 @@ select,input{border-radius:10px!important}
   <p class="row" style="gap:6px;margin:12px 0 4px;font-size:.78rem"><span class="type">Maker-checker above ₹10,000 (BR-5)</span><span class="type">Never auto write-off (BR-4)</span><span class="type">IRP 30-day clock (BR-6)</span><span class="type">Credit flag, never a block (BR-7)</span><span class="type">Unbudgeted scheme → sales head (BR-8)</span></p>
 </div>
 
+<div class="dk"><div class="pnote" id="privacy-note"><svg viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="10" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M8 10V7a4 4 0 0 1 8 0v3" fill="none" stroke="currentColor" stroke-width="1.8"/></svg><span><b>Private by design.</b> Files are read in your browser and never uploaded. No accounts or analytics; progress stays in this browser until you press Reset. Sample data is illustrative.</span></div></div>
 <div class="bar-top"><div class="dk row" style="width:100%">
   <span class="day" id="day">Day 0</span>
   <label>Acting as <select id="who"><option value="maker">Asha (AR executive)</option><option value="checker">Vikram (Finance controller)</option></select></label>
@@ -225,6 +239,7 @@ select,input{border-radius:10px!important}
   <p class="foot">Rules simplified for illustration: TDS u/s 194Q at 0.1% of taxable value once a distributor's purchases pass ₹50 lakh; thresholds are Finance-set and illustrative. Tax rules change; check current law. Built by Rupak Ghanpathi as a self-initiated case study.</p>
 </main>
 <div class="flash" id="flash" role="status" aria-live="polite"></div>
+<footer class="dfoot"><div class="dk"><span>© 2026 Rupak Ghanpathi · Every Rupee, a portfolio case study. Not affiliated with Cello World.</span><span><a href="./">Overview</a> · <a href="Cello_O2C_One_Pager.pdf">One-page PDF</a> · <a href="https://github.com/RUPAK30/Cello-O2C-Deduction-Workflow-Case-Study">GitHub</a> · <a href="mailto:rupakr2g@gmail.com?subject=Every%20Rupee">Email</a></span></div></footer>
 <script src="data.js"></script>
 <script src="desk.js"></script>
 </body>

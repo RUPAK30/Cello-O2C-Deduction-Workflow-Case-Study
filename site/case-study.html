@@ -7,7 +7,7 @@
 <meta name="description" content="Business analysis case study by Rupak Ghanpathi: current-state analysis, business rules, user stories, RACI and executable acceptance tests for distributor short-payment reconciliation.">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Distributor short-payment reconciliation: a business analysis case study">
-<meta property="og:description" content="Problem statement, current and target process, eight business rules, user stories and ten executable UAT cases.">
+<meta property="og:description" content="Problem statement, current and target process, eight business rules, user stories and eleven executable UAT cases.">
 <meta property="og:url" content="https://everyrupee-o2c.vercel.app/">
 <meta property="og:image" content="https://everyrupee-o2c.vercel.app/og.png">
 <meta property="og:image:width" content="1200">
@@ -89,7 +89,7 @@ details.fold[open]>summary{margin-bottom:14px}
   <div class="wwh-grid">
     <div class="wwh-c"><b>Why: the problem</b><p>One short payment mixes tax withheld, valid claims and disputes. Recorded as a single difference, it has no owner, and receivables outgrow revenue. Distributors short-pay partly because their claims take months to settle; settling valid claims fast removes the reason.</p></div>
     <div class="wwh-c"><b>When: the trigger</b><p>A receipt posts below the invoice value.<br><span class="mini">Today</span> weeks of email.<br><span class="mini">Target</span> every rupee classified and owned the same day.</p></div>
-    <div class="wwh-c"><b>How: the proposed process</b><ol><li>Identify the payer (BR-1)</li><li>Separate statutory TDS (BR-2)</li><li>Validate claims against evidence (BR-3)</li><li>Route the remainder to an owner with an SLA (BR-4 to BR-7)</li></ol></div>
+    <div class="wwh-c"><b>How: the proposed process</b><ol><li>Identify the payer (BR-1)</li><li>Separate statutory TDS (BR-2)</li><li>Validate claims against evidence (BR-3)</li><li>Route the remainder to an owner with an SLA (BR-4 to BR-7)</li><li>Send unbudgeted scheme claims to the regional sales head (BR-8)</li></ol></div>
   </div>
   <p style="margin:16px 0 8px"><a class="cta" href="desk.html">Open the executable specification →</a></p>
 </section>
@@ -310,7 +310,7 @@ details.fold[open]>summary{margin-bottom:14px}
   <ol class="plain">
     <li><b>v1 · The assignment.</b> A deduction workflow: a case with a reason code and owner, SLA routing, maker-checker, ERP as system of record.</li>
     <li><b>v2 · The research.</b> TDS treated as a loss, 90–95% of deduction value usually valid, missed credit-note windows: answered by four layers (Identify, Split, Validate, Prevent).</li>
-    <li><b>v3 · An executable specification.</b> The page had become a long read. The rules now run as a desk: the ten UAT cases execute against it and report pass or fail, and every action is traced to its rule, story and test. The full specification sits behind one tap.</li>
+    <li><b>v3 · An executable specification.</b> The page had become a long read. The rules now run as a desk: the eleven UAT cases execute against it and report pass or fail, and every action is traced to its rule, story and test. The full specification sits behind one tap.</li>
   </ol>
 </details>
 </section>

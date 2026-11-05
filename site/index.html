@@ -3,11 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Every Rupee · A finance-ops problem, broken down and built</title>
+<title>Every Rupee · every missing rupee gets an owner and an ending</title>
 <meta name="description" content="Distributor short-payments, broken down the way a BA would: who owns what, what data goes in, the rules, and a working product with 11 tests. By Rupak Ghanpathi.">
 <meta property="og:title" content="Every Rupee · every missing rupee gets an owner and an ending">
 <meta property="og:description" content="From 1 Nov 2026, brands recover GST on after-sale discounts only via a GST credit note. A working reconciliation product, 8 rules, 11 tests.">
-<meta property="og:image" content="og.png">
+<meta property="og:image" content="https://everyrupee-o2c.vercel.app/og.png">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,600&display=swap" rel="stylesheet">
 <style>:root{--ink:#0F1F1A;--ink2:#40514A;--mut:#6B7A73;--line:#DCE9E3;--green:#059669;--green-d:#047857;--gold:#D97706;--gold-s:#FFF7E6;--bg:#F7FBF9}
@@ -104,12 +104,42 @@ footer{padding:24px 0 40px;font-size:.76rem;color:var(--mut)}footer a{color:var(
 nav a.pri{background:#0F1F1A;box-shadow:none}
 .ask{display:flex;flex-wrap:wrap;gap:16px;align-items:center;justify-content:space-between;padding:20px 22px;border-radius:20px;background:linear-gradient(135deg,#ECFDF5,#FFF7E6);border:1px solid var(--line)}
 .ask b{display:block;font-size:1rem}.ask span{font-size:.88rem;color:var(--ink2)}
+
+header.top{position:sticky;top:0;z-index:20;background:rgba(247,251,249,.72);backdrop-filter:saturate(1.6) blur(16px);-webkit-backdrop-filter:saturate(1.6) blur(16px);border-bottom:1px solid rgba(15,31,26,.06)}
+.tin{display:flex;align-items:center;justify-content:space-between;height:62px;gap:16px}
+.logo span{font-weight:650;letter-spacing:-.02em}
+.tnav{display:flex;gap:2px}.tnav a{font-size:.88rem;color:var(--ink2);text-decoration:none;padding:7px 12px;border-radius:8px;transition:background .15s,color .15s}.tnav a:hover{background:rgba(15,31,26,.05);color:var(--ink)}
+.tact{display:flex;align-items:center;gap:14px}.lnk{font-size:.88rem;color:var(--ink2);text-decoration:none}.lnk:hover{color:var(--ink)}
+@media(max-width:820px){.tnav,.lnk{display:none}}
+.btn{height:44px;padding:0 18px;border-radius:11px;font-size:.92rem;font-weight:550;letter-spacing:-.01em;gap:8px;color:var(--ink);background:#fff;border:1px solid rgba(15,31,26,.12);box-shadow:0 1px 2px rgba(15,31,26,.06),inset 0 -1px 0 rgba(15,31,26,.04);transition:transform .15s ease,box-shadow .15s ease,background .15s ease;backdrop-filter:none}
+.btn:hover{transform:translateY(-1px);box-shadow:0 6px 16px -8px rgba(15,31,26,.25)}
+.btn:active{transform:translateY(0)}
+.btn svg{width:15px;height:15px;transition:transform .15s}.btn:hover svg{transform:translateX(2px)}
+.btn.g{color:#fff;border:1px solid #0B1612;background:linear-gradient(180deg,#1E3A31 0%,#0F1F1A 100%);box-shadow:inset 0 1px 0 rgba(255,255,255,.14),0 8px 20px -10px rgba(15,31,26,.7)}
+.btn.g:hover{background:linear-gradient(180deg,#0A7A5A 0%,#047857 100%);border-color:#04694C}
+.btn.sm{height:36px;padding:0 14px;font-size:.85rem;border-radius:9px}
+.btn:focus-visible{outline:2px solid #10B981;outline-offset:2px}
+.seg{scroll-margin-top:80px}#how,#privacy,#calc{scroll-margin-top:80px}
+.privacy{padding:22px;border-radius:20px;background:#0F1F1A;color:#E7F3EE}
+.ph{display:flex;gap:14px;align-items:center;margin-bottom:16px}.ph b{display:block;font-size:1.05rem;color:#fff}.ph span{font-size:.86rem;color:#9FBFB2}
+.lock{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;background:rgba(16,185,129,.16);color:#6EE7B7;flex:none}.lock svg{width:22px;height:22px}
+.pg{display:grid;gap:12px}@media(min-width:720px){.pg{grid-template-columns:repeat(3,1fr)}}
+.pg div{padding:14px;border-radius:14px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08)}
+.pg b{display:block;font-size:.92rem;color:#fff;margin-bottom:4px}.pg span{font-size:.83rem;color:#B6CFC5}
+footer.foot{margin-top:40px;border-top:1px solid var(--line);background:#fff;padding:36px 0 22px;font-size:.86rem;color:var(--ink2)}
+.fg{display:grid;gap:24px}@media(min-width:760px){.fg{grid-template-columns:1.4fr 1fr 1fr 1fr}}
+.fb p{margin:10px 0 0;color:var(--mut);max-width:30ch;font-size:.84rem}
+footer h4{margin:0 0 10px;font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--mut)}
+footer .fg a:not(.logo){display:block;text-decoration:none;color:var(--ink2);padding:3px 0}footer .fg a:hover{color:var(--green-d)}
+.fsrc{margin-top:26px;padding-top:16px;border-top:1px solid var(--line);font-size:.76rem;color:var(--mut)}.fsrc a{color:var(--ink2)}
+.fbot{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:10px;font-size:.76rem;color:var(--mut)}.fbot a{color:var(--ink2)}
 </style>
 </head>
 <body>
-<header><div class="col">
-  <a class="logo" href="./"><svg width="28" height="28" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="Every Rupee"><circle cx="16" cy="16" r="13" fill="none" stroke="#64748B" stroke-width="4.5" stroke-dasharray="2.48 79.20" transform="rotate(-90 16 16)"/><circle cx="16" cy="16" r="13" fill="none" stroke="#059669" stroke-width="4.5" stroke-dasharray="31.07 50.61" stroke-dashoffset="-4.08" transform="rotate(-90 16 16)"/><circle cx="16" cy="16" r="13" fill="none" stroke="#D97706" stroke-width="4.5" stroke-dasharray="43.32 38.36" stroke-dashoffset="-36.76" transform="rotate(-90 16 16)"/><text x="16" y="21.2" text-anchor="middle" font-family="Inter,Arial,sans-serif" font-weight="700" font-size="14" fill="#111827">₹</text></svg><span>Every Rupee<small>by Rupak Ghanpathi</small></span></a>
-  <nav><a class="h" href="case-study.html">Full case study</a><a class="h" href="brd.html">BRD</a><a class="pri" href="desk.html">Try the product</a></nav>
+<header class="top"><div class="col tin">
+  <a class="logo" href="./"><svg width="28" height="28" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="Every Rupee"><circle cx="16" cy="16" r="13" fill="none" stroke="#64748B" stroke-width="4.5" stroke-dasharray="2.48 79.20" transform="rotate(-90 16 16)"/><circle cx="16" cy="16" r="13" fill="none" stroke="#059669" stroke-width="4.5" stroke-dasharray="31.07 50.61" stroke-dashoffset="-4.08" transform="rotate(-90 16 16)"/><circle cx="16" cy="16" r="13" fill="none" stroke="#D97706" stroke-width="4.5" stroke-dasharray="43.32 38.36" stroke-dashoffset="-36.76" transform="rotate(-90 16 16)"/><text x="16" y="21.2" text-anchor="middle" font-family="Inter,Arial,sans-serif" font-weight="700" font-size="14" fill="#111827">₹</text></svg><span>Every Rupee</span></a>
+  <nav class="tnav"><a href="#product">Product</a><a href="#how">How it works</a><a href="#privacy">Privacy</a><a href="case-study.html">Case study</a></nav>
+  <div class="tact"><a class="lnk" href="Cello_O2C_One_Pager.pdf">One-pager</a><a class="btn g sm" href="desk.html">Open the product<svg viewBox="0 0 16 16"><path d="M5 3l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
 </div></header>
 
 <main class="col">
@@ -119,19 +149,19 @@ nav a.pri{background:#0F1F1A;box-shadow:none}
   <h1>Distributors pay less than the bill. <em>Every Rupee gives every missing rupee an owner and an ending.</em></h1>
   <p class="lead">For consumer brands selling through distributors on credit. Upload a bank statement, see every gap labelled and owned, approve it, close it with a GST credit note. Built end to end by a BA, with 8 rules and 11 tests.</p>
   <div class="gst"><b>New since 1 Nov 2026</b> GST on an after-sale discount is recovered only through a GST credit note, once the distributor reverses his credit. Every untracked note is tax paid on money never received.</div>
-  <div class="btns"><a class="btn g" href="desk.html">Try the product →</a><a class="btn" href="desk.html?uat=1">Run the 11 tests</a><a class="btn" href="Cello_O2C_One_Pager.pdf">One-page PDF</a></div>
+  <div class="btns"><a class="btn g" href="desk.html">Try the product<svg viewBox="0 0 16 16"><path d="M5 3l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a><a class="btn" href="desk.html?uat=1">Run the 11 tests</a><a class="btn" href="Cello_O2C_One_Pager.pdf">One-page PDF</a></div>
   <div class="chips"><span>4 owners</span><span>8 rules</span><span>Maker-checker &gt; ₹10,000</span><span>No auto write-offs</span></div>
  </div>
  <a class="app" href="desk.html" style="text-decoration:none;color:inherit;display:block" aria-label="Open the product">
   <div class="bar"><i></i><i></i><i></i><span>Every Rupee · today's gaps</span></div>
-  <div class="apph"><b>₹16,410</b><small>short-paid · 3 gaps · 3 owners</small></div>
+  <div class="apph"><b>₹16,410</b><small>short-paid · 3 gaps · 2 still open</small></div>
   <div class="case"><b>₹12,400</b><span class="tag t2">Scheme · no budget</span><span class="who">Owner: Regional sales head</span><span class="who">1 day left</span><div class="sla"><i style="width:70%"></i></div></div>
   <div class="case"><b>₹3,150</b><span class="tag t3">Damage · needs checker</span><span class="who">Owner: Checker</span><span class="who">2 days left</span><div class="sla"><i style="width:45%"></i></div></div>
   <div class="case"><b>₹860</b><span class="tag t1">TDS · matched</span><span class="who">Owner: Finance ops</span><span class="who">Closed ✓</span><div class="sla"><i style="width:100%"></i></div></div>
   <div class="appf"><span>Sample data</span><b style="color:#047857">Open the product →</b></div>
  </a>
 </div></section>
-<div class="seg"><div role="tablist"><button class="on" data-p="prod">The product</button><button data-p="think">The thinking</button></div></div>
+<div class="seg" id="product"><div role="tablist"><button class="on" data-p="prod">The product</button><button data-p="think">The thinking</button></div></div>
 <div class="pane" id="prod">
  <div class="screens blk">
   <div class="scr"><span class="n">STEP 1</span><h3>Upload and match</h3><p>Bank statement in; each payment matched to its bill; every gap flagged.</p><div class="mini"><div><span>Bill #4417</span><span>₹11,800</span></div><div><span>Paid</span><span>₹10,620</span></div><div><span>Gap</span><span class="no">₹1,180</span></div></div></div>
@@ -154,20 +184,20 @@ nav a.pri{background:#0F1F1A;box-shadow:none}
   <h2>Cello World's receivables grew faster than its revenue</h2>
   <div class="facts"><div class="fact"><b>Receivables</b><p>₹658 Cr → ₹750 Cr</p><small>+14.0%, FY25 → FY26</small></div><div class="fact"><b>Revenue</b><p>₹2,136 Cr → ₹2,324 Cr</p><small>+8.8%</small></div><div class="fact new"><b>Gap</b><p>≈ ₹34 Cr above revenue pace</p><small>An estimate that justifies discovery, not a diagnosis</small></div></div>
 </div>
-<div class="card blk">
-  <p class="k">Where this would fail · and the design answer</p>
-  <div class="grid4">
-   <div class="tile"><b>Distributors keep paying the old account</b><span>Old account stays open a quarter; Sales gets a weekly list of who still uses it.</span></div>
-   <div class="tile"><b>Scheme rules change mid-quarter</b><span>No scheme is valid until Sales enters dates and budget; anything else goes to a person.</span></div>
-   <div class="tile"><b>Sales overrides the credit flag</b><span>The flag never blocks an order, but every override is logged by name and reviewed monthly.</span></div>
-  </div>
-</div>
 <div class="blk">
   <p class="k">The problem, today</p>
   <div class="facts">
     <div class="fact"><b>Squeezed</b><p>Distributors earn ₹3.5–5 per ₹100; costs keep rising.</p><small>AICPDF, Jun 2026</small></div>
     <div class="fact"><b>Slow</b><p>Claims reportedly take 45–90 days, so distributors deduct from the next payment instead.</p><small>Vendor estimate (Spirestock, Dec 2025), not independent data</small></div>
     <div class="fact new"><b>New rule</b><p>From 1 Nov 2026, GST back on after-sale discounts only via a GST credit note.</p><small>Finance Act 2026</small></div>
+  </div>
+</div>
+<div class="card blk">
+  <p class="k">Where this would fail · and the design answer</p>
+  <div class="grid4">
+   <div class="tile"><b>Distributors keep paying the old account</b><span>Old account stays open a quarter; Sales gets a weekly list of who still uses it.</span></div>
+   <div class="tile"><b>Scheme rules change mid-quarter</b><span>No scheme is valid until Sales enters dates and budget; anything else goes to a person.</span></div>
+   <div class="tile"><b>Sales overrides the credit flag</b><span>The flag never blocks an order, but every override is logged by name and reviewed monthly.</span></div>
   </div>
 </div>
 
@@ -185,7 +215,7 @@ nav a.pri{background:#0F1F1A;box-shadow:none}
   <p class="note">No approved budget behind the scheme? It goes to the regional sales head <b>within 3 days</b>: charge his budget or recover (BR-8).</p>
 </div>
 
-<details><summary>How it works at the core: data in → logic → out</summary><div class="in"><ul>
+<details id="how"><summary>How it works at the core: data in → logic → out</summary><div class="in"><ul>
 <li><b>In:</b> bank statement (one virtual account per distributor), open invoices, scheme budgets, claim evidence</li>
 <li><b>Logic:</b> match payer and oldest invoice · split the gap (TDS, scheme, damage, unexplained) · auto-accept only with evidence, within budget and tolerance · route the rest with an SLA</li>
 <li><b>Out:</b> a case queue with reason, owner and deadline · credit notes or recoveries with references · credit flag when disputes pile up</li></ul></div></details>
@@ -210,14 +240,24 @@ nav a.pri{background:#0F1F1A;box-shadow:none}
   <p class="how">Billing × share × (days ÷ 30) = cash stuck; × cost of money = yearly cost. Defaults are examples.</p>
 </div>
 
+<div class="privacy blk" id="privacy">
+  <div class="ph"><span class="lock"><svg viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="10" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M8 10V7a4 4 0 0 1 8 0v3" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></span><div><b>Your data stays with you</b><span>Built the way a bank's controls team would expect.</span></div></div>
+  <div class="pg"><div><b>Read in your browser</b><span>An uploaded CSV is read on your device. It is never sent to a server.</span></div><div><b>No accounts, no tracking</b><span>No sign-up and no analytics. Progress is saved only in your browser and cleared by Reset.</span></div><div><b>Sample data by default</b><span>Distributor names and amounts are illustrative. No real company data is used.</span></div></div>
+</div>
 <div class="ask blk"><div><b>I'm looking for a Business Analyst or Product role in fintech, BFSI or finance software.</b><span>Happy to walk you through this in 15 minutes.</span></div><div class="btns"><a class="btn g" href="mailto:rupakr2g@gmail.com?subject=Every%20Rupee">Email me</a><a class="btn" href="https://rupak-lemon.vercel.app">Portfolio</a></div></div>
-<p style="text-align:center;font-size:.8rem;color:var(--mut);margin:0 0 20px">Working prototype. Sample file provided; any file you upload stays in your browser. Not connected to any ERP or bank; doesn't file GST. Tax rules summarised for illustration.</p>
+
 </main>
 
-<footer class="col">
-  <p>Sources: <a href="https://www.outlookbusiness.com/news/fmcg-distributors-association-warns-of-protests-over-margins">AICPDF margins (Outlook Business, Jun 2026)</a> · <a href="https://spirestock.com/blog/distributor-claims-settlement-fmcg-india">Claims settlement (Spirestock, vendor)</a> · <a href="https://taxguru.in/goods-and-service-tax/post-sale-discounts-ids-refunds-gst-1-november-2026.html">GST post-sale discounts from 1 Nov 2026 (TaxGuru)</a></p>
-  <p><a href="https://lull-hr.vercel.app/">Viraam</a> ends the meeting · <a href="https://everyrupee-o2c.vercel.app/">Every Rupee</a> owns the short-paid difference · <a href="https://tentoday.vercel.app/">Ten Today</a> unblocks the approval. By Rupak Ghanpathi · <a href="https://rupak-lemon.vercel.app">Portfolio</a> · <a href="https://github.com/RUPAK30/Cello-O2C-Deduction-Workflow-Case-Study">GitHub</a></p>
-</footer>
+<footer class="foot"><div class="col">
+ <div class="fg">
+  <div class="fb"><a class="logo" href="./"><svg width="28" height="28" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="Every Rupee"><circle cx="16" cy="16" r="13" fill="none" stroke="#64748B" stroke-width="4.5" stroke-dasharray="2.48 79.20" transform="rotate(-90 16 16)"/><circle cx="16" cy="16" r="13" fill="none" stroke="#059669" stroke-width="4.5" stroke-dasharray="31.07 50.61" stroke-dashoffset="-4.08" transform="rotate(-90 16 16)"/><circle cx="16" cy="16" r="13" fill="none" stroke="#D97706" stroke-width="4.5" stroke-dasharray="43.32 38.36" stroke-dashoffset="-36.76" transform="rotate(-90 16 16)"/><text x="16" y="21.2" text-anchor="middle" font-family="Inter,Arial,sans-serif" font-weight="700" font-size="14" fill="#111827">₹</text></svg><span>Every Rupee</span></a><p>Every missing rupee gets a reason, an owner and an ending. A portfolio case study by Rupak Ghanpathi.</p></div>
+  <div><h4>Product</h4><a href="desk.html">Open the product</a><a href="desk.html?uat=1">Run the 11 tests</a><a href="#calc">Cash-stuck calculator</a></div>
+  <div><h4>Documents</h4><a href="Cello_O2C_One_Pager.pdf">One-page PDF</a><a href="Cello_O2C_BRD.pdf">BRD (PDF)</a><a href="case-study.html">Full case study</a><a href="https://github.com/RUPAK30/Cello-O2C-Deduction-Workflow-Case-Study">Source on GitHub</a></div>
+  <div><h4>About</h4><a href="https://rupak-lemon.vercel.app">Portfolio</a><a href="mailto:rupakr2g@gmail.com?subject=Every%20Rupee">Email Rupak</a><a href="https://lull-hr.vercel.app/">Viraam</a><a href="https://tentoday.vercel.app/">Ten Today</a></div>
+ </div>
+ <div class="fsrc">Sources: <a href="https://www.outlookbusiness.com/news/fmcg-distributors-association-warns-of-protests-over-margins">AICPDF (Outlook Business, Jun 2026)</a> · <a href="https://spirestock.com/blog/distributor-claims-settlement-fmcg-india">Spirestock (vendor, Dec 2025)</a> · <a href="https://taxguru.in/goods-and-service-tax/post-sale-discounts-ids-refunds-gst-1-november-2026.html">TaxGuru (GST, Oct 2026)</a> · Cello World annual reports FY25–FY26</div>
+ <div class="fbot"><span>© 2026 Rupak Ghanpathi · Working prototype, not affiliated with Cello World. Tax rules summarised for illustration; check current law.</span><a href="#privacy">Privacy</a></div>
+</div></footer>
 <script>
 (function(){
 var f=function(x){return x>=100?'₹'+(x/100).toFixed(2).replace(/\.00$/,'')+' crore':'₹'+x.toFixed(1).replace(/\.0$/,'')+' lakh'};
