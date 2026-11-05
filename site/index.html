@@ -11,14 +11,14 @@
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,600&display=swap" rel="stylesheet">
 <style>
-:root{--ink:#0F1F1A;--ink2:#3E5049;--mut:#6B7A73;--line:#E1ECE7;--g:#059669;--gd:#047857;--gold:#4F46E5;--gold-s:#EEF2FF;--bg:#F8FBFA}
+:root{--ink:#0F1F1A;--ink2:#3E5049;--mut:#6B7A73;--line:#E1ECE7;--g:#059669;--gd:#047857;--gold:#0E7490;--gold-s:#ECFEFF;--bg:#F8FBFA}
 *{box-sizing:border-box}html,body{overflow-x:clip}html{scroll-behavior:smooth}
 body{margin:0;font-family:Inter,system-ui,sans-serif;color:var(--ink);background:var(--bg);line-height:1.5;-webkit-font-smoothing:antialiased}
 a{color:inherit}.col{max-width:1040px;margin:0 auto;padding:0 20px}
 .mesh{position:absolute;inset:0 0 auto 0;height:900px;z-index:-1;overflow:hidden;pointer-events:none}
 .mesh i{position:absolute;border-radius:50%;filter:blur(70px);opacity:.75;animation:dr 22s ease-in-out infinite alternate}
 .mesh i:nth-child(1){width:520px;height:420px;left:-120px;top:-80px;background:#B9F0D9}
-.mesh i:nth-child(2){width:480px;height:420px;right:-140px;top:-60px;background:#DCE3FF;animation-delay:-6s}
+.mesh i:nth-child(2){width:480px;height:420px;right:-140px;top:-60px;background:#CFEFF7;animation-delay:-6s}
 .mesh i:nth-child(3){width:420px;height:360px;left:38%;top:180px;background:#CDEFF0;opacity:.55;animation-delay:-11s}
 @keyframes dr{to{transform:translate(40px,30px) scale(1.06)}}
 @media(prefers-reduced-motion:reduce){.mesh i{animation:none}}
@@ -42,10 +42,10 @@ header{position:sticky;top:0;z-index:30;background:rgba(248,251,250,.7);backdrop
 .eye{display:inline-flex;align-items:center;gap:8px;font-size:.8rem;font-weight:600;color:var(--gd);background:rgba(255,255,255,.75);border:1px solid var(--line);padding:6px 13px;border-radius:999px}
 .eye b{width:7px;height:7px;border-radius:50%;background:#10B981;box-shadow:0 0 0 4px rgba(16,185,129,.18)}
 h1{font-family:'Source Serif 4',Georgia,serif;font-weight:600;font-size:clamp(2.1rem,5.2vw,3.5rem);line-height:1.08;letter-spacing:-.025em;margin:18px auto 14px;max-width:24ch}
-h1 em{font-style:normal;background:linear-gradient(100deg,#047857 10%,#10B981 50%,#4F46E5 95%);-webkit-background-clip:text;background-clip:text;color:transparent}
+h1 em{font-style:normal;background:linear-gradient(100deg,#047857 10%,#10B981 50%,#0E7490 95%);-webkit-background-clip:text;background-clip:text;color:transparent}
 .lead{font-size:1.1rem;color:var(--ink2);max-width:58ch;margin:0 auto 24px}
 .cta{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
-.gst{display:flex;gap:12px;align-items:flex-start;max-width:640px;margin:26px auto 0;text-align:left;padding:13px 16px;border-radius:14px;background:rgba(238,242,255,.9);border:1px solid #C7D2FE;font-size:.9rem;color:#312E81}
+.gst{display:flex;gap:12px;align-items:flex-start;max-width:640px;margin:26px auto 0;text-align:left;padding:13px 16px;border-radius:14px;background:rgba(236,254,255,.9);border:1px solid #A5E3EE;font-size:.9rem;color:#164E63}
 .gst span:first-child{flex:none;font-size:.68rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#fff;background:var(--gold);border-radius:6px;padding:3px 7px;margin-top:2px}
 /* interactive table */
 .board{margin:34px 0 0;background:#fff;border:1px solid var(--line);border-radius:22px;box-shadow:0 40px 80px -50px rgba(4,120,87,.55);overflow:hidden}
@@ -58,15 +58,15 @@ h1 em{font-style:normal;background:linear-gradient(100deg,#047857 10%,#10B981 50
 .rows .amt{font-weight:700;font-variant-numeric:tabular-nums;font-size:1rem}
 .rows .rs{font-size:.88rem}.rows .rs small{display:block;color:var(--mut);font-size:.78rem}
 .st{font-size:.7rem;font-weight:600;padding:3px 9px;border-radius:999px;white-space:nowrap}
-.s-open{background:var(--gold-s);color:var(--gold)}.s-chk{background:#EEF2FF;color:#4338CA}.s-done{background:#ECFDF5;color:var(--gd)}
-.det{padding:20px 22px;border-top:1px solid var(--line);background:linear-gradient(160deg,#F6FCF9,#F5F7FF)}
+.s-open{background:var(--gold-s);color:var(--gold)}.s-chk{background:#ECFEFF;color:#0E7490}.s-done{background:#ECFDF5;color:var(--gd)}
+.det{padding:20px 22px;border-top:1px solid var(--line);background:linear-gradient(160deg,#F6FCF9,#F0FDFF)}
 @media(min-width:880px){.det{border-top:0;border-left:1px solid var(--line)}}
 .det h3{margin:0 0 4px;font-size:1.15rem;letter-spacing:-.02em}.det .sub{color:var(--mut);font-size:.86rem;margin:0 0 14px}
 .qa{display:grid;gap:8px;margin:0 0 16px}
 .qa div{display:grid;grid-template-columns:62px 1fr;gap:10px;font-size:.9rem}
 .qa b{font-size:.7rem;letter-spacing:.07em;text-transform:uppercase;color:var(--gd);padding-top:2px}
 .track{display:flex;gap:6px;margin:0 0 10px}
-.track span{flex:1;height:6px;border-radius:9px;background:#E6EFEB;transition:background .3s}.track span.on{background:linear-gradient(90deg,#10B981,#4F46E5)}
+.track span{flex:1;height:6px;border-radius:9px;background:#E6EFEB;transition:background .3s}.track span.on{background:linear-gradient(90deg,#10B981,#0E7490)}
 .stage{font-size:.86rem;color:var(--ink2);min-height:2.6em;margin:0 0 12px}
 .stage b{color:var(--ink)}
 .ctl{display:flex;gap:8px;flex-wrap:wrap}
@@ -78,11 +78,11 @@ h2{font-size:clamp(1.4rem,3vw,1.9rem);letter-spacing:-.025em;margin:0 auto 22px;
 .tile{background:#fff;border:1px solid var(--line);border-radius:18px;padding:18px;box-shadow:0 18px 36px -32px rgba(4,120,87,.5)}
 .tile b{display:block;margin-bottom:5px;font-size:.98rem}.tile span{font-size:.87rem;color:var(--ink2)}.tile small{display:block;margin-top:8px;color:var(--mut);font-size:.74rem}
 .tile .big{font-size:1.5rem;font-weight:700;letter-spacing:-.02em;color:var(--gd);margin-bottom:2px}
-.tile.warm{background:linear-gradient(160deg,#F3F5FF,#fff)}
+.tile.warm{background:linear-gradient(160deg,#F0FDFF,#fff)}
 .calc{background:#fff;border:1px solid var(--line);border-radius:20px;padding:20px;display:grid;gap:18px}@media(min-width:780px){.calc{grid-template-columns:1.2fr 1fr;align-items:center}}
 .calc label{display:grid;grid-template-columns:1fr 120px;gap:10px;align-items:center;padding:6px 0;font-size:.9rem}
 .calc input{font:inherit;padding:8px 10px;border:1px solid var(--line);border-radius:10px;text-align:right;width:100%}
-.out{display:grid;gap:10px}.out div{padding:16px;border-radius:16px;background:linear-gradient(135deg,#ECFDF5,#EEF2FF)}
+.out{display:grid;gap:10px}.out div{padding:16px;border-radius:16px;background:linear-gradient(135deg,#ECFDF5,#ECFEFF)}
 .out b{display:block;font-size:1.7rem;letter-spacing:-.02em;color:var(--gd)}.out span{font-size:.84rem;color:var(--ink2)}
 .how{font-size:.75rem;color:var(--mut);grid-column:1/-1;margin:0}
 .priv{background:#0F1F1A;color:#CFE3DA;border-radius:22px;padding:24px;display:grid;gap:16px}@media(min-width:780px){.priv{grid-template-columns:1fr 2.4fr;align-items:center}}
@@ -114,7 +114,7 @@ footer{margin-top:60px;border-top:1px solid var(--line);background:#fff;padding:
 <div class="mesh" aria-hidden="true"><i></i><i></i><i></i></div>
 <header><div class="col hin">
   <nav class="hl"><a href="#board">How it works</a><a href="#thinking">The thinking</a><a href="sources.html">Sources</a></nav>
-  <a class="logo" href="./" aria-label="Every Rupee home"><svg width="28" height="28" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="Every Rupee"><circle cx="16" cy="16" r="13" fill="none" stroke="#64748B" stroke-width="4.5" stroke-dasharray="2.48 79.20" transform="rotate(-90 16 16)"/><circle cx="16" cy="16" r="13" fill="none" stroke="#059669" stroke-width="4.5" stroke-dasharray="31.07 50.61" stroke-dashoffset="-4.08" transform="rotate(-90 16 16)"/><circle cx="16" cy="16" r="13" fill="none" stroke="#6366F1" stroke-width="4.5" stroke-dasharray="43.32 38.36" stroke-dashoffset="-36.76" transform="rotate(-90 16 16)"/><text x="16" y="21.2" text-anchor="middle" font-family="Inter,Arial,sans-serif" font-weight="700" font-size="14" fill="#111827">₹</text></svg><span>Every Rupee</span></a>
+  <a class="logo" href="./" aria-label="Every Rupee home"><svg width="28" height="28" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="Every Rupee"><circle cx="16" cy="16" r="13" fill="none" stroke="#64748B" stroke-width="4.5" stroke-dasharray="2.48 79.20" transform="rotate(-90 16 16)"/><circle cx="16" cy="16" r="13" fill="none" stroke="#059669" stroke-width="4.5" stroke-dasharray="31.07 50.61" stroke-dashoffset="-4.08" transform="rotate(-90 16 16)"/><circle cx="16" cy="16" r="13" fill="none" stroke="#0EA5E9" stroke-width="4.5" stroke-dasharray="43.32 38.36" stroke-dashoffset="-36.76" transform="rotate(-90 16 16)"/><text x="16" y="21.2" text-anchor="middle" font-family="Inter,Arial,sans-serif" font-weight="700" font-size="14" fill="#111827">₹</text></svg><span>Every Rupee</span></a>
   <div class="hr"><a class="t" href="Cello_O2C_One_Pager.pdf">One-pager</a><a class="btn g sm" href="desk.html">Open the product <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5 3l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
 </div></header>
 
@@ -217,7 +217,7 @@ footer{margin-top:60px;border-top:1px solid var(--line);background:#fff;padding:
 </main>
 
 <footer><div class="col">
-  <div class="fc"><a class="logo" href="./"><svg width="28" height="28" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="Every Rupee"><circle cx="16" cy="16" r="13" fill="none" stroke="#64748B" stroke-width="4.5" stroke-dasharray="2.48 79.20" transform="rotate(-90 16 16)"/><circle cx="16" cy="16" r="13" fill="none" stroke="#059669" stroke-width="4.5" stroke-dasharray="31.07 50.61" stroke-dashoffset="-4.08" transform="rotate(-90 16 16)"/><circle cx="16" cy="16" r="13" fill="none" stroke="#6366F1" stroke-width="4.5" stroke-dasharray="43.32 38.36" stroke-dashoffset="-36.76" transform="rotate(-90 16 16)"/><text x="16" y="21.2" text-anchor="middle" font-family="Inter,Arial,sans-serif" font-weight="700" font-size="14" fill="#111827">₹</text></svg><span>Every Rupee</span></a><p>Every missing rupee gets a reason, an owner and an ending. A portfolio case study by Rupak Ghanpathi.</p>
+  <div class="fc"><a class="logo" href="./"><svg width="28" height="28" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="Every Rupee"><circle cx="16" cy="16" r="13" fill="none" stroke="#64748B" stroke-width="4.5" stroke-dasharray="2.48 79.20" transform="rotate(-90 16 16)"/><circle cx="16" cy="16" r="13" fill="none" stroke="#059669" stroke-width="4.5" stroke-dasharray="31.07 50.61" stroke-dashoffset="-4.08" transform="rotate(-90 16 16)"/><circle cx="16" cy="16" r="13" fill="none" stroke="#0EA5E9" stroke-width="4.5" stroke-dasharray="43.32 38.36" stroke-dashoffset="-36.76" transform="rotate(-90 16 16)"/><text x="16" y="21.2" text-anchor="middle" font-family="Inter,Arial,sans-serif" font-weight="700" font-size="14" fill="#111827">₹</text></svg><span>Every Rupee</span></a><p>Every missing rupee gets a reason, an owner and an ending. A portfolio case study by Rupak Ghanpathi.</p>
   <nav class="fl"><a href="desk.html">The product</a><a href="desk.html?uat=1">Run the 11 tests</a><a href="Cello_O2C_One_Pager.pdf">One-page PDF</a><a href="Cello_O2C_BRD.pdf">BRD</a><a href="case-study.html">Full case study</a><a href="sources.html">Sources</a><a href="https://github.com/RUPAK30/Cello-O2C-Deduction-Workflow-Case-Study">GitHub</a><a href="https://lull-hr.vercel.app/">Viraam</a><a href="https://tentoday.vercel.app/">Ten Today</a></nav></div>
   <div class="fb"><span>© 2026 Rupak Ghanpathi · Working prototype, not affiliated with Cello World. Tax rules summarised for illustration; check current law.</span><a href="#privacy">Privacy</a></div>
 </div></footer>
