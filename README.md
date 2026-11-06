@@ -1,61 +1,45 @@
-# Distributor short-payment reconciliation: a business analysis case study
+# Every Rupee: short-payment reconciliation for FMCG finance teams
 
-> **Live page:** [everyrupee-o2c.vercel.app](https://everyrupee-o2c.vercel.app) · Product case study by **Rupak Ghanpathi** · built from Cello World Ltd's public filings
+> **Live prototype:** [everyrupee-o2c.vercel.app](https://everyrupee-o2c.vercel.app) · **Try the desk:** [/desk.html](https://everyrupee-o2c.vercel.app/desk.html) · Portfolio case study by **Rupak Ghanpathi**, built solo, sample data
 
-In Indian distribution, a short payment is usually three things at once: tax withheld, a valid claim, and a dispute. Most teams treat it as one. This case study designs the workflow that separates them, proves what's valid, and prevents the next gap.
+[![Every Rupee homepage](preview.png)](https://everyrupee-o2c.vercel.app)
 
-**[Case study (PDF)](site/Cello_O2C_Case_Study.pdf)** · **[One-pager (PDF)](site/Cello_O2C_One_Pager.pdf)** · **[BRD (PDF)](site/Cello_O2C_BRD.pdf)**
+Distributors pay less than the invoice. The gap lands in accounts receivable with no reason and no owner. Every Rupee matches each payment to its invoice, gives every gap one owner and a deadline, and closes it with a GST credit note or a recovery, never a silent write-off.
 
-[![One-pager preview](preview.png)](site/Cello_O2C_One_Pager.pdf)
+## The call I made
+**Control over speed.** No auto write-offs, maker-checker above ₹10,000, strict matching at launch. That means fewer auto-matches and more manual work, on purpose: in finance ops, a wrong closure costs more than a slow one.
 
-## Where it fits
-Distributors short-pay partly because their claims take months: a distribution-software vendor reports 45–90 days to settle manually, about 35% rejected for missing paperwork, and poor settlement as the second-biggest reason distributors drop a brand ([Spirestock](https://spirestock.com/blog/distributor-claims-settlement-fmcg-india), vendor figures, indicative). Distributor strain is visible independently, e.g. the Oct 2025 Tata Consumer distributor protest over payment delays and unsold, damaged stock ([Storyboard18](https://www.storyboard18.com/how-it-works/tata-consumer-aicpdf-reach-settlement-maharashtra-distributors-call-off-protest-83416.htm)). Every Rupee checks evidence on day one, settles valid claims upfront as credit notes and owns every remaining gap, protecting the manufacturer's cash and the distributor relationship. Discovery question: how long does a damage claim take to settle today?
+**What I got wrong:** v2 was a wall of text, so I rebuilt it as something you can run, because a spec nobody executes isn't a spec.
 
-## Why it matters
-| Metric (FY25 to FY26) | Change |
-| --- | --- |
-| Trade receivables, ₹658 Cr to ₹750 Cr | **+14.0%** |
-| Revenue, ₹2,136 Cr to ₹2,324 Cr | +8.8% |
-| Receivables above revenue-pace growth | **approx. ₹34 Cr** (an estimate, not a measured backlog) |
+## Why now
+- **Receivables outgrew revenue.** Cello World's trade receivables rose 14.0% (₹658 → ₹750 Cr) against 8.8% revenue growth (₹2,136 → ₹2,324 Cr), FY25 → FY26: about ₹34 Cr above revenue pace. *My estimate from annual reports; a reason to look, not a diagnosis.*
+- **Thin distributor margins.** Distributors earn ₹3.5–5 per ₹100 (AICPDF, Jun 2026), so they recover slow claims by deducting.
+- **New GST rule from 1 Nov 2026.** GST on an after-sale discount comes back only through a GST credit note the distributor reverses (Finance Act 2026, CBIC Notification 03/2026). *Summarised; check with a CA.*
 
-## Executable specification (new)
-**[everyrupee-o2c.vercel.app/desk.html](https://everyrupee-o2c.vercel.app/desk.html)**: the BRD as an executable specification. One button runs the ten UAT cases against the engine and shows pass/fail with expected vs actual; every action is traced to its rule, story and test; BR-3 is shown as a decision table. Load the sample bank statement or upload your own CSV, and the seven business rules run on every receipt: payer identified by virtual account, 194Q TDS split out, claims auto-accepted only with evidence and within budget, everything else opened as a case with an owner and SLA. Then work the cases as an AR executive or Finance controller: attach evidence, approve (maker-checker blocks self-approval above the threshold), recover invalid claims, issue credit notes, advance days to see SLA escalation and IRP alerts, place orders to trigger the credit flag, and download cases and the audit trail as CSV. Synthetic data; runs entirely in the browser.
+Full sources and what the project does not claim: [sources.html](https://everyrupee-o2c.vercel.app/sources.html)
 
-## What the live page shows
-Written for two readers: recruiters (plain language, skills named, tap-to-explain finance terms) and business hiring managers (the full specification).
-- **The race:** the same ₹20,000 short payment plays out automatically in two lanes, today's email process (31 days, still unexplained) against the proposed workflow (every rupee classified and owned by 09:03 on day 0). Pause, step and replay; reduced-motion users see the end state.
-- **At a glance:** the problem, what I designed, my role, and the BA skills shown.
-- **Try the rules:** live Finance parameters (auto-accept limit, proof of delivery), control tests that are blocked and logged, the owner's notification, the credit check, next month's credit note and the audit trail.
-- **Integrations (static, no login):** a mock Slack notification to the dispute owner (copyable), SLA and IRP deadlines as Google Calendar links or .ics files, user stories as a JIRA-importable CSV and UAT cases as CSV.
-- **The specification:** one tabbed panel with business rules BR-1 to BR-7, reason codes, a clickable traceability matrix (finding → requirement → test), user stories, UAT cases and RACI; then trade-offs, metrics and the validation plan.
+## What's in it
+| | |
+|---|---|
+| **The desk** | Load a sample bank statement (or upload a CSV, read only in your browser), classify short-payments, work cases as Asha in AR, approve, issue credit notes, see the audit trail |
+| **8 business rules** | BR-1 to BR-8: payer matching, TDS split, scheme and damage validation, maker-checker, GST credit notes, escalation of unbudgeted schemes |
+| **11 UAT tests** | Run in the browser in one click, including the cases that must be blocked: [desk.html?uat=1](https://everyrupee-o2c.vercel.app/desk.html?uat=1) |
+| **Documents** | [BRD (PDF)](site/Cello_O2C_BRD.pdf) · [One-pager (PDF)](site/Cello_O2C_One_Pager.pdf) · [Case study](https://everyrupee-o2c.vercel.app/case-study.html) |
 
-## The design: four layers
-1. **Identify.** Each distributor pays into its own virtual account, so every receipt is tagged to the payer. Unreferenced partial payments settle the oldest open invoice first.
-2. **Split.** Statutory withholding (TDS u/s 194Q; GST-TDS for notified buyers) is separated from commercial deductions. TDS is a credit to match in Form 26AS, not a loss.
-3. **Validate.** Reason code → required evidence → validity rule. Evidenced, in-budget claims under a Finance-set tolerance are auto-accepted; unexplained gaps are never written off automatically.
-4. **Prevent.** Valid claims are settled upfront as credit notes, with IRP reporting (30 days) and Section 34 deadlines built into the SLA. Ageing disputes flag the distributor's next order for credit review.
+## Where it could fail
+| Risk | Design answer |
+|---|---|
+| Distributors keep paying the old account | Old account stays open a quarter; Sales gets a weekly list |
+| Scheme rules change mid-quarter | No dates and budget from Sales, no valid scheme; the rest goes to a person |
+| Sales overrides the credit flag | The flag never blocks an order; overrides are logged by name |
 
-Kept from the original design: a case with reason code and owner, SLA routing, maker-checker above threshold, ERP as system of record, full audit trail.
+## Honest limits
+- Not used by any brand. Not affiliated with Cello World; internal processes are hypotheses from public information.
+- No ERP or bank connection; no GST filing. Sample data only.
+- No sign-up, no analytics, no tracking.
 
-## What the research added
-| Finding (source) | How the design answers it |
-| --- | --- |
-| TDS treated as a loss is a leading cause of reconciliation differences (invoicedataextraction.com guide) | The Split layer tracks each distributor's running purchases, expects the 194Q TDS line, and classifies it as a Form 26AS credit |
-| Unstructured claims can over-pay 5–12% of scheme spend (Terra Insight) | Scheme claims are valid only with evidence and within that distributor's scheme budget |
-| 90–95% of deduction value is typically valid; 5–10% invalid (HighRadius) | "Make the 90% boring": auto-accept evidenced, in-budget claims; people work only the exceptions |
-| Average dispute resolution about 41 days; 44% of companies have no resolution deadline (HighRadius; Attain Consulting 2021 survey) | Every dispute gets an owner and an SLA on day 0, with escalation on breach |
-| Missed credit-note windows leak GST (Terra Insight example, illustrative) | IRP 30-day and Section 34 deadlines are part of the SLA |
-| Virtual accounts tag each payment to its payer automatically (open.money) | The Identify layer removes manual payer identification from bank narrations |
-
-## BR-8: unbudgeted scheme claims (new)
-A scheme deduction with no approved budget behind it, usually a verbal promise by a sales manager, no longer sits in unallocated receivables. It goes to the Regional sales head with a 3-day SLA and two choices: charge it to the region's trade budget, so sales absorbs it rather than net realisation, or reject it and recover from the distributor. It answers the incentive gap between Sales (gross billing) and Finance (net realisation). UAT-11 tests it.
-
-## Repo map
-- `site/` — the live page (static HTML, CSS, JS; deployed on Vercel with Root Directory `site`)
-- `site/data.js` — single source for business rules, reason codes, user stories and UAT; the page, BRD and CSV exports all render from it`n- `site/brd.html`, `site/onepager.html` — editable sources for the BRD and one-pager; the PDFs in `site/` are generated from these and from the page's print layout
-
-## Skills shown
-Problem framing · stakeholder analysis · process design · user stories and acceptance criteria · controls and UAT · success metrics
+## Run locally
+Static HTML, CSS and JavaScript, no build step: open `site/index.html`, or serve `site/` with any static server.
 
 ---
-*Self-initiated case study from Cello World Ltd's public filings (FY26 consolidated, FY25 restated) and public industry research. Internal processes are hypotheses, not confirmed company practice. Tools named are proposals, not claims about Cello's systems. Tax rules are summarised for illustration and change; check current law.*
+Rupak Ghanpathi · Business Analyst, ex-HDFC Bank · [Portfolio](https://rupak-lemon.vercel.app) · rupakr2g@gmail.com
