@@ -236,6 +236,13 @@ h2{font-weight:700}
 .btn:not(.g):not(.primary):not(.small),.pb:not(.g){background:#EEF5FF!important;color:#0A66D1!important;border:1px solid #D6E7FF!important;border-radius:980px!important;box-shadow:none!important}
 .btn:not(.g):not(.primary):not(.small):hover,.pb:not(.g):hover{background:#E2EEFF!important}
 .btn.small{background:#fff!important;color:#0A66D1!important;border:1px solid #D6E7FF!important;border-radius:980px!important}.btn.small:hover{background:#EEF5FF!important}
+
+.trk{margin:26px 0 10px;text-align:center;font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--mut)}
+.askin{margin-top:16px}.askin .askq{max-width:none}
+.g2{grid-template-columns:repeat(2,1fr)!important}@media(max-width:700px){.g2{grid-template-columns:1fr!important}}
+#expiry{margin-top:14px}
+.cm{display:grid;gap:12px;max-width:none;margin:0 0 14px}@media(min-width:820px){.cm{grid-template-columns:1.2fr 1fr;align-items:stretch}}
+.cm .cost,.cm .miss{margin:0!important;max-width:none}.cm .miss{text-align:left;background:#fff;border:1px solid var(--line);border-radius:16px;padding:14px 18px;display:block}
 </style>
 </head>
 <body>
@@ -281,11 +288,7 @@ h2{font-weight:700}
     <tr><th>Audit trail</th><td>Rebuilt from inboxes</td><td>Every action logged by name and time</td></tr>
   </tbody></table><p class="cap">Illustrative: one gap from the sample data, traced through the workflow. "Today" is the common manual pattern, not a measured baseline.</p></div>
   <p class="prf">0 auto write-offs · maker-checker above ₹10,000 · 8 rules, 11 tests, run in the browser</p>
-</section>
-
-<section class="sec" id="trace">
-  <p class="k">Traceability</p>
-  <h2>From a public filing to a running control</h2>
+  <p class="trk" id="trace">Traceability · from a public filing to a running control</p>
   <ol class="tr6">
     <li><small>Filing</small><b>Receivables +14.0% vs revenue +8.8%</b><span>Cello World, FY25→FY26</span></li>
     <li><small>Assumption</small><b>Short-payments sit unowned</b><span>A reason to look, not a diagnosis</span></li>
@@ -295,6 +298,8 @@ h2{font-weight:700}
     <li><small>Screen</small><b>Vikram approves</b><span>Finance controller, in the desk</span></li>
   </ol>
 </section>
+
+
 
 
 
@@ -314,16 +319,25 @@ h2{font-weight:700}
     <div class="out"><div><b id="o1">–</b><span>cash stuck at any time</span></div><div><b id="o2">–</b><span>yearly interest cost</span></div></div>
     <p class="how">Billing × share × days÷30 = cash stuck. Try your own numbers.</p>
   </div>
-</section>
-<section class="sec" id="ask">
+<div id="ask" class="askin">
   <div class="hook" id="hook" hidden><small id="hookt"></small><p id="hookp"></p></div>
   <div class="askq"><small>The question I'd ask you</small><p id="l3"></p><a class="btn g sm" id="m5" href="#contact">Answer it in one line</a></div>
   <span id="l1" hidden></span><span id="l2" hidden></span><span id="lensh" hidden></span>
+</div>
 </section>
 
 
-<section class="sec" id="expiry">
-  <div class="exp">
+
+
+
+<section class="sec" id="evidence">
+  <p class="k">Why now</p>
+  <h2>Why this matters now</h2>
+  <div class="g3 g2">
+    <div class="tile"><div class="big">+14% vs +8.8%</div><b>Cello's receivables outgrew revenue</b><span>About ₹34 Cr above revenue pace, FY25→FY26.</span><small>Annual reports · my estimate, a reason to look, not a diagnosis</small></div>
+    <div class="tile"><div class="big">₹3.5–5</div><b>Distributor margin per ₹100</b><span>Too thin to wait on slow claims, so they deduct.</span><small>AICPDF, Jun 2026</small></div></div>
+
+  <div id="expiry"><div class="exp">
     <div class="ex1"><p class="k">The part nobody owns</p>
     <h2>A deduction can have a tax deadline.</h2>
     <p>When a brand settles a scheme claim with a <b>GST credit note</b>, it gets back the GST already paid on the discount. That credit note must go out by <b>30 November after the financial year ends</b> (or the annual return date, if earlier). For FY <span class="fyx">2025-26</span> supplies, that's <b>30 November <span class="fyy">2026</span></b>.</p>
@@ -332,23 +346,14 @@ h2{font-weight:700}
     <small>CGST Act s.34(2); s.15(3)(b) as amended by Finance Act 2026; CBIC Circular 251/08/2025. Summarised from public sources, Oct 2026. Not tax advice.</small></div>
     <div class="ex2"><b id="xd">–</b><span id="xl">days to the FY 2025-26 credit-note deadline</span></div>
   </div>
-</section>
-
-<section class="sec" id="evidence">
-  <p class="k">Why now</p>
-  <h2>Why this matters now</h2>
-  <div class="g3">
-    <div class="tile"><div class="big">+14% vs +8.8%</div><b>Cello's receivables outgrew revenue</b><span>About ₹34 Cr above revenue pace, FY25→FY26.</span><small>Annual reports · my estimate, a reason to look, not a diagnosis</small></div>
-    <div class="tile"><div class="big">₹3.5–5</div><b>Distributor margin per ₹100</b><span>Too thin to wait on slow claims, so they deduct.</span><small>AICPDF, Jun 2026</small></div>
-    <div class="tile warm"><div class="big" style="color:var(--gold)">1 Nov 2026</div><b>New GST credit-note rule</b><span>Untracked credit note, unrecovered GST.</span><small>Finance Act 2026 · CBIC 03/2026</small></div>
-  </div>
+</div>
 </section>
 
 <section class="sec" id="thinking">
   <p class="k">The thinking</p>
   <h2>Controls first, failure planned for</h2>
-  <div class="cost"><b>What this costs</b><ul><li>Fewer auto-matches at launch: strict matching rejects fuzzy ones.</li><li>More manual review: anything above ₹10,000 needs a second person.</li><li>A slower first close: Sales must enter scheme dates and budgets before rules can accept a claim.</li></ul></div>
-  <p class="miss"><b>What I got wrong:</b> v2 was a wall of text, so I rebuilt it as something you can run, because a spec nobody executes isn't a spec.</p>
+  <div class="cm"><div class="cost"><b>What this costs</b><ul><li>Fewer auto-matches at launch: strict matching rejects fuzzy ones.</li><li>More manual review: anything above ₹10,000 needs a second person.</li><li>A slower first close: Sales must enter scheme dates and budgets before rules can accept a claim.</li></ul></div>
+  <p class="miss"><b>What I got wrong:</b> v2 was a wall of text, so I rebuilt it as something you can run, because a spec nobody executes isn't a spec.</p></div>
   <div class="two-up">
     <div class="pane"><h3>How I'd work from week one</h3><ol class="pts">
       <li><b>Evidence first.</b> Every fact dated and sourced.</li>
@@ -365,7 +370,6 @@ h2{font-weight:700}
 
 
 
-<section class="sec"><div class="band"><div><h2>See it work on today's short-payments.</h2><p>Sample data, no sign-up. Takes two minutes.</p></div><div class="cta"><a class="btn g" href="desk.html?tour=1">Try the live desk<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5 3l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a><a class="btn" href="#contact">Talk to Rupak</a></div></div></section>
 
 <section class="sec" id="contact">
   <div class="founder">
