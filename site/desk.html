@@ -377,7 +377,7 @@ var S=[
 {h:"The money comes in",p:function(){return "This morning's bank statement is loaded. Each payment is matched to the right distributor and bill. Some paid less than they owed: that difference is a short-payment."},go:function(){if(!q('#case-list article'))q('#load-sample').click();setTimeout(function(){tab('#recv');hl('#recv')},200)}},
 {h:"Rules explain the easy gaps",p:function(){return "Of "+(v('#k-gap')||"today's gap")+" short-paid, rules explain "+(v('#k-auto')||"some")+" instantly: tax held back by law (grey) and discounts already approved (amber). The rest (blue) goes to a named person. Watch the last box: ₹0 without an owner."},go:function(){tab('#cls');hl('.sumbar')}},
 {h:"People decide the rest",p:function(){return "Asha works each open case before its deadline. Anything above ₹10,000 also needs Vikram, the finance controller. No rule can write money off. Each case ends in a credit note or a recovery."},go:function(){tab('#cases');hl('#case-list')}},
-{h:"The next order is checked",p:function(){return "I've just placed a new order for a distributor with an unsettled gap. His row now says Held for review: a manager takes a look first. The order is flagged, never blocked."},go:function(){tab('#dists');var b=[].slice.call(document.querySelectorAll('[data-order]'));var r=b.filter(function(x){return x.closest('tr').querySelector('.pill.bad')})[0]||b[0];if(r){r.click();setTimeout(function(){hl('#dist-body')},80)}}},
+{h:"The next order is checked",p:function(){return "I've just placed a new order for a distributor with an unsettled gap. His row now says Held for review: a manager takes a look first. The order is flagged, never blocked."},go:function(){tab('#dists');var b=[].slice.call(document.querySelectorAll('[data-order]'));var r=b.filter(function(x){return x.closest('tr').querySelector('.pill.bad')})[0]||b[0];if(r){r.click();setTimeout(function(){var o=document.querySelector('.ordst');var tr=o&&o.closest('tr');document.querySelectorAll('.hl').forEach(function(e){e.classList.remove('hl')});if(tr){tr.classList.add('hl');tr.scrollIntoView({behavior:'smooth',block:'start'})}},120)}}},
 {h:"Every step is on record",p:function(){return "Who did what, when, and under which rule: "+(v('#k-rules')||"every")+" actions logged so far. Want proof the edge cases hold? Tap Run tests: 11 checks, including ones that must be blocked."},go:function(){tab('#auditc');hl('#auditc')}}];
 var i=0,T=q('#tour'),B=q('#tourbtn');
 function dots(){var o='';for(var k=1;k<S.length;k++)o+='<i class="'+(k<=i?'on':'')+'"></i>';return o}
@@ -390,6 +390,7 @@ q('#tgo').onclick=function(){if(i<S.length-1){i++;show()}else{T.hidden=true;B.hi
 q('#tbk').onclick=function(){if(i>1){i--;show()}};document.addEventListener('keydown',function(e){if(T.hidden)return;if(e.key==='ArrowRight'||e.key==='Enter')q('#tgo').click();if(e.key==='ArrowLeft')q('#tbk').click();if(e.key==='Escape')q('#tx').click()});
 q('#tx').onclick=function(){T.hidden=true;B.hidden=false;hl(null)};
 var P=q('.pcta .pb.g');if(P)P.onclick=function(){B.click()};
+(function(){var P=q('.pcta');if(!P||!('IntersectionObserver' in window))return;new IntersectionObserver(function(e){if(T.hidden)B.style.display=e[0].isIntersecting?'none':''}).observe(P)})();
 if(/[?&]tour=1/.test(location.search))setTimeout(function(){B.click()},600);
 })();
 </script>
@@ -427,6 +428,30 @@ body,.phero,main{background-image:none!important}.phero{background:#FBFBFD!impor
 .btn.small{background:#fff!important;color:#0A66D1!important;border:1px solid #D6E7FF!important;border-radius:980px!important}.btn.small:hover{background:#EEF5FF!important}
 .kpi.lead{background:linear-gradient(160deg,#EEF5FF,#E2EEFF)!important;border:1px solid #CFE3FF!important}.kpi.lead span{color:#0A66D1!important}.kpi.lead b{color:#0B4FA3!important}
 .day,#day{background:#EEF5FF!important;color:#0A66D1!important;border:1px solid #D6E7FF!important}.flash{background:#1F2A3A!important}
+
+@media(max-width:640px){
+.appbar .pri,.appbar nav a.pri{font-size:.82rem!important;padding:0 14px!important;height:36px!important}
+.phero{padding-top:20px!important}.phero h1{font-size:1.85rem!important;line-height:1.1!important}
+.phero p{font-size:.95rem!important}.pcta{display:grid!important;grid-template-columns:1fr 1fr;gap:8px}.pcta .pb{justify-content:center;font-size:.88rem!important;padding:0 10px!important;white-space:nowrap}
+.peye{font-size:.72rem!important;padding:5px 10px!important}
+.tourbtn{height:40px!important;font-size:.85rem!important;right:12px!important;bottom:12px!important}
+.tour{right:8px!important;left:8px!important;bottom:8px!important;width:auto!important}
+.kpis{grid-template-columns:1fr 1fr!important;gap:8px!important}.kpi{padding:12px!important}.kpi b{font-size:1.05rem!important}.kpi.lead{grid-column:1/-1}
+.tabs2{overflow-x:auto;flex-wrap:nowrap!important;scrollbar-width:none}.tabs2 a{white-space:nowrap}
+}
+@media(max-width:640px){.phero .dk{display:block!important}.phero .dk>*{min-width:0;max-width:100%}.pcta .pb{white-space:normal!important;font-size:.84rem!important;line-height:1.2;min-height:44px;text-align:center}.pflow{margin-top:18px}}
+@media(max-width:640px){main table{display:block;overflow-x:auto;max-width:100%;-webkit-overflow-scrolling:touch}}
+tr.hl{scroll-margin-top:150px}#dist-body tr.hl td{background:#EEF5FF}@media(max-width:640px){.tour{padding:12px 14px 10px!important}.tour b{font-size:.95rem!important}.tour p{font-size:.84rem!important;margin-bottom:8px!important}}
+@media(max-width:640px){
+table:has(#dist-body){display:block!important;overflow:visible!important}table:has(#dist-body) thead{display:none}
+#dist-body{display:block}#dist-body tr{display:grid;grid-template-columns:repeat(3,1fr);gap:6px 10px;padding:14px 10px;border-bottom:1px solid #E8E8ED;border-radius:12px}
+#dist-body td{border:0!important;padding:0!important;text-align:left!important;font-size:.85rem}
+#dist-body td:first-child{grid-column:1/-1;font-weight:600}
+#dist-body td:nth-child(2)::before{content:"FY purchases";display:block;font:600 .64rem Inter,sans-serif;letter-spacing:.06em;text-transform:uppercase;color:#86868B}
+#dist-body td:nth-child(3)::before{content:"Scheme left";display:block;font:600 .64rem Inter,sans-serif;letter-spacing:.06em;text-transform:uppercase;color:#86868B}
+#dist-body td:nth-child(4)::before{content:"Disputed";display:block;font:600 .64rem Inter,sans-serif;letter-spacing:.06em;text-transform:uppercase;color:#86868B}
+#dist-body td:last-child{grid-column:1/-1;display:flex;align-items:center;gap:8px;margin-top:4px}
+}
 </style>
 </body>
 </html>
