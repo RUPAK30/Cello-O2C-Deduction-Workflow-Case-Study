@@ -190,6 +190,10 @@ h2{font-weight:700}
 .pdone{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;font-size:.98rem;color:var(--ink2)}
 .pdone b{color:var(--ink)}.pdone a{color:var(--gd);font-weight:600;cursor:pointer;font-size:.88rem;text-decoration:none;border:1px solid var(--line);border-radius:999px;padding:4px 12px}
 @media(max-width:640px){#pf input{width:100%}#pf .btn{width:100%}}
+
+.sec{padding-top:36px!important}h2{margin-bottom:16px!important}.hero{padding-bottom:0!important}
+.stats{margin-top:18px!important}.pz{margin-top:14px!important;padding:12px 14px!important}.pers{padding-top:20px!important}
+.band{padding:22px 26px!important}footer{margin-top:40px!important;padding-top:30px!important}
 </style>
 </head>
 <body>
@@ -202,14 +206,14 @@ h2{font-weight:700}
 
 <main class="col">
 <section class="hero">
-  <span class="forchip" id="forchip" hidden></span>
+  <span id="forchip" hidden style="display:none!important"></span>
   <a class="ann" href="sources.html"><span>New</span>Ready for the 1 Nov 2026 GST rule <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5 3l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
   <h1>Short-payment reconciliation <em>for FMCG finance teams.</em></h1>
   <p class="lead">Match every distributor payment to its invoice. Give every gap one owner and a deadline. Close it with a GST credit note or a recovery, never a silent write-off.</p>
   <div class="cta"><a class="btn g" href="desk.html">Try the live desk<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5 3l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a><a class="btn" href="#board">See it in 90 seconds</a></div>
   <ul class="stats"><li><b>8</b>business rules</li><li><b>11</b>tests, run in-browser</li><li><b>₹10,000</b>maker-checker limit</li><li><b>0</b>auto write-offs</li></ul>
-  <div class="pz" id="pz"><p class="pzk">See it through your lens</p><form id="pf"><label class="sr">Role</label><span class="w">I'm a</span><select id="pr"><option value="pm">Product manager</option><option value="hr">Recruiter / TA</option><option value="fin">Finance leader</option><option value="founder">Founder</option></select>
-  <span class="w">at</span><input id="pc" maxlength="40" placeholder="your company" aria-label="Company"><button class="btn g sm" type="submit">Tailor this page</button></form><span class="pdone" id="pdone" hidden></span></div>
+  <div class="pz" id="pz"><p class="pzk">Tailor this page to you</p><form id="pf"><label class="sr">Role</label><span class="w">I'm a</span><select id="pr"><option value="pm">Product manager</option><option value="hr">Recruiter / TA</option><option value="fin">Finance leader</option><option value="founder">Founder</option></select>
+  <span class="w">at</span><input id="pc" maxlength="40" placeholder="your company" aria-label="Company"><button class="btn g sm" type="submit">Tailor</button></form><span class="pdone" id="pdone" hidden></span></div>
 
 </section>
 
@@ -289,16 +293,7 @@ h2{font-weight:700}
   <div class="trust" id="privacy"><span><b>Runs in your browser.</b> Uploaded files never leave your device.</span><span><b>No sign-up, no tracking.</b></span><span><b>Sample data only.</b></span><a href="sources.html">Sources, and what I don't claim <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5 3l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
 </section>
 
-<section class="sec" id="faq">
-  <p class="k">FAQ</p><h2>Questions people ask first</h2>
-  <div class="faq">
-    <details><summary>Is a brand using this today?</summary><p>No. It's a working prototype on sample data, built as a portfolio case study. The problem is real and sourced; the product has not been deployed.</p></details>
-    <details><summary>Does it connect to an ERP or bank?</summary><p>Not yet. It reads a bank-statement CSV in your browser. The BRD sets out how it would sit on top of the ERP, which stays the system of record.</p></details>
-    <details><summary>What stops a wrong write-off?</summary><p>No rule can write money off. Anything above ₹10,000 needs a second person, and every closure carries a posting reference.</p></details>
-    <details><summary>Is the GST rule summary reliable?</summary><p>It's summarised from the Finance Act 2026 and CBIC Notification 03/2026, with the source linked. Check it with a CA before relying on it.</p></details>
-    <details><summary>Who built it?</summary><p>Rupak Ghanpathi, alone: 2.5 years as a Business Analyst at HDFC Bank. Research, rules, BRD, product and tests. Open to BA and Product roles in Bengaluru.</p></details>
-  </div>
-</section>
+
 
 <section class="sec"><div class="band"><div><h2>See it work on today's short-payments.</h2><p>Sample data, no sign-up. Takes two minutes.</p></div><div class="cta"><a class="btn g" href="desk.html">Try the live desk<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5 3l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a><a class="btn" href="#contact">Talk to Rupak</a></div></div></section>
 
@@ -381,7 +376,7 @@ function mail(){var tag=co?' ('+co+')':'';var hi='Hi Rupak,\n\n';
  document.getElementById('m3').href=mt('Every Rupee: not a fit'+tag,hi+'Not a fit right now, because: ');
  document.getElementById('m4').href=mt('Worth 90 seconds: Every Rupee','A BA built a working deduction workflow, with rules, tests and the new GST credit-note rule:\n'+U+(co?'?for='+encodeURIComponent(co):'')+'\n',''); }
 document.getElementById('askf').onsubmit=function(e){e.preventDefault();var q=document.getElementById('askq').value.trim();location.href=mt('Every Rupee: a question'+(co?' ('+co+')':''),'Hi Rupak,\n\n'+(q||''))};
-function apply(){var c=document.getElementById('forchip');if(!co){c.hidden=true;return}c.textContent='Prepared for '+(nm?nm+' and ':'')+'the '+co+' team';c.hidden=false;
+function apply(){var c=document.getElementById('forchip');if(!co){c.hidden=true;return}c.textContent='Prepared for '+(nm?nm+' and ':'')+'the '+co+' team';
  document.getElementById('lensh').textContent='How this maps to '+co;document.getElementById('rh').textContent=(nm?nm+', is':'Is')+' this a problem at '+co+'?';
  document.getElementById('rp').textContent='If yes, one tap. If no, tell me why. Both help.';document.title='Every Rupee · for '+co;}
 apply();set(ln);
@@ -411,7 +406,7 @@ if(hk){document.getElementById('hookt').textContent='Why I sent this'+(co?' to '
 var P=new URLSearchParams(location.search),pr=document.getElementById('pr'),pc=document.getElementById('pc'),f=document.getElementById('pf'),d=document.getElementById('pdone');
 var RL={pm:'Product manager',hr:'Recruiter',fin:'Finance leader',founder:'Founder'},LN={pm:'saas',hr:'saas',fin:'brand',founder:'saas'};
 function done(r,c){f.hidden=true;d.hidden=false;d.textContent='';document.querySelector('.pzk').textContent='✓ Tailored';var wt=document.getElementById('whot');if(wt)wt.textContent='For a '+RL[r].toLowerCase()+(c?' at '+c:'');var t=document.createTextNode('Showing this page as a ');var b=document.createElement('b');b.textContent=RL[r]+(c?' at '+c:'');
- var a=document.createElement('a');a.textContent='Change';a.onclick=function(){f.hidden=false;d.hidden=true;document.querySelector('.pzk').textContent='See it through your lens'};d.append(t,b,a);}
+ var a=document.createElement('a');a.textContent='Change';a.onclick=function(){f.hidden=false;d.hidden=true;document.querySelector('.pzk').textContent='Tailor this page to you'};d.append(t,b,a);}
 function go(r,c,scroll){window.ERrole&&ERrole(r);window.ERco&&ERco(c,P.get('name')||'');if(!P.get('lens')&&window.ERlens)ERlens(LN[r]);done(r,c);
  try{localStorage.setItem('er-who',JSON.stringify({r:r,c:c}))}catch(e){}
  if(scroll){var w=document.getElementById('who');w.scrollIntoView({behavior:'smooth',block:'center'});w.classList.remove('flash');void w.offsetWidth;w.classList.add('flash')}}
