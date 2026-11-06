@@ -41,8 +41,8 @@ header{position:sticky;top:0;z-index:30;background:rgba(248,251,250,.7);backdrop
 .hero{text-align:center;padding:62px 0 28px}
 .eye{display:inline-flex;align-items:center;gap:8px;font-size:.8rem;font-weight:600;color:var(--gd);background:rgba(255,255,255,.75);border:1px solid var(--line);padding:6px 13px;border-radius:999px}
 .eye b{width:7px;height:7px;border-radius:50%;background:#10B981;box-shadow:0 0 0 4px rgba(16,185,129,.18)}
-h1{font-family:'Source Serif 4',Georgia,serif;font-weight:600;font-size:clamp(2.1rem,5.2vw,3.5rem);line-height:1.08;letter-spacing:-.025em;margin:18px auto 14px;max-width:24ch}
-h1 em{font-style:normal;background:linear-gradient(100deg,#047857 10%,#10B981 50%,#0E7490 95%);-webkit-background-clip:text;background-clip:text;color:transparent}
+h1{font-family:Inter,system-ui,sans-serif;font-weight:700;font-size:clamp(2rem,5vw,3.4rem);line-height:1.06;letter-spacing:-.035em;margin:18px auto 14px;max-width:24ch}
+h1 em{font-style:normal;background:linear-gradient(100deg,#047857,#0E7490);-webkit-background-clip:text;background-clip:text;color:transparent}
 .lead{font-size:1.1rem;color:var(--ink2);max-width:58ch;margin:0 auto 24px}
 .cta{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
 .gst{display:flex;gap:12px;align-items:flex-start;max-width:640px;margin:26px auto 0;text-align:left;padding:13px 16px;border-radius:14px;background:rgba(236,254,255,.9);border:1px solid #A5E3EE;font-size:.9rem;color:#164E63}
@@ -151,7 +151,7 @@ footer{margin-top:56px;background:linear-gradient(180deg,#fff,#F0FDF8);padding:4
 [hidden]{display:none!important}
 .pbar{background:linear-gradient(90deg,#D1FAE5,#CFFAFE);color:#0F3D33;border-bottom:1px solid #A7E8D3;font-size:.86rem}
 .pin{display:flex;align-items:center;gap:14px;flex-wrap:wrap;justify-content:center;min-height:48px;padding-top:6px;padding-bottom:6px;position:relative}
-.pl{display:inline-flex;align-items:center;gap:8px;font-weight:600}.pl i{width:8px;height:8px;border-radius:50%;background:#10B981;box-shadow:0 0 0 0 rgba(16,185,129,.6);animation:pu 2s infinite}
+.pl{display:inline-flex;align-items:center;gap:8px;font-weight:600}.pl i{width:8px;height:8px;border-radius:50%;background:#10B981;box-shadow:0 0 0 0 rgba(16,185,129,.6);}
 @keyframes pu{70%{box-shadow:0 0 0 8px rgba(16,185,129,0)}100%{box-shadow:0 0 0 0 rgba(16,185,129,0)}}
 #pf{display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:center}#pf label{display:inline-flex;align-items:center;gap:6px;color:#3E5049}
 #pf select,#pf input{height:32px;border-radius:9px;border:1px solid #9FDCCB;background:#fff;color:#0F1F1A;font:inherit;font-size:.84rem;padding:0 10px}
@@ -171,6 +171,14 @@ footer{margin-top:56px;background:linear-gradient(180deg,#fff,#F0FDF8);padding:4
 .faq summary{cursor:pointer;list-style:none;padding:16px 20px;font-weight:600;display:flex;justify-content:space-between;gap:12px}.faq summary::-webkit-details-marker{display:none}
 .faq summary:after{content:'+';color:var(--gd);font-size:1.2rem;line-height:1}.faq details[open] summary:after{content:'–'}
 .faq p{margin:0;padding:0 20px 16px;color:var(--ink2);font-size:.92rem}
+
+.ann{display:inline-flex;align-items:center;gap:10px;padding:5px 12px 5px 5px;border-radius:999px;background:#fff;border:1px solid var(--line);font-size:.84rem;font-weight:550;color:var(--ink2);text-decoration:none;box-shadow:0 6px 20px -14px rgba(4,120,87,.5)}
+.ann span{background:#0E7490;color:#fff;font-size:.7rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:3px 9px;border-radius:999px}.ann svg{width:12px;height:12px}.ann:hover{border-color:#86E1C1}
+.lead{max-width:56ch}
+.pers{padding-top:28px}.pers .who,.pers .hook{margin-top:0}.pers .hook{margin-bottom:14px!important}
+.band{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:18px;padding:30px;border-radius:24px;background:linear-gradient(120deg,#ECFDF5,#ECFEFF);border:1px solid #BFE9DD}
+.band h2{text-align:left;margin:0 0 4px;max-width:none;font-size:clamp(1.25rem,2.6vw,1.6rem)}.band p{margin:0;color:var(--ink2)}.band .cta{margin:0}
+h2{font-weight:700}
 </style>
 </head>
 <body>
@@ -190,20 +198,11 @@ footer{margin-top:56px;background:linear-gradient(180deg,#fff,#F0FDF8);padding:4
 <main class="col">
 <section class="hero">
   <span class="forchip" id="forchip" hidden></span>
-  <span class="eye"><b></b>Every Rupee Deduction Desk · live prototype</span>
-  <h1>Close every short-payment <em>with a reason, an owner and a GST credit note.</em></h1>
-  <p class="lead">Match distributor payments to invoices, route every gap to one owner, and track GST credit notes under the 1 Nov 2026 rule. Built for FMCG finance teams.</p>
+  <a class="ann" href="sources.html"><span>New</span>Ready for the 1 Nov 2026 GST rule <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5 3l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+  <h1>Short-payment reconciliation <em>for FMCG finance teams.</em></h1>
+  <p class="lead">Match every distributor payment to its invoice. Give every gap one owner and a deadline. Close it with a GST credit note or a recovery, never a silent write-off.</p>
   <div class="cta"><a class="btn g" href="desk.html">Try the live desk<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5 3l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a><a class="btn" href="#board">See it in 90 seconds</a></div>
   <ul class="stats"><li><b>8</b>business rules</li><li><b>11</b>tests, run in-browser</li><li><b>₹10,000</b>maker-checker limit</li><li><b>0</b>auto write-offs</li></ul>
-  <div class="gst"><span>New · 1 Nov 2026</span><span>GST on an after-sale discount now comes back only via a GST credit note the distributor reverses. Untracked note = tax paid on money never received.</span></div>
-  <div class="hook" style="max-width:720px;margin:18px auto 0;text-align:left" id="hook" hidden><small id="hookt"></small><p id="hookp"></p></div>
-  <div class="who" id="who">
-    <div class="whoh"><span>Reading as</span><div class="seg sm" role="group" aria-label="Your role">
-      <button type="button" data-r="pm">Product manager</button><button type="button" data-r="hr">Hiring / TA</button><button type="button" data-r="fin">Finance leader</button><button type="button" data-r="founder">Founder</button></div></div>
-    <p class="whoq" id="whoq"></p>
-    <div class="proof" id="proof"></div>
-  </div>
-
 </section>
 
 <section class="board" id="board">
@@ -219,6 +218,17 @@ footer{margin-top:56px;background:linear-gradient(180deg,#fff,#F0FDF8);padding:4
     </div>
   </div>
 </section>
+<section class="sec pers">
+  <div class="hook" style="max-width:720px;margin:18px auto 0;text-align:left" id="hook" hidden><small id="hookt"></small><p id="hookp"></p></div>
+  <div class="who" id="who">
+    <div class="whoh"><span>Reading as</span><div class="seg sm" role="group" aria-label="Your role">
+      <button type="button" data-r="pm">Product manager</button><button type="button" data-r="hr">Hiring / TA</button><button type="button" data-r="fin">Finance leader</button><button type="button" data-r="founder">Founder</button></div></div>
+    <p class="whoq" id="whoq"></p>
+    <div class="proof" id="proof"></div>
+  </div>
+
+</section>
+
 
 <section class="sec lens" id="lens">
   <div class="lh"><h2 id="lensh">Built for your team</h2>
@@ -281,6 +291,8 @@ footer{margin-top:56px;background:linear-gradient(180deg,#fff,#F0FDF8);padding:4
     <details><summary>Who built it?</summary><p>Rupak Ghanpathi, alone: 2.5 years as a Business Analyst at HDFC Bank. Research, rules, BRD, product and tests. Open to BA and Product roles in Bengaluru.</p></details>
   </div>
 </section>
+
+<section class="sec"><div class="band"><div><h2>See it work on today's short-payments.</h2><p>Sample data, no sign-up. Takes two minutes.</p></div><div class="cta"><a class="btn g" href="desk.html">Try the live desk<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5 3l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a><a class="btn" href="#contact">Talk to Rupak</a></div></div></section>
 
 <section class="sec" id="contact">
   <div class="founder">
