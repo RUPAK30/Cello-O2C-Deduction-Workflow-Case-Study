@@ -196,15 +196,15 @@ td,th{padding:12px 14px!important}
    <div>
     <span class="peye"><b></b>Live workspace · sample data · nothing leaves your browser</span>
     <h1>You're Asha in accounts receivable. <em>Close today's short-payments.</em></h1>
-    <p class="plead">Load the statement, let the 8 rules sort every gap, approve what needs a second pair of eyes, and close each one with a credit note or a recovery. Then switch to Vikram, the controller, and see what only he can approve.</p>
+    <p class="plead">When a distributor pays less than the bill, someone has to find out why and settle it. Here you do that job for one day: rules sort the easy gaps, you decide the rest, and big amounts need your manager Vikram.</p>
     <div class="pcta"><button class="pb g lg" type="button" onclick="document.getElementById('load-sample').click();document.getElementById('cls').scrollIntoView({behavior:'smooth'})">Take the 60-second tour<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5 3l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button><label class="pb lg">Upload your own CSV<input type="file" accept=".csv,text/csv" hidden onchange="var f=document.getElementById('file');f.files=this.files;f.dispatchEvent(new Event('change'))"></label></div>
     <p class="ppriv"><svg viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="10" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M8 10V7a4 4 0 0 1 8 0v3" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>Files are read on your device, never uploaded. No accounts, no analytics. Reset clears everything.</p>
    </div>
    <ol class="pflow">
-    <li><i>1</i><div><b>Receive</b><span>Each payment matched to its payer and bill.</span></div></li>
-    <li><i>2</i><div><b>Classify</b><span>TDS, scheme, damage or unexplained, by rule.</span></div></li>
-    <li><i>3</i><div><b>Work cases</b><span>Owner, deadline, maker-checker above ₹10,000.</span></div></li>
-    <li><i>4</i><div><b>Close and prevent</b><span>Credit note or recovery; ageing disputes flag the next order.</span></div></li>
+    <li><i>1</i><div><b>Receive</b><span>Money arrives and is matched to each bill.</span></div></li>
+    <li><i>2</i><div><b>Classify</b><span>Rules explain each gap: tax, a discount, damage, or unknown.</span></div></li>
+    <li><i>3</i><div><b>Work cases</b><span>Unknown gaps get a person and a deadline; big ones need two people.</span></div></li>
+    <li><i>4</i><div><b>Close and prevent</b><span>Each gap is settled or recovered; old disputes flag the next order.</span></div></li>
    </ol>
   </div>
   <button class="btn primary" id="run-uat" type="button" hidden style="display:none!important">Run the 11 tests</button>
@@ -235,7 +235,15 @@ td,th{padding:12px 14px!important}
   <section style="padding:18px 0 0" id="recv">
     <div class="grid two">
       <div class="card">
-        <p class="step">1 · Receive</p>
+        <details class="gloss"><summary>New to finance? The 6 words you need</summary><dl>
+<dt>Short-paid</dt><dd>The distributor paid less than the bill said.</dd>
+<dt>TDS</dt><dd>Tax the buyer must keep back and pay to the government. Not a loss, just matched to a tax form.</dd>
+<dt>Scheme claim</dt><dd>A discount the brand promised, like a festival offer, that the distributor took off the payment.</dd>
+<dt>Credit note</dt><dd>The document that officially reduces a bill, so the books and GST match what was paid.</dd>
+<dt>Maker-checker</dt><dd>One person proposes, a second approves. Nobody approves their own big decision.</dd>
+<dt>Audit trail</dt><dd>A log of who did what and when, so anyone can check it later.</dd></dl></details>
+<p class="step">1 · Receive</p>
+<p class="plain"><b>In plain words:</b> A brand sells to shops' suppliers (distributors) on credit. Here, the money they paid back arrives, and each payment is matched to its bill.</p>
         <h2>Today's bank statement</h2>
         <p class="sub">Receipts arrive tagged to the payer by virtual account (BR-1).</p>
         <div class="row">
@@ -266,6 +274,7 @@ td,th{padding:12px 14px!important}
 
   <section style="padding:18px 0 0" id="cls">
     <p class="step">2 · Classify <span class="why2">every short rupee becomes TDS, an accepted claim or a case with an owner</span></p>
+<p class="plain"><b>In plain words:</b> Where a distributor paid less than the bill, the system works out why: tax he legally kept back, a discount he was owed, or something a person must look into.</p>
     <details class="card" id="rules" style="margin-top:8px"><summary><b>BR-3 as a decision table</b> <span class="tiny">(tap to open)</span></summary>
       <table class="dt" style="margin-top:10px"><tr><th>Evidence present</th><th>Amount ≤ Finance limit</th><th>Within scheme budget</th><th>Within 2× distributor's damage norm</th><th>Outcome</th></tr>
       <tr><td class="y">Y</td><td class="y">Y</td><td class="y">Y</td><td class="y">Y</td><td>Auto-accept, credit note (BR-6)</td></tr>
@@ -291,6 +300,7 @@ td,th{padding:12px 14px!important}
     <div class="grid two">
       <div>
         <p class="step">3 · Work the cases <span class="why2">a person decides only what the rules could not</span></p>
+<p class="plain"><b>In plain words:</b> Each unexplained gap is a case with one person responsible and a deadline. Bigger amounts need a second person to agree.</p>
         <p class="sub" style="font-size:.85rem;color:var(--muted)">Tip: approve a ₹12,000 case as Asha (blocked), then switch to Vikram.</p>
         <div id="case-list"></div>
         <div class="row"><button class="btn small" id="dl-cases">Download cases (CSV)</button></div>
@@ -298,6 +308,7 @@ td,th{padding:12px 14px!important}
       <div>
         <div class="card" style="margin-bottom:16px">
           <p class="step" id="dists">4 · Prevent <span class="why2">ageing disputes flag the next order</span></p>
+<p class="plain"><b>In plain words:</b> If a distributor has old or large unsettled gaps, his next order is flagged for a manager to look at. It is never blocked.</p>
           <h2>Distributors and credit</h2>
           <p class="sub">Open disputes above ₹20,000 or older than 45 days flag the next order for review (BR-7).</p>
           <div class="tbl"><table><thead><tr><th>Distributor</th><th class="r">FY purchases</th><th class="r">Scheme left</th><th class="r">Disputed</th><th></th></tr></thead><tbody id="dist-body"></tbody></table></div>
@@ -361,13 +372,14 @@ var ls=document.getElementById('load-sample');if(ls)ls.addEventListener('click',
 function q(s){return document.querySelector(s)}function tab(h){var a=q('.tabs2 a[href="'+h+'"]');if(a)a.click()}
 function hl(sel){document.querySelectorAll('.hl').forEach(function(e){e.classList.remove('hl')});var e=sel&&q(sel);if(e){e.classList.add('hl');e.scrollIntoView({behavior:'smooth',block:'center'})}}
 var S=[
-{h:"A bank statement arrives",p:"Distributors paid today, but some paid less than their invoices. Every short-paid amount becomes a case, sorted by rule.",go:function(){if(!q('#case-list article'))q('#load-sample').click();setTimeout(function(){tab('#recv');hl('#recv')},200)}},
-{h:"Rules sort every gap",p:"TDS is matched to tax, valid claims are accepted, everything else gets a named owner. The bar is the goal: no rupee left without an owner.",go:function(){tab('#cls');hl('.sumbar')}},
-{h:"A person decides, with a second check",p:"Asha in accounts receivable works each case. Anything above ₹10,000 needs Vikram, the finance controller. No rule writes money off.",go:function(){tab('#cases');hl('#case-list')}},
-{h:"Old disputes flag the next order",p:"I just placed an order for a distributor. Look at the right column: Released, or Held for review if he has old or large disputes. It's flagged, never blocked.",go:function(){tab('#dists');var b=[].slice.call(document.querySelectorAll('[data-order]'));var row=b.filter(function(x){return x.closest('tr').querySelector('.pill.bad')})[0]||b[0];if(row){row.click();setTimeout(function(){hl('#dist-body')},80)}}},
-{h:"Everything is on the record",p:"Every action is logged with a rule, a name and a time. That's what an auditor asks for. Run the 11 tests to see the edge cases blocked.",go:function(){tab('#auditc');hl('#auditc')}}];
+{h:"What this is",p:"A brand sells goods to distributors on credit. Distributors often pay less than the bill and don't say why. This desk makes sure every missing rupee gets a reason and a person responsible. Here's one day, in 5 steps.",go:function(){hl(null)}},
+{h:"1. Money arrives",p:"Today's bank payments are loaded. Each payment is matched to its bill. Some distributors paid less than they owed. That missing amount is what we track.",go:function(){if(!q('#case-list article'))q('#load-sample').click();setTimeout(function(){tab('#recv');hl('#recv')},200)}},
+{h:"2. Each gap gets a reason",p:"Rules sort every missing rupee: tax kept back legally (grey), a discount he was owed (gold), or something a person must check (orange). The goal is the box on the right: ₹0 without an owner.",go:function(){tab('#cls');hl('.sumbar')}},
+{h:"3. A person decides the rest",p:"Asha in accounts works each unexplained case. Anything above ₹10,000 needs Vikram, her manager, to agree. Nothing is ever written off automatically.",go:function(){tab('#cases');hl('#case-list')}},
+{h:"4. The next order is checked",p:"I just placed a new order for a distributor with an old unsettled gap. See Held for review in his row: a manager takes a look. Sales isn't stopped.",go:function(){tab('#dists');var b=[].slice.call(document.querySelectorAll('[data-order]'));var row=b.filter(function(x){return x.closest('tr').querySelector('.pill.bad')})[0]||b[0];if(row){row.click();setTimeout(function(){hl('#dist-body')},80)}}},
+{h:"5. Everything is recorded",p:"Every step is logged with who, what and when, so an auditor can check it. Want proof it works? Run tests checks 11 tricky cases, including ones that must be blocked.",go:function(){tab('#auditc');hl('#auditc')}}];
 var i=0,T=q('#tour'),B=q('#tourbtn');
-function show(){var x=S[i];q('#tn').textContent='STEP '+(i+1)+' OF '+S.length;q('#th').textContent=x.h;q('#tp').textContent=x.p;q('#tf').style.width=((i+1)/S.length*100)+'%';q('#tgo').textContent=i<S.length-1?'Next':'Done';x.go()}
+function show(){var x=S[i];q('#tn').textContent=(i?'STEP '+i+' OF '+(S.length-1):'START HERE');q('#th').textContent=x.h;q('#tp').textContent=x.p;q('#tf').style.width=((i+1)/S.length*100)+'%';q('#tgo').textContent=!i?'Show me':i<S.length-1?'Next':'Done';x.go()}
 B.onclick=function(){i=0;T.hidden=false;B.hidden=true;show()};
 q('#tgo').onclick=function(){if(i<S.length-1){i++;show()}else{T.hidden=true;B.hidden=false;hl(null)}};
 q('#tx').onclick=function(){T.hidden=true;B.hidden=false;hl(null)};
@@ -375,5 +387,9 @@ var P=q('.pcta .pb.g');if(P)P.onclick=function(){B.click()};
 if(/[?&]tour=1/.test(location.search))setTimeout(function(){B.click()},600);
 })();
 </script>
+<style>.plain{margin:6px 0 14px;font-size:.88rem;color:#3E5049;background:#F3FBF8;border-left:3px solid #10B981;padding:8px 12px;border-radius:0 10px 10px 0;line-height:1.5}.plain b{color:#0F1F1A}
+.gloss{margin:0 0 18px;background:#fff;border:1px solid #D6E8E1;border-radius:14px;padding:0 16px}.gloss summary{cursor:pointer;padding:12px 0;font-weight:600;font-size:.9rem;color:#047857}
+.gloss dl{display:grid;grid-template-columns:130px 1fr;gap:6px 14px;margin:0 0 14px;font-size:.88rem}.gloss dt{font-weight:650}.gloss dd{margin:0;color:#3E5049}
+@media(max-width:560px){.gloss dl{grid-template-columns:1fr}.gloss dd{margin-bottom:6px}}</style>
 </body>
 </html>
