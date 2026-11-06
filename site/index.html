@@ -243,6 +243,20 @@ h2{font-weight:700}
 #expiry{margin-top:14px}
 .cm{display:grid;gap:12px;max-width:none;margin:0 0 14px}@media(min-width:820px){.cm{grid-template-columns:1.2fr 1fr;align-items:stretch}}
 .cm .cost,.cm .miss{margin:0!important;max-width:none}.cm .miss{text-align:left;background:#fff;border:1px solid var(--line);border-radius:16px;padding:14px 18px;display:block}
+
+.nowst{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--line);border-radius:18px;background:#fff;overflow:hidden}
+.nowst a{padding:16px 18px;text-decoration:none;color:inherit;text-align:center}.nowst a+a{border-left:1px solid var(--line)}.nowst a:hover{background:#FAFAFC}
+.nowst b{display:block;font-size:1.35rem;letter-spacing:-.02em;color:#1D1D1F}.nowst span{font-size:.8rem;color:var(--mut)}
+@media(max-width:700px){.nowst{grid-template-columns:1fr}.nowst a+a{border-left:0;border-top:1px solid var(--line)}}
+#now{padding-top:20px!important}
+.deep{display:grid;gap:10px}.dp{background:#fff;border:1px solid var(--line);border-radius:18px;overflow:hidden}
+.dp>summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:16px;padding:16px 20px}.dp>summary::-webkit-details-marker{display:none}
+.dp>summary span{flex:1}.dp>summary b{display:block;font-size:1rem}.dp>summary em{font-style:normal;font-size:.86rem;color:var(--mut)}
+.dp>summary i{font-style:normal;width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:#EEF5FF;color:#0A66D1;font-size:1.1rem;transition:transform .2s;flex:none}
+.dp[open]>summary i{transform:rotate(45deg)}.dp[open]>summary{border-bottom:1px solid var(--line)}
+.dp>section{padding:18px 20px 22px!important;margin:0!important}.dp>section>.k,.dp>section>h2{display:none}
+.dp:hover{border-color:#D6E7FF}
+.nowst b span{font-size:inherit!important;color:inherit!important}.chip.p{background:linear-gradient(180deg,#3A8DF5,#1F7AEC)!important;color:#fff!important;border:0!important}.chip:not(.p){background:#EEF5FF!important;color:#0A66D1!important;border:1px solid #D6E7FF!important}
 </style>
 </head>
 <body>
@@ -277,6 +291,39 @@ h2{font-weight:700}
     </div>
   </div>
 </section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section class="sec" id="now"><div class="nowst">
+  <a href="#evidence"><b>+14% vs +8.8%</b><span>Cello's receivables vs revenue, FY26</span></a>
+  <a href="#evidence"><b>₹3.5–5</b><span>distributor margin per ₹100</span></a>
+  <a href="#evidence"><b><span id="xd2">–</span> days</b><span>to the credit-note deadline, 30 Nov</span></a>
+</div></section>
+
+<section class="sec" id="deep">
+  <p class="k">Go deeper</p>
+  <h2>Open what you care about</h2>
+  <div class="deep">
+  <details class="dp" data-for="delta"><summary><span><b>Before and after, with the full trace</b><em>The same ₹12,400 gap two ways, and the chain from a public filing to a passing test.</em></span><i aria-hidden="true">+</i></summary>
 <section class="sec" id="delta">
   <p class="k">Before and after</p>
   <h2>The same ₹12,400 gap, two ways</h2>
@@ -298,14 +345,28 @@ h2{font-weight:700}
     <li><small>Screen</small><b>Vikram approves</b><span>Finance controller, in the desk</span></li>
   </ol>
 </section>
+  </details>
+  <details class="dp" data-for="evidence"><summary><span><b>Why now: the numbers and the GST deadline</b><em>Receivables vs revenue, distributor margins, and the credit-note deadline in detail.</em></span><i aria-hidden="true">+</i></summary>
+<section class="sec" id="evidence">
+  <p class="k">Why now</p>
+  <h2>Why this matters now</h2>
+  <div class="g3 g2">
+    <div class="tile"><div class="big">+14% vs +8.8%</div><b>Cello's receivables outgrew revenue</b><span>About ₹34 Cr above revenue pace, FY25→FY26.</span><small>Annual reports · my estimate, a reason to look, not a diagnosis</small></div>
+    <div class="tile"><div class="big">₹3.5–5</div><b>Distributor margin per ₹100</b><span>Too thin to wait on slow claims, so they deduct.</span><small>AICPDF, Jun 2026</small></div></div>
 
-
-
-
-
-
-
-
+  <div id="expiry"><div class="exp">
+    <div class="ex1"><p class="k">The part nobody owns</p>
+    <h2>A deduction can have a tax deadline.</h2>
+    <p>When a brand settles a scheme claim with a <b>GST credit note</b>, it gets back the GST already paid on the discount. That credit note must go out by <b>30 November after the financial year ends</b> (or the annual return date, if earlier). For FY <span class="fyx">2025-26</span> supplies, that's <b>30 November <span class="fyy">2026</span></b>.</p>
+    <p>Many brands settle schemes with a plain <b>financial credit note</b> instead and keep the GST cost. From 1 Nov 2026 the GST route gets easier, so more claims will qualify. An undecided deduction quietly loses that choice after the deadline.</p>
+    <p>The brand's GST gain is the distributor's input-credit reversal. That's why the two sides negotiate which kind of credit note gets issued.</p>
+    <small>CGST Act s.34(2); s.15(3)(b) as amended by Finance Act 2026; CBIC Circular 251/08/2025. Summarised from public sources, Oct 2026. Not tax advice.</small></div>
+    <div class="ex2"><b id="xd">–</b><span id="xl">days to the FY 2025-26 credit-note deadline</span></div>
+  </div>
+</div>
+</section>
+  </details>
+  <details class="dp" data-for="calc"><summary><span><b>What short-payments cost you</b><em>Plug in your own numbers, plus the one question I'd ask your team.</em></span><i aria-hidden="true">+</i></summary>
 <section class="sec" id="calc">
   <p class="k">What it's worth</p>
   <h2>See what short-payments cost you</h2>
@@ -325,30 +386,8 @@ h2{font-weight:700}
   <span id="l1" hidden></span><span id="l2" hidden></span><span id="lensh" hidden></span>
 </div>
 </section>
-
-
-
-
-
-<section class="sec" id="evidence">
-  <p class="k">Why now</p>
-  <h2>Why this matters now</h2>
-  <div class="g3 g2">
-    <div class="tile"><div class="big">+14% vs +8.8%</div><b>Cello's receivables outgrew revenue</b><span>About ₹34 Cr above revenue pace, FY25→FY26.</span><small>Annual reports · my estimate, a reason to look, not a diagnosis</small></div>
-    <div class="tile"><div class="big">₹3.5–5</div><b>Distributor margin per ₹100</b><span>Too thin to wait on slow claims, so they deduct.</span><small>AICPDF, Jun 2026</small></div></div>
-
-  <div id="expiry"><div class="exp">
-    <div class="ex1"><p class="k">The part nobody owns</p>
-    <h2>A deduction can have a tax deadline.</h2>
-    <p>When a brand settles a scheme claim with a <b>GST credit note</b>, it gets back the GST already paid on the discount. That credit note must go out by <b>30 November after the financial year ends</b> (or the annual return date, if earlier). For FY <span class="fyx">2025-26</span> supplies, that's <b>30 November <span class="fyy">2026</span></b>.</p>
-    <p>Many brands settle schemes with a plain <b>financial credit note</b> instead and keep the GST cost. From 1 Nov 2026 the GST route gets easier, so more claims will qualify. An undecided deduction quietly loses that choice after the deadline.</p>
-    <p>The brand's GST gain is the distributor's input-credit reversal. That's why the two sides negotiate which kind of credit note gets issued.</p>
-    <small>CGST Act s.34(2); s.15(3)(b) as amended by Finance Act 2026; CBIC Circular 251/08/2025. Summarised from public sources, Oct 2026. Not tax advice.</small></div>
-    <div class="ex2"><b id="xd">–</b><span id="xl">days to the FY 2025-26 credit-note deadline</span></div>
-  </div>
-</div>
-</section>
-
+  </details>
+  <details class="dp" data-for="thinking"><summary><span><b>How I think: costs, mistakes, risks</b><em>What this design costs, what I got wrong, and where it could fail.</em></span><i aria-hidden="true">+</i></summary>
 <section class="sec" id="thinking">
   <p class="k">The thinking</p>
   <h2>Controls first, failure planned for</h2>
@@ -367,9 +406,9 @@ h2{font-weight:700}
   </div>
   <div class="trust" id="privacy"><span><b>Runs in your browser.</b> Uploaded files never leave your device.</span><span><b>No sign-up, no tracking.</b></span><span><b>Sample data only.</b></span><a href="sources.html">Sources, and what I don't claim <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5 3l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
 </section>
-
-
-
+  </details>
+  </div>
+</section>
 
 <section class="sec" id="contact">
   <div class="founder">
@@ -465,5 +504,11 @@ if(hk){document.getElementById('hookt').textContent='Why I sent this'+(co?' to '
 var t=new Date(y,10,30,23,59,59);if(d>t)t=new Date(y+1,10,30,23,59,59);var n=Math.ceil((t-d)/864e5);
 var fy=(t.getFullYear()-1)+'-'+String(t.getFullYear()).slice(2);document.getElementById('xd').textContent=n;document.querySelectorAll('.fyx').forEach(function(e){e.textContent=fy});document.querySelectorAll('.fyy').forEach(function(e){e.textContent=t.getFullYear()});
 document.getElementById('xl').textContent=(n===1?'day':'days')+' to the FY '+fy+' credit-note deadline';})();</script>
+<script>(function(){
+function openFor(h){if(!h)return;var t=document.querySelector(h);if(!t)return;var d=t.closest('details.dp');if(d&&!d.open){d.open=true}setTimeout(function(){t.scrollIntoView({behavior:'smooth',block:'start'})},30)}
+document.addEventListener('click',function(e){var a=e.target.closest('a[href^="#"]');if(!a)return;var h=a.getAttribute('href');var t=h.length>1&&document.querySelector(h);if(t&&t.closest('details.dp')){e.preventDefault();openFor(h);history.replaceState(null,'',h)}});
+if(location.hash)openFor(location.hash);
+var x=document.getElementById('xd'),y=document.getElementById('xd2');if(x&&y)y.textContent=x.textContent;
+})();</script>
 </body>
 </html>
