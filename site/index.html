@@ -201,6 +201,26 @@ h2{font-weight:700}
 .miss{max-width:680px;margin:-4px auto 18px;text-align:center;font-size:.95rem;color:var(--ink2)}.miss b{color:var(--ink)}
 .lens .hook{margin:0 0 16px}
 .prf{margin:10px auto 0;font-size:.85rem;font-weight:600;color:var(--gd);letter-spacing:.01em}
+
+.thesis{margin:22px auto 0;font-size:1.15rem;font-weight:700;color:var(--ink);letter-spacing:-.01em}
+.ba{max-width:860px;margin:0 auto}.ba table{width:100%;border-collapse:separate;border-spacing:0;background:#fff;border:1px solid var(--line);border-radius:18px;overflow:hidden;font-size:.92rem}
+.ba th,.ba td{padding:12px 16px;text-align:left;border-bottom:1px solid var(--line)}.ba tr:last-child>*{border-bottom:0}
+.ba thead th{font-size:.74rem;letter-spacing:.06em;text-transform:uppercase;color:var(--mut);background:#FBFEFD}
+.ba tbody th{font-weight:600;color:var(--ink2);width:22%}.ba td:nth-child(2){color:#8A6F6F}.ba td:nth-child(3){color:var(--ink);font-weight:550;background:#F3FDF9}
+.cap{font-size:.78rem;color:var(--mut);margin:8px 2px 0}.prf{text-align:center;margin:14px auto 0}
+.tr6{list-style:none;padding:0;margin:0;display:grid;gap:10px;grid-template-columns:repeat(6,1fr);counter-reset:t}
+.tr6 li{position:relative;background:#fff;border:1px solid var(--line);border-radius:14px;padding:12px}
+.tr6 li:not(:last-child):after{content:'→';position:absolute;right:-11px;top:50%;transform:translateY(-50%);color:var(--gd);font-weight:700;z-index:1;background:var(--bg);line-height:1}
+.tr6 small{display:block;font-size:.66rem;letter-spacing:.08em;text-transform:uppercase;color:#0E7490;font-weight:700;margin-bottom:4px}
+.tr6 b{display:block;font-size:.86rem;line-height:1.3;margin-bottom:4px}.tr6 span{font-size:.76rem;color:var(--mut)}
+@media(max-width:900px){.tr6{grid-template-columns:1fr 1fr}.tr6 li:after{display:none}}
+@media(max-width:640px){.ba th,.ba td{padding:10px;font-size:.84rem}}
+.askq{max-width:720px;margin:0 auto;text-align:center;background:linear-gradient(135deg,#ECFDF5,#ECFEFF);border:1px solid #BFE9DD;border-radius:20px;padding:22px}
+.askq small{display:block;font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:#0E7490;font-weight:700;margin-bottom:6px}
+.askq p{margin:0 0 14px;font-size:1.15rem;font-weight:650;color:var(--ink);line-height:1.4}
+#ask .hook{max-width:720px;margin:0 auto 12px}
+.cost{max-width:680px;margin:0 auto 14px;background:#fff;border:1px solid var(--line);border-radius:16px;padding:14px 18px}.cost b{display:block;margin-bottom:6px}
+.cost ul{margin:0;padding-left:18px;color:var(--ink2);font-size:.92rem}.cost li{margin:3px 0}
 </style>
 </head>
 <body>
@@ -215,11 +235,11 @@ h2{font-weight:700}
 <section class="hero">
   <span id="forchip" hidden style="display:none!important"></span>
   <span class="eye2">Portfolio case study by Rupak Ghanpathi · built solo · sample data</span>
-  <h1>Short-payment reconciliation <em>for FMCG finance teams.</em></h1>
-  <p class="lead">Match every distributor payment to its invoice. Give every gap one owner and a deadline. Close it with a GST credit note or a recovery, never a silent write-off.</p>
+  <h1>A distributor pays short. <em>On day 31 it's still nobody's problem.</em></h1>
+  <p class="lead">Every Rupee is a short-payment reconciliation desk for FMCG finance teams, built from Cello World's public filings. Every gap gets one owner and ends in a credit note or a recovery.</p>
   <div class="cta"><a class="btn g" href="desk.html">Try the live desk<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5 3l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a><a class="btn" href="#contact">Talk to Rupak</a></div>
+  <p class="thesis">The hard part of a deduction isn't matching it. It's owning it.</p>
   <p class="dec"><b>The call I made:</b> control over speed. No auto write-offs, maker-checker above ₹10,000, strict matching at launch. Fewer auto-matches and more manual work, on purpose.</p>
-  <p class="prf">0 auto write-offs · maker-checker above ₹10,000 · 8 rules, 11 tests, run in the browser</p>
 </section>
 
 <section class="board" id="board">
@@ -235,18 +255,36 @@ h2{font-weight:700}
     </div>
   </div>
 </section>
-
-
-
-<section class="sec lens" id="lens">
-  <div class="hook" id="hook" hidden><small id="hookt"></small><p id="hookp"></p></div>
-  <div class="lh"><h2 id="lensh">Built for your team</h2>
-  <div class="seg" role="group" aria-label="Your side">
-    <button type="button" data-l="saas" aria-pressed="true">I build finance software</button>
-    <button type="button" data-l="brand" aria-pressed="false">I run finance at a brand</button>
-    <button type="button" data-l="bank" aria-pressed="false">I'm at a bank or NBFC</button></div></div>
-  <div class="lcards"><div class="lcard"><small>Where you meet this</small><p id="l1"></p></div><div class="lcard"><small>My first 30 days</small><p id="l2"></p></div><div class="lcard"><small>The question I'd ask you</small><p id="l3"></p></div></div>
+<section class="sec" id="delta">
+  <p class="k">Before and after</p>
+  <h2>The same ₹12,400 gap, two ways</h2>
+  <div class="ba"><table><thead><tr><th></th><th>How it often runs today</th><th>On the desk</th></tr></thead><tbody>
+    <tr><th>Explained</th><td>Day 31, if ever</td><td>Same day, by rule</td></tr>
+    <tr><th>Where it lives</th><td>Email threads, no owner</td><td>One case, one owner, one deadline</td></tr>
+    <tr><th>Who decides</th><td>Whoever replies first</td><td>Regional sales head, 3-day SLA (BR-8)</td></tr>
+    <tr><th>How it ends</th><td>Silent write-off, or never</td><td>Credit note or recovery, with a posting reference</td></tr>
+    <tr><th>Audit trail</th><td>Rebuilt from inboxes</td><td>Every action logged by name and time</td></tr>
+  </tbody></table><p class="cap">Illustrative: one gap from the sample data, worked end to end. "Today" is the common manual pattern, not a measured baseline.</p></div>
+  <p class="prf">0 auto write-offs · maker-checker above ₹10,000 · 8 rules, 11 tests, run in the browser</p>
 </section>
+
+<section class="sec" id="trace">
+  <p class="k">Traceability</p>
+  <h2>From a public filing to a running control</h2>
+  <ol class="tr6">
+    <li><small>Filing</small><b>Receivables +14.0% vs revenue +8.8%</b><span>Cello World, FY25→FY26</span></li>
+    <li><small>Assumption</small><b>Short-payments sit unowned</b><span>A reason to look, not a diagnosis</span></li>
+    <li><small>Requirement</small><b>US-5: no self-approval above ₹10,000</b><span>In the BRD</span></li>
+    <li><small>Rule</small><b>BR-5 maker-checker</b><span>Blocked, logged, routed</span></li>
+    <li><small>Test</small><b>UAT-06 passes</b><span>Maker tries to approve own case</span></li>
+    <li><small>Screen</small><b>Vikram approves</b><span>Finance controller, in the desk</span></li>
+  </ol>
+</section>
+
+
+
+
+
 
 <section class="sec" id="calc">
   <p class="k">What it's worth</p>
@@ -262,6 +300,12 @@ h2{font-weight:700}
     <p class="how">Billing × share × days÷30 = cash stuck. Try your own numbers.</p>
   </div>
 </section>
+<section class="sec" id="ask">
+  <div class="hook" id="hook" hidden><small id="hookt"></small><p id="hookp"></p></div>
+  <div class="askq"><small>The question I'd ask you</small><p id="l3"></p><a class="btn g sm" id="m5" href="#contact">Answer it in one line</a></div>
+  <span id="l1" hidden></span><span id="l2" hidden></span><span id="lensh" hidden></span>
+</section>
+
 
 <section class="sec" id="evidence">
   <p class="k">Why now</p>
@@ -276,6 +320,7 @@ h2{font-weight:700}
 <section class="sec" id="thinking">
   <p class="k">The thinking</p>
   <h2>Controls first, failure planned for</h2>
+  <div class="cost"><b>What this costs</b><ul><li>Fewer auto-matches at launch: strict matching rejects fuzzy ones.</li><li>More manual review: anything above ₹10,000 needs a second person.</li><li>A slower first close: Sales must enter scheme dates and budgets before rules can accept a claim.</li></ul></div>
   <p class="miss"><b>What I got wrong:</b> v2 was a wall of text, so I rebuilt it as something you can run, because a spec nobody executes isn't a spec.</p>
   <div class="two-up">
     <div class="pane"><h3>How I'd work from week one</h3><ol class="pts">
@@ -370,6 +415,7 @@ var E='rupakr2g@gmail.com',U=location.origin+location.pathname;
 function mt(sub,body,to){return 'mailto:'+(to===undefined?E:to)+'?subject='+encodeURIComponent(sub)+'&body='+encodeURIComponent(body)}
 function mail(){var tag=co?' ('+co+')':'';var hi='Hi Rupak,\n\n';
  document.getElementById('m1').href=mt('Every Rupee: let\'s talk'+tag,hi+'Your question: '+L[ln].c+'\nShort answer: \n\nFree for 20 minutes on: ');
+ var _m5=document.getElementById('m5');if(_m5)_m5.href=document.getElementById('m1').href;
  document.getElementById('m3').href=mt('Every Rupee: not a fit'+tag,hi+'Not a fit right now, because: ');
  var _m4=document.getElementById('m4');if(_m4)_m4.href=mt('Worth 90 seconds: Every Rupee','A BA built a working deduction workflow, with rules, tests and the new GST credit-note rule:\n'+U+(co?'?for='+encodeURIComponent(co):'')+'\n',''); }
 document.getElementById('askf').onsubmit=function(e){e.preventDefault();var q=document.getElementById('askq').value.trim();location.href=mt('Every Rupee: a question'+(co?' ('+co+')':''),'Hi Rupak,\n\n'+(q||''))};
