@@ -330,7 +330,7 @@ td,th{padding:12px 14px!important}
   </div>
   <p class="foot">Rules simplified for illustration: TDS u/s 194Q at 0.1% of taxable value once a distributor's purchases pass ₹50 lakh; thresholds are Finance-set and illustrative. Tax rules summarised from public sources, Oct 2026. Not tax advice. Built by Rupak Ghanpathi as a self-initiated case study.</p>
 </main>
-<div class="tour" id="tour" hidden><div class="tt"><span id="tn">1/5</span><button id="tx" aria-label="Close">×</button></div><b id="th"></b><p id="tp"></p><div class="tb"><button class="btn primary" id="tgo">Next</button></div><div class="tbar"><i id="tf"></i></div></div>
+<div class="tour" id="tour" hidden><div class="tt"><span id="tn">1/5</span><button id="tx" aria-label="Close">×</button></div><b id="th"></b><p id="tp"></p><div class="tb"><button class="tbk" id="tbk" hidden>← Back</button><button class="btn primary" id="tgo">Next</button></div><div class="tbar"><i id="tf"></i></div></div>
 <button class="tourbtn" id="tourbtn" type="button">▶ 60-second tour</button>
 <div class="flash" id="flash" role="status" aria-live="polite"></div>
 <footer class="dfoot"><div class="dk"><span>© 2026 Rupak Ghanpathi · Every Rupee, a portfolio case study. Not affiliated with Cello World.</span><span><a href="./">Overview</a> · <a href="Cello_O2C_One_Pager.pdf">One-page PDF</a> · <a href="https://github.com/RUPAK30/Cello-O2C-Deduction-Workflow-Case-Study">GitHub</a> · <a href="mailto:rupakr2g@gmail.com?subject=Every%20Rupee">Email</a></span></div></footer>
@@ -371,17 +371,23 @@ var ls=document.getElementById('load-sample');if(ls)ls.addEventListener('click',
 (function(){
 function q(s){return document.querySelector(s)}function tab(h){var a=q('.tabs2 a[href="'+h+'"]');if(a)a.click()}
 function hl(sel){document.querySelectorAll('.hl').forEach(function(e){e.classList.remove('hl')});var e=sel&&q(sel);if(e){e.classList.add('hl');e.scrollIntoView({behavior:'smooth',block:'center'})}}
+function v(id){var e=q(id);return e?e.textContent.trim():''}
 var S=[
-{h:"What this is",p:"A brand sells goods to distributors on credit. Distributors often pay less than the bill and don't say why. This desk makes sure every missing rupee gets a reason and a person responsible. Here's one day, in 5 steps.",go:function(){hl(null)}},
-{h:"1. Money arrives",p:"Today's bank payments are loaded. Each payment is matched to its bill. Some distributors paid less than they owed. That missing amount is what we track.",go:function(){if(!q('#case-list article'))q('#load-sample').click();setTimeout(function(){tab('#recv');hl('#recv')},200)}},
-{h:"2. Each gap gets a reason",p:"Rules sort every missing rupee: tax kept back legally (grey), a discount he was owed (gold), or something a person must check (orange). The goal is the box on the right: ₹0 without an owner.",go:function(){tab('#cls');hl('.sumbar')}},
-{h:"3. A person decides the rest",p:"Asha in accounts works each unexplained case. Anything above ₹10,000 needs Vikram, her manager, to agree. Nothing is ever written off automatically.",go:function(){tab('#cases');hl('#case-list')}},
-{h:"4. The next order is checked",p:"I just placed a new order for a distributor with an old unsettled gap. See Held for review in his row: a manager takes a look. Sales isn't stopped.",go:function(){tab('#dists');var b=[].slice.call(document.querySelectorAll('[data-order]'));var row=b.filter(function(x){return x.closest('tr').querySelector('.pill.bad')})[0]||b[0];if(row){row.click();setTimeout(function(){hl('#dist-body')},80)}}},
-{h:"5. Everything is recorded",p:"Every step is logged with who, what and when, so an auditor can check it. Want proof it works? Run tests checks 11 tricky cases, including ones that must be blocked.",go:function(){tab('#auditc');hl('#auditc')}}];
+{h:"One problem, one minute",p:function(){return "Brands sell to distributors on credit. Distributors often pay less than the bill and don't say why. This desk makes sure every missing rupee gets a reason, an owner and an ending. Here's one working day."},go:function(){hl(null)}},
+{h:"The money comes in",p:function(){return "This morning's bank statement is loaded. Each payment is matched to the right distributor and bill. Some paid less than they owed: that difference is a short-payment."},go:function(){if(!q('#case-list article'))q('#load-sample').click();setTimeout(function(){tab('#recv');hl('#recv')},200)}},
+{h:"Rules explain the easy gaps",p:function(){return "Of "+(v('#k-gap')||"today's gap")+" short-paid, rules explain "+(v('#k-auto')||"some")+" instantly: tax held back by law (blue) and discounts already approved (yellow). The rest (coral) goes to a named person. Watch the last box: ₹0 without an owner."},go:function(){tab('#cls');hl('.sumbar')}},
+{h:"People decide the rest",p:function(){return "Asha works each open case before its deadline. Anything above ₹10,000 also needs Vikram, the finance controller. No rule can write money off. Each case ends in a credit note or a recovery."},go:function(){tab('#cases');hl('#case-list')}},
+{h:"The next order is checked",p:function(){return "I've just placed a new order for a distributor with an unsettled gap. His row now says Held for review: a manager takes a look first. The order is flagged, never blocked."},go:function(){tab('#dists');var b=[].slice.call(document.querySelectorAll('[data-order]'));var r=b.filter(function(x){return x.closest('tr').querySelector('.pill.bad')})[0]||b[0];if(r){r.click();setTimeout(function(){hl('#dist-body')},80)}}},
+{h:"Every step is on record",p:function(){return "Who did what, when, and under which rule: "+(v('#k-rules')||"every")+" actions logged so far. Want proof the edge cases hold? Tap Run tests: 11 checks, including ones that must be blocked."},go:function(){tab('#auditc');hl('#auditc')}}];
 var i=0,T=q('#tour'),B=q('#tourbtn');
-function show(){var x=S[i];q('#tn').textContent=(i?'STEP '+i+' OF '+(S.length-1):'START HERE');q('#th').textContent=x.h;q('#tp').textContent=x.p;q('#tf').style.width=((i+1)/S.length*100)+'%';q('#tgo').textContent=!i?'Show me':i<S.length-1?'Next':'Done';x.go()}
+function dots(){var o='';for(var k=1;k<S.length;k++)o+='<i class="'+(k<=i?'on':'')+'"></i>';return o}
+function show(){var x=S[i];T.classList.add('sw');setTimeout(function(){x.go();setTimeout(function(){
+q('#tn').innerHTML=i?'<span>STEP '+i+' OF '+(S.length-1)+'</span><span class="dt">'+dots()+'</span>':'<span>START HERE</span>';
+q('#th').textContent=x.h;q('#tp').textContent=x.p();q('#tf').style.width=(i/(S.length-1)*100)+'%';
+q('#tgo').textContent=!i?'Show me →':i<S.length-1?'Next →':'Finish';q('#tbk').hidden=i<2;T.classList.remove('sw')},260)},140)}
 B.onclick=function(){i=0;T.hidden=false;B.hidden=true;show()};
 q('#tgo').onclick=function(){if(i<S.length-1){i++;show()}else{T.hidden=true;B.hidden=false;hl(null)}};
+q('#tbk').onclick=function(){if(i>1){i--;show()}};document.addEventListener('keydown',function(e){if(T.hidden)return;if(e.key==='ArrowRight'||e.key==='Enter')q('#tgo').click();if(e.key==='ArrowLeft')q('#tbk').click();if(e.key==='Escape')q('#tx').click()});
 q('#tx').onclick=function(){T.hidden=true;B.hidden=false;hl(null)};
 var P=q('.pcta .pb.g');if(P)P.onclick=function(){B.click()};
 if(/[?&]tour=1/.test(location.search))setTimeout(function(){B.click()},600);
@@ -391,5 +397,25 @@ if(/[?&]tour=1/.test(location.search))setTimeout(function(){B.click()},600);
 .gloss{margin:0 0 18px;background:#fff;border:1px solid #D6E8E1;border-radius:14px;padding:0 16px}.gloss summary{cursor:pointer;padding:12px 0;font-weight:600;font-size:.9rem;color:#047857}
 .gloss dl{display:grid;grid-template-columns:130px 1fr;gap:6px 14px;margin:0 0 14px;font-size:.88rem}.gloss dt{font-weight:650}.gloss dd{margin:0;color:#3E5049}
 @media(max-width:560px){.gloss dl{grid-template-columns:1fr}.gloss dd{margin-bottom:6px}}</style>
+<style>
+:root{--ink2c:#264653;--jade:#2A9D8F;--jade2:#228176;--honey:#E9C46A;--coral:#E76F51;--peri:#8D99CC}
+.btn.primary,.pb.g,.appbar nav a.pri,.tabs2 button{background:linear-gradient(180deg,#2FA898,#238A7E)!important;border:1px solid #1F7C71!important;color:#fff!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.22),0 8px 18px -10px rgba(35,138,126,.7)!important}
+.btn.primary:hover,.pb.g:hover,.appbar nav a.pri:hover,.tabs2 button:hover{background:linear-gradient(180deg,#2B8C9E,#264653)!important}
+.tabs2 a.on{background:linear-gradient(180deg,#E8F6F3,#D6EFEA)!important;color:#264653!important;box-shadow:inset 0 0 0 1px #A8DCD3}
+.tabs2 a.on i{background:#2A9D8F!important;color:#fff!important}
+.kpi.lead{background:linear-gradient(135deg,#2A9D8F,#3D8FA3)!important;border-color:#2A9D8F!important}
+.s-tds{background:#8D99CC!important}.s-acc{background:#E9C46A!important}.s-dis{background:#E76F51!important}
+#bar{border-radius:999px;overflow:hidden}
+.tourbtn{background:linear-gradient(180deg,#2FA898,#238A7E)!important;box-shadow:0 14px 30px -12px rgba(35,138,126,.75)!important}
+.tour{transition:opacity .25s ease,transform .25s ease}.tour.sw{opacity:.35;transform:translateY(6px)}
+.tour #tp,.tour #th{transition:opacity .2s}.tt{gap:10px}.tt>span{display:flex;align-items:center;gap:10px;width:100%;justify-content:space-between}
+.dt{display:inline-flex;gap:4px}.dt i{width:16px;height:4px;border-radius:4px;background:#DCEBE6}.dt i.on{background:#2A9D8F}
+.tbar{display:none}.tb{gap:8px;align-items:center}.tbk{border:0;background:none;color:#5B6B65;font:inherit;font-size:.86rem;cursor:pointer;margin-right:auto;padding:8px 4px}
+.hl{outline:3px solid rgba(42,157,143,.85)!important;outline-offset:5px;animation:hlp 1.4s ease 1}
+@keyframes hlp{0%{outline-color:rgba(42,157,143,0)}40%{outline-color:rgba(42,157,143,1)}100%{outline-color:rgba(42,157,143,.85)}}
+.plain{border-left-color:#2A9D8F!important;background:#F2FAF8!important}
+.tt>span>span:first-child{white-space:nowrap}.flash{background:#264653!important}
+@media(prefers-reduced-motion:reduce){.tour,.hl{transition:none;animation:none}}
+</style>
 </body>
 </html>
