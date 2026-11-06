@@ -197,7 +197,7 @@ td,th{padding:12px 14px!important}
     <span class="peye"><b></b>Live workspace · sample data · nothing leaves your browser</span>
     <h1>You're Asha in accounts receivable. <em>Close today's short-payments.</em></h1>
     <p class="plead">Load the statement, let the 8 rules sort every gap, approve what needs a second pair of eyes, and close each one with a credit note or a recovery. Then switch to Vikram, the controller, and see what only he can approve.</p>
-    <div class="pcta"><button class="pb g lg" type="button" onclick="document.getElementById('load-sample').click();document.getElementById('cls').scrollIntoView({behavior:'smooth'})">Start: load today's statement<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5 3l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button><label class="pb lg">Upload your own CSV<input type="file" accept=".csv,text/csv" hidden onchange="var f=document.getElementById('file');f.files=this.files;f.dispatchEvent(new Event('change'))"></label></div>
+    <div class="pcta"><button class="pb g lg" type="button" onclick="document.getElementById('load-sample').click();document.getElementById('cls').scrollIntoView({behavior:'smooth'})">Take the 60-second tour<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5 3l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button><label class="pb lg">Upload your own CSV<input type="file" accept=".csv,text/csv" hidden onchange="var f=document.getElementById('file');f.files=this.files;f.dispatchEvent(new Event('change'))"></label></div>
     <p class="ppriv"><svg viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="10" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M8 10V7a4 4 0 0 1 8 0v3" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>Files are read on your device, never uploaded. No accounts, no analytics. Reset clears everything.</p>
    </div>
    <ol class="pflow">
@@ -277,10 +277,10 @@ td,th{padding:12px 14px!important}
     </details>
     <div class="kpis">
       <div class="kpi"><span>Short-paid today</span><b id="k-gap">—</b></div>
-      <div class="kpi"><span>Classified by rule</span><b id="k-auto">—</b></div>
-      <div class="kpi"><span>Rule firings logged</span><b id="k-rules">—</b></div>
+      <div class="kpi"><span>Sorted automatically</span><b id="k-auto">—</b></div>
+      <div class="kpi"><span>Actions logged</span><b id="k-rules">—</b></div>
       <div class="kpi"><span>Open cases</span><b id="k-open">0</b></div>
-      <div class="kpi lead"><span>Rupees without an owner</span><b id="k-unowned">—</b></div>
+      <div class="kpi lead"><span>Without an owner</span><b id="k-unowned">—</b></div>
     </div>
     <div class="stack" id="bar"></div>
     <ul class="legend" id="legend"></ul>
@@ -319,6 +319,8 @@ td,th{padding:12px 14px!important}
   </div>
   <p class="foot">Rules simplified for illustration: TDS u/s 194Q at 0.1% of taxable value once a distributor's purchases pass ₹50 lakh; thresholds are Finance-set and illustrative. Tax rules summarised from public sources, Oct 2026. Not tax advice. Built by Rupak Ghanpathi as a self-initiated case study.</p>
 </main>
+<div class="tour" id="tour" hidden><div class="tt"><span id="tn">1/5</span><button id="tx" aria-label="Close">×</button></div><b id="th"></b><p id="tp"></p><div class="tb"><button class="btn primary" id="tgo">Next</button></div><div class="tbar"><i id="tf"></i></div></div>
+<button class="tourbtn" id="tourbtn" type="button">▶ 60-second tour</button>
 <div class="flash" id="flash" role="status" aria-live="polite"></div>
 <footer class="dfoot"><div class="dk"><span>© 2026 Rupak Ghanpathi · Every Rupee, a portfolio case study. Not affiliated with Cello World.</span><span><a href="./">Overview</a> · <a href="Cello_O2C_One_Pager.pdf">One-page PDF</a> · <a href="https://github.com/RUPAK30/Cello-O2C-Deduction-Workflow-Case-Study">GitHub</a> · <a href="mailto:rupakr2g@gmail.com?subject=Every%20Rupee">Email</a></span></div></footer>
 <script src="data.js"></script>
@@ -342,6 +344,35 @@ function show(t){[recv,cls,q('#cases')].forEach(function(x){x.hidden=true});
 show('recv');
 var st=document.querySelector('.pcta .pb.g');if(st)st.onclick=function(){document.getElementById('load-sample').click();show('cases');tabs.scrollIntoView({behavior:'smooth'})};
 var ls=document.getElementById('load-sample');if(ls)ls.addEventListener('click',function(){setTimeout(function(){show('cases')},50)});
+})();
+</script>
+<style>
+.ordst{display:inline-block;font-size:.72rem;font-weight:700;padding:3px 9px;border-radius:999px;margin-right:8px}.ordst.ok{background:#DCFCE7;color:#166534}.ordst.bad{background:#FEF3C7;color:#92400E}
+.tourbtn{position:fixed;right:20px;bottom:20px;z-index:60;height:46px;padding:0 18px;border:0;border-radius:999px;background:linear-gradient(180deg,#1E3A31,#0F1F1A);color:#fff;font:inherit;font-weight:650;box-shadow:0 14px 30px -12px rgba(15,31,26,.6);cursor:pointer}
+.tour{position:fixed;right:20px;bottom:20px;z-index:61;width:min(360px,calc(100vw - 32px));background:#fff;border:1px solid #CFE3DB;border-radius:18px;padding:16px 18px 14px;box-shadow:0 30px 60px -24px rgba(15,31,26,.45)}
+.tt{display:flex;justify-content:space-between;align-items:center;font-size:.72rem;font-weight:700;letter-spacing:.08em;color:#0E7490}.tt button{border:0;background:none;font-size:1.2rem;color:#6B7A73;cursor:pointer}
+.tour b{display:block;font-size:1.02rem;margin:4px 0 6px}.tour p{margin:0 0 12px;font-size:.9rem;color:#3E5049;line-height:1.5}.tb{display:flex;justify-content:flex-end}
+.tbar{height:4px;background:#E6F2EE;border-radius:4px;margin-top:12px;overflow:hidden}.tbar i{display:block;height:100%;background:#10B981;width:20%;transition:width .3s}
+.hl{outline:3px solid #10B981!important;outline-offset:4px;border-radius:12px;transition:outline .2s}
+.sumcap{font-size:.82rem;color:#5B6B65;margin:6px 0 0}
+</style>
+<script>
+(function(){
+function q(s){return document.querySelector(s)}function tab(h){var a=q('.tabs2 a[href="'+h+'"]');if(a)a.click()}
+function hl(sel){document.querySelectorAll('.hl').forEach(function(e){e.classList.remove('hl')});var e=sel&&q(sel);if(e){e.classList.add('hl');e.scrollIntoView({behavior:'smooth',block:'center'})}}
+var S=[
+{h:"A bank statement arrives",p:"Distributors paid today, but some paid less than their invoices. Every short-paid amount becomes a case, sorted by rule.",go:function(){if(!q('#case-list article'))q('#load-sample').click();setTimeout(function(){tab('#recv');hl('#recv')},200)}},
+{h:"Rules sort every gap",p:"TDS is matched to tax, valid claims are accepted, everything else gets a named owner. The bar is the goal: no rupee left without an owner.",go:function(){tab('#cls');hl('.sumbar')}},
+{h:"A person decides, with a second check",p:"Asha in accounts receivable works each case. Anything above ₹10,000 needs Vikram, the finance controller. No rule writes money off.",go:function(){tab('#cases');hl('#case-list')}},
+{h:"Old disputes flag the next order",p:"I just placed an order for a distributor. Look at the right column: Released, or Held for review if he has old or large disputes. It's flagged, never blocked.",go:function(){tab('#dists');var b=[].slice.call(document.querySelectorAll('[data-order]'));var row=b.filter(function(x){return x.closest('tr').querySelector('.pill.bad')})[0]||b[0];if(row){row.click();setTimeout(function(){hl('#dist-body')},80)}}},
+{h:"Everything is on the record",p:"Every action is logged with a rule, a name and a time. That's what an auditor asks for. Run the 11 tests to see the edge cases blocked.",go:function(){tab('#auditc');hl('#auditc')}}];
+var i=0,T=q('#tour'),B=q('#tourbtn');
+function show(){var x=S[i];q('#tn').textContent='STEP '+(i+1)+' OF '+S.length;q('#th').textContent=x.h;q('#tp').textContent=x.p;q('#tf').style.width=((i+1)/S.length*100)+'%';q('#tgo').textContent=i<S.length-1?'Next':'Done';x.go()}
+B.onclick=function(){i=0;T.hidden=false;B.hidden=true;show()};
+q('#tgo').onclick=function(){if(i<S.length-1){i++;show()}else{T.hidden=true;B.hidden=false;hl(null)}};
+q('#tx').onclick=function(){T.hidden=true;B.hidden=false;hl(null)};
+var P=q('.pcta .pb.g');if(P)P.onclick=function(){B.click()};
+if(/[?&]tour=1/.test(location.search))setTimeout(function(){B.click()},600);
 })();
 </script>
 </body>

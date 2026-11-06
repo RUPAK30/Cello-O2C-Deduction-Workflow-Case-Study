@@ -167,8 +167,8 @@
   }
   function order(va) {
     var d = dist(va), x = exposure(va);
-    if (x.flagged) { log("BR-7", "New order from " + d.name + " flagged for credit review (" + inr(x.amt) + " disputed, oldest " + x.oldest + " days). Not blocked."); flash("Order placed and flagged for credit review: not blocked, a controller decides.", true); }
-    else { log("BR-7", "New order from " + d.name + " passed the credit check."); flash("Order placed. Credit check passed.", false); }
+    if (x.flagged) { log("BR-7", "New order from " + d.name + " flagged for credit review (" + inr(x.amt) + " disputed, oldest " + x.oldest + " days). Not blocked."); d.ord = "flag"; flash("Order placed and flagged for credit review: not blocked, a controller decides.", true); }
+    else { log("BR-7", "New order from " + d.name + " passed the credit check."); d.ord = "ok"; flash("Order placed. Credit check passed.", false); }
     save(); if (!QUIET) render();
   }
 
@@ -234,7 +234,7 @@
         "<div class='acts'>" + actions + "</div></article>";
     }).join("") : "<p class='empty'>No cases yet. Load today's bank statement above.</p>";
 
-    $("dist-body").innerHTML = S.dists.map(function (d) { var x = exposure(d.va); return "<tr><td>" + esc(d.name) + "<br><span class='mono tiny'>" + d.va + "</span></td><td class='mono r'>" + inr(d.purchases) + (d.purchases > 5000000 ? "<br><span class='tiny'>194Q applies</span>" : "") + "</td><td class='mono r'>" + inr(d.schemeLeft) + "</td><td class='mono r'>" + (x.amt ? inr(x.amt) : "—") + (x.flagged ? "<br><span class='pill bad'>credit review</span>" : "") + "</td><td><button class='btn small' data-order='" + d.va + "'>New order</button></td></tr>"; }).join("");
+    $("dist-body").innerHTML = S.dists.map(function (d) { var x = exposure(d.va); return "<tr><td>" + esc(d.name) + "<br><span class='mono tiny'>" + d.va + "</span></td><td class='mono r'>" + inr(d.purchases) + (d.purchases > 5000000 ? "<br><span class='tiny'>194Q applies</span>" : "") + "</td><td class='mono r'>" + inr(d.schemeLeft) + "</td><td class='mono r'>" + (x.amt ? inr(x.amt) : "—") + (x.flagged ? "<br><span class='pill bad'>credit review</span>" : "") + "</td><td>" + (d.ord === "flag" ? "<span class='ordst bad'>Held for review</span>" : d.ord === "ok" ? "<span class='ordst ok'>Released</span>" : "") + "<button class='btn small' data-order='" + d.va + "'>" + (d.ord ? "Order again" : "New order") + "</button></td></tr>"; }).join("");
 
     $("cn-body").innerHTML = S.notes.length ? S.notes.map(function (n) { var left = n.irpDue - S.day; return "<tr><td class='mono'>" + n.id + "</td><td>" + esc(n.dist.split(",")[0]) + "</td><td class='mono r'>" + inr(n.amount) + "</td><td class='mono r'>" + (left >= 0 ? left + " days" : "<span class='pill bad'>overdue</span>") + "</td></tr>"; }).join("") : "<tr><td colspan='4' class='empty'>None yet.</td></tr>";
 
