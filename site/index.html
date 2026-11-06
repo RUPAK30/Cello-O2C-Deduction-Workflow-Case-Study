@@ -3,9 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Every Rupee · every missing rupee gets an owner and an ending</title>
+<title>Every Rupee · Deduction desk for FMCG finance teams</title>
 <meta name="description" content="Distributor short-payments, owned end to end: a working reconciliation product with 8 rules and 11 tests, built by Rupak Ghanpathi.">
-<meta property="og:title" content="Every Rupee · every missing rupee gets an owner and an ending">
+<meta property="og:title" content="Every Rupee · Deduction desk for FMCG finance teams">
 <meta property="og:description" content="From 1 Nov 2026, brands recover GST on after-sale discounts only via a GST credit note. A working reconciliation product, 8 rules, 11 tests.">
 <meta property="og:image" content="https://everyrupee-o2c.vercel.app/og.png">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
@@ -161,6 +161,16 @@ footer{margin-top:56px;background:linear-gradient(180deg,#fff,#F0FDF8);padding:4
 .px{position:absolute;right:16px;top:50%;transform:translateY(-50%);background:none;border:0;color:#3E5049;font-size:1.2rem;cursor:pointer}
 @media(max-width:640px){.pl{display:none}#pf input{width:120px}.px{display:none}}
 .who.flash{animation:fl 1.2s ease}@keyframes fl{0%{box-shadow:0 0 0 0 rgba(16,185,129,.5)}100%{box-shadow:0 0 0 18px rgba(16,185,129,0)}}
+
+.stats{list-style:none;padding:0;margin:22px auto 0;display:flex;flex-wrap:wrap;justify-content:center;gap:0;max-width:720px;border:1px solid var(--line);border-radius:16px;background:rgba(255,255,255,.75)}
+.stats li{flex:1 1 150px;padding:12px 10px;text-align:center;font-size:.8rem;color:var(--mut)}.stats li+li{border-left:1px solid var(--line)}
+.stats b{display:block;font-size:1.25rem;color:var(--ink);letter-spacing:-.02em}
+@media(max-width:640px){.stats li{flex:1 1 45%}.stats li:nth-child(3){border-left:0}.stats li:nth-child(n+3){border-top:1px solid var(--line)}}
+.faq{max-width:760px;margin:0 auto;background:#fff;border:1px solid var(--line);border-radius:20px;overflow:hidden}
+.faq details{border-bottom:1px solid var(--line)}.faq details:last-child{border:0}
+.faq summary{cursor:pointer;list-style:none;padding:16px 20px;font-weight:600;display:flex;justify-content:space-between;gap:12px}.faq summary::-webkit-details-marker{display:none}
+.faq summary:after{content:'+';color:var(--gd);font-size:1.2rem;line-height:1}.faq details[open] summary:after{content:'–'}
+.faq p{margin:0;padding:0 20px 16px;color:var(--ink2);font-size:.92rem}
 </style>
 </head>
 <body>
@@ -180,10 +190,11 @@ footer{margin-top:56px;background:linear-gradient(180deg,#fff,#F0FDF8);padding:4
 <main class="col">
 <section class="hero">
   <span class="forchip" id="forchip" hidden></span>
-  <span class="eye"><b></b>Live prototype · sample data · v3.0</span>
-  <h1>Every short-paid rupee needs <em>a reason, an owner and an ending.</em></h1>
-  <p class="lead">Distributors short-pay; brands lose track. I mapped the owners, wrote the rules and built a product finance ops could run tomorrow: 8 rules, 11 tests, maker-checker.</p>
-  <div class="cta"><a class="btn g" href="#board">See it in 90 seconds<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5 3l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a><a class="btn" href="#calc">What is it costing you?</a></div>
+  <span class="eye"><b></b>Every Rupee Deduction Desk · live prototype</span>
+  <h1>Close every short-payment <em>with a reason, an owner and a GST credit note.</em></h1>
+  <p class="lead">Match distributor payments to invoices, route every gap to one owner, and track GST credit notes under the 1 Nov 2026 rule. Built for FMCG finance teams.</p>
+  <div class="cta"><a class="btn g" href="desk.html">Try the live desk<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5 3l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a><a class="btn" href="#board">See it in 90 seconds</a></div>
+  <ul class="stats"><li><b>8</b>business rules</li><li><b>11</b>tests, run in-browser</li><li><b>₹10,000</b>maker-checker limit</li><li><b>0</b>auto write-offs</li></ul>
   <div class="gst"><span>New · 1 Nov 2026</span><span>GST on an after-sale discount now comes back only via a GST credit note the distributor reverses. Untracked note = tax paid on money never received.</span></div>
   <div class="hook" style="max-width:720px;margin:18px auto 0;text-align:left" id="hook" hidden><small id="hookt"></small><p id="hookp"></p></div>
   <div class="who" id="who">
@@ -210,7 +221,7 @@ footer{margin-top:56px;background:linear-gradient(180deg,#fff,#F0FDF8);padding:4
 </section>
 
 <section class="sec lens" id="lens">
-  <div class="lh"><h2 id="lensh">Read it from your side of the table</h2>
+  <div class="lh"><h2 id="lensh">Built for your team</h2>
   <div class="seg" role="group" aria-label="Your side">
     <button type="button" data-l="saas" aria-pressed="true">I build finance software</button>
     <button type="button" data-l="brand" aria-pressed="false">I run finance at a brand</button>
@@ -220,7 +231,7 @@ footer{margin-top:56px;background:linear-gradient(180deg,#fff,#F0FDF8);padding:4
 
 <section class="sec" id="calc">
   <p class="k">What it's worth</p>
-  <h2>How much cash is stuck in short-payments?</h2>
+  <h2>See what short-payments cost you</h2>
   <div class="calc">
     <div>
       <label>Monthly billing to distributors (₹ lakh)<input id="bill" type="number" min="0" value="500"></label>
@@ -235,7 +246,7 @@ footer{margin-top:56px;background:linear-gradient(180deg,#fff,#F0FDF8);padding:4
 
 <section class="sec" id="evidence">
   <p class="k">Why now</p>
-  <h2>Three numbers behind it</h2>
+  <h2>Why this matters now</h2>
   <div class="g3">
     <div class="tile"><div class="big">+14% vs +8.8%</div><b>Cello's receivables outgrew revenue</b><span>About ₹34 Cr above revenue pace, FY25→FY26.</span><small>Annual reports · my estimate, a reason to look, not a diagnosis</small></div>
     <div class="tile"><div class="big">₹3.5–5</div><b>Distributor margin per ₹100</b><span>Too thin to wait on slow claims, so they deduct.</span><small>AICPDF, Jun 2026</small></div>
@@ -245,7 +256,7 @@ footer{margin-top:56px;background:linear-gradient(180deg,#fff,#F0FDF8);padding:4
 
 <section class="sec" id="thinking">
   <p class="k">The thinking</p>
-  <h2>How I work, and where it could fail</h2>
+  <h2>Controls first, failure planned for</h2>
   <div class="two-up">
     <div class="pane"><h3>How I'd work from week one</h3><ol class="pts">
       <li><b>Evidence first.</b> Every fact dated and sourced.</li>
@@ -258,6 +269,17 @@ footer{margin-top:56px;background:linear-gradient(180deg,#fff,#F0FDF8);padding:4
       <li><b>Sales overrides the credit flag.</b> It never blocks an order; overrides are logged by name.</li></ol></div>
   </div>
   <div class="trust" id="privacy"><span><b>Runs in your browser.</b> Uploaded files never leave your device.</span><span><b>No sign-up, no tracking.</b></span><span><b>Sample data only.</b></span><a href="sources.html">Sources, and what I don't claim <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5 3l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
+</section>
+
+<section class="sec" id="faq">
+  <p class="k">FAQ</p><h2>Questions people ask first</h2>
+  <div class="faq">
+    <details><summary>Is a brand using this today?</summary><p>No. It's a working prototype on sample data, built as a portfolio case study. The problem is real and sourced; the product has not been deployed.</p></details>
+    <details><summary>Does it connect to an ERP or bank?</summary><p>Not yet. It reads a bank-statement CSV in your browser. The BRD sets out how it would sit on top of the ERP, which stays the system of record.</p></details>
+    <details><summary>What stops a wrong write-off?</summary><p>No rule can write money off. Anything above ₹10,000 needs a second person, and every closure carries a posting reference.</p></details>
+    <details><summary>Is the GST rule summary reliable?</summary><p>It's summarised from the Finance Act 2026 and CBIC Notification 03/2026, with the source linked. Check it with a CA before relying on it.</p></details>
+    <details><summary>Who built it?</summary><p>Rupak Ghanpathi, alone: 2.5 years as a Business Analyst at HDFC Bank. Research, rules, BRD, product and tests. Open to BA and Product roles in Bengaluru.</p></details>
+  </div>
 </section>
 
 <section class="sec" id="contact">
