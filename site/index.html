@@ -221,6 +221,13 @@ h2{font-weight:700}
 #ask .hook{max-width:720px;margin:0 auto 12px}
 .cost{max-width:680px;margin:0 auto 14px;background:#fff;border:1px solid var(--line);border-radius:16px;padding:14px 18px}.cost b{display:block;margin-bottom:6px}
 .cost ul{margin:0;padding-left:18px;color:var(--ink2);font-size:.92rem}.cost li{margin:3px 0}
+
+.exp{display:grid;gap:22px;align-items:center;background:#fff;border:1px solid var(--line);border-radius:24px;padding:26px 28px;box-shadow:0 24px 50px -40px rgba(14,116,144,.6)}
+@media(min-width:820px){.exp{grid-template-columns:1fr 220px}}
+.exp h2{text-align:left;margin:0 0 12px!important;font-size:clamp(1.3rem,2.6vw,1.75rem);max-width:none}.exp .k{text-align:left}
+.exp p{margin:0 0 10px;color:var(--ink2);font-size:.95rem;line-height:1.6}.exp p b{color:var(--ink)}.exp small{color:var(--mut);font-size:.76rem}
+.ex2{text-align:center;padding:22px 14px;border-radius:18px;background:linear-gradient(160deg,#ECFEFF,#ECFDF5);border:1px solid #A5E3EE}
+.ex2 b{display:block;font-size:3.4rem;line-height:1;letter-spacing:-.04em;color:#0E7490;font-variant-numeric:tabular-nums}.ex2 span{display:block;margin-top:8px;font-size:.82rem;color:var(--ink2)}
 </style>
 </head>
 <body>
@@ -306,6 +313,17 @@ h2{font-weight:700}
   <span id="l1" hidden></span><span id="l2" hidden></span><span id="lensh" hidden></span>
 </section>
 
+
+<section class="sec" id="expiry">
+  <div class="exp">
+    <div class="ex1"><p class="k">The part nobody owns</p>
+    <h2>The deduction has an expiry date. Most teams find out in December.</h2>
+    <p>A GST credit note is the only document that lets a brand reduce the GST it has already paid on an invoice it will never fully collect. It must be issued by <b>30 November after the financial year ends</b> (or the annual return date, if earlier). For FY 2025-26 supplies, that's <b>30 November 2026</b>.</p>
+    <p>Miss it, and the GST stays paid on money the brand never received. The same ₹12,400 gap stops being a timing difference and becomes a permanent cost.</p>
+    <small>CGST Act, section 34(2). Summarised; check with a CA.</small></div>
+    <div class="ex2"><b id="xd">–</b><span id="xl">days to the FY 2025-26 credit-note deadline</span></div>
+  </div>
+</section>
 
 <section class="sec" id="evidence">
   <p class="k">Why now</p>
@@ -430,5 +448,9 @@ window.ERco=function(c,n){co=clean(c,40);nm=clean(n,30);apply();mail()};window.E
 
 <script>(function(){var P=new URLSearchParams(location.search),hk=(P.get('hook')||'').replace(/[<>]/g,'').trim().slice(0,240),co=(P.get('for')||'').replace(/[<>"]/g,'').trim().slice(0,40);
 if(hk){document.getElementById('hookt').textContent='Why I sent this'+(co?' to '+co:'');document.getElementById('hookp').textContent=hk;document.getElementById('hook').hidden=false;}})();</script>
+<script>(function(){var d=new Date(),y=d.getMonth()<11||(d.getMonth()===11&&false)?d.getFullYear():d.getFullYear()+1;
+var t=new Date(y,10,30,23,59,59);if(d>t)t=new Date(y+1,10,30,23,59,59);var n=Math.ceil((t-d)/864e5);
+var fy=(t.getFullYear()-1)+'-'+String(t.getFullYear()).slice(2);document.getElementById('xd').textContent=n;
+document.getElementById('xl').textContent=(n===1?'day':'days')+' to the FY '+fy+' credit-note deadline';})();</script>
 </body>
 </html>
