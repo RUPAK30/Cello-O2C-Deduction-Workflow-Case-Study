@@ -5,7 +5,9 @@ label{display:block;font-size:.8rem;font-weight:600;margin:12px 0 5px}input,sele
 output{display:block;margin:18px 0 10px;padding:12px;background:#F0FDFA;border-radius:10px;font-size:.85rem;word-break:break-all}button{height:42px;border:0;border-radius:10px;padding:0 18px;background:#0F1F1A;color:#fff;font:inherit;font-weight:600;cursor:pointer}</style></head><body>
 <div class="c"><h1>Personal link maker</h1><p>One link per company. Paste it in your email or DM.</p>
 <label>Company<input id="co" placeholder="e.g. Finifi"></label><label>First name (optional)<input id="nm" placeholder="e.g. Priya"></label>
+<label>They are<select id="rl"><option value="pm">Product manager</option><option value="hr">Hiring / TA</option><option value="fin">Finance leader</option><option value="founder">Founder</option></select></label>
+<label>Why them, one line (optional, your own research)<input id="hk" maxlength="240" placeholder="e.g. Your settlement team reconciles short-paid B2B invoices daily."></label>
 <label>Their side<select id="ln"><option value="saas">Builds finance software</option><option value="brand">Finance at a brand</option><option value="bank">Bank or NBFC</option></select></label>
 <output id="o"></output><button id="cp">Copy link</button></div>
-<script>var B='https://everyrupee-o2c.vercel.app/';function u(){var q=new URLSearchParams();var c=co.value.trim(),n=nm.value.trim();if(c)q.set('for',c);if(n)q.set('name',n);q.set('lens',ln.value);o.textContent=B+'?'+q.toString();}
-[co,nm,ln].forEach(function(e){e.oninput=u});u();cp.onclick=function(){try{navigator.clipboard.writeText(o.textContent);cp.textContent='Copied'}catch(e){}}</script></body></html>
+<script>var B='https://everyrupee-o2c.vercel.app/';function u(){var q=new URLSearchParams();var c=co.value.trim(),n=nm.value.trim();if(c)q.set('for',c);if(n)q.set('name',n);q.set('lens',ln.value);q.set('role',rl.value);if(hk.value.trim())q.set('hook',hk.value.trim());o.textContent=B+'?'+q.toString();}
+[co,nm,ln,rl,hk].forEach(function(e){e.oninput=u});u();cp.onclick=function(){try{navigator.clipboard.writeText(o.textContent);cp.textContent='Copied'}catch(e){}}</script></body></html>

@@ -136,6 +136,17 @@ footer{margin-top:56px;background:linear-gradient(180deg,#fff,#F0FDF8);padding:4
 .fgrid h4{margin:0 0 10px;font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--mut)}
 .fgrid div>a:not(.logo):not(.fmail){display:block;text-decoration:none;color:var(--ink2);padding:4px 0;font-size:.88rem}.fgrid div>a:not(.logo):not(.fmail):hover{color:var(--gd)}
 .fb{margin-top:28px}
+
+.who{max-width:720px;margin:18px auto 0;background:rgba(255,255,255,.88);border:1px solid var(--line);border-radius:20px;padding:16px 18px;text-align:left;box-shadow:0 24px 50px -40px rgba(4,120,87,.6)}
+.whoh{display:flex;flex-wrap:wrap;align-items:center;gap:10px;justify-content:space-between}.whoh>span{font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--mut)}
+.seg.sm button{padding:6px 12px;font-size:.8rem}
+.whoq{margin:12px 0 10px;font-weight:600;font-size:.98rem}
+.proof{display:grid;gap:8px}@media(min-width:700px){.proof{grid-template-columns:repeat(3,1fr)}}
+.proof a{display:block;text-decoration:none;color:var(--ink2);background:#F6FBF9;border:1px solid var(--line);border-radius:14px;padding:11px 12px;font-size:.84rem;line-height:1.45;transition:.15s}
+.proof a b{display:block;color:var(--ink);font-size:.88rem;margin-bottom:2px}.proof a em{font-style:normal;color:var(--gd);font-weight:600;font-size:.78rem}
+.proof a:hover{border-color:#86E1C1;background:#fff;transform:translateY(-1px)}
+.hook{background:linear-gradient(135deg,#ECFDF5,#ECFEFF);border:1px solid #A5E3EE;border-radius:18px;padding:16px 20px;margin:0 0 18px}
+.hook small{display:block;font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;color:#0E7490;font-weight:700;margin-bottom:4px}.hook p{margin:0;font-size:1rem;color:var(--ink);line-height:1.5}
 </style>
 </head>
 <body>
@@ -149,11 +160,19 @@ footer{margin-top:56px;background:linear-gradient(180deg,#fff,#F0FDF8);padding:4
 <main class="col">
 <section class="hero">
   <span class="forchip" id="forchip" hidden></span>
-  <span class="eye"><b></b>A finance-ops case study, built as a working product</span>
+  <span class="eye"><b></b>A BA case study you can actually use</span>
   <h1>Every short-paid rupee needs <em>a reason, an owner and an ending.</em></h1>
   <p class="lead">Distributors short-pay; brands lose track. I mapped the owners, wrote the rules and built a product finance ops could run tomorrow: 8 rules, 11 tests, maker-checker.</p>
   <div class="cta"><a class="btn g" href="#board">See it in 90 seconds<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5 3l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a><a class="btn" href="#calc">What is it costing you?</a></div>
   <div class="gst"><span>New · 1 Nov 2026</span><span>GST on an after-sale discount now comes back only via a GST credit note the distributor reverses. Untracked note = tax paid on money never received.</span></div>
+  <div class="hook" style="max-width:720px;margin:18px auto 0;text-align:left" id="hook" hidden><small id="hookt"></small><p id="hookp"></p></div>
+  <div class="who" id="who">
+    <div class="whoh"><span>Reading as</span><div class="seg sm" role="group" aria-label="Your role">
+      <button type="button" data-r="pm">Product manager</button><button type="button" data-r="hr">Hiring / TA</button><button type="button" data-r="fin">Finance leader</button><button type="button" data-r="founder">Founder</button></div></div>
+    <p class="whoq" id="whoq"></p>
+    <div class="proof" id="proof"></div>
+  </div>
+
 </section>
 
 <section class="board" id="board">
@@ -304,6 +323,22 @@ if(co){var c=document.getElementById('forchip');c.textContent='Prepared for '+(n
  document.getElementById('lensh').textContent='How this maps to '+co;document.getElementById('rh').textContent=(nm?nm+', is':'Is')+' this a problem at '+co+'?';
  document.getElementById('rp').textContent='If yes, one tap. If no, tell me why. Both help.';document.title='Every Rupee · for '+co;}
 set(ln);
+})();
+</script>
+<script>
+(function(){
+var R={pm:{q:'Can he turn a messy problem into a spec my engineers can build?',p:[['Problem from public evidence','Annual-report numbers, dated and sourced.','sources.html','See sources'],['8 testable rules, one BRD','Owners, SLAs, maker-checker, edge cases.','Cello_O2C_BRD.pdf','Open the BRD'],['11 UAT tests, in the browser','Including the cases that must be blocked.','desk.html?uat=1','Run them']]},
+hr:{q:'Can he do the job from day one, and can he join?',p:[['2.5 years BA at HDFC Bank','25+ BRDs, 20+ UAT cycles, 15+ on-time releases, zero SOX findings.','https://rupak-lemon.vercel.app','Portfolio and CV'],['Bengaluru, immediate joiner','Open to BA and Product roles in fintech, BFSI, finance software.','#contact','Reach me'],['This page is the work sample','One product, built alone. Try it in two minutes.','desk.html','Open it']]},
+fin:{q:'Does he understand where the money actually leaks?',p:[['Controls first','Maker-checker above ₹10,000. No rule ever writes money off.','desk.html','See a case'],['The 1 Nov 2026 GST rule','Credit notes tracked until the distributor reverses.','sources.html','See the source'],['Cost you can check','Plug in your billing and days. Plain arithmetic.','#calc','Try your numbers']]},
+founder:{q:'Will he own a problem end to end without hand-holding?',p:[['Found it, built it, alone','From an annual report to a working product and tests.','case-study.html','Read the case'],['Ships live products','Viraam and Ten Today, both public.','https://lull-hr.vercel.app/','See Viraam'],['Honest about limits','What this does not claim, in writing.','sources.html','Read it']]}};
+var P=new URLSearchParams(location.search),r=R[P.get('role')]?P.get('role'):'pm';
+var hk=(P.get('hook')||'').replace(/[<>]/g,'').trim().slice(0,240),co=(P.get('for')||'').replace(/[<>"]/g,'').trim().slice(0,40);
+function set(k){[].forEach.call(document.querySelectorAll('.seg.sm button'),function(b){b.setAttribute('aria-pressed',b.dataset.r===k)});
+ var x=R[k],pf=document.getElementById('proof');document.getElementById('whoq').textContent='“'+x.q+'”';pf.innerHTML='';
+ x.p.forEach(function(p){var a=document.createElement('a');a.href=p[2];if(/^http/.test(p[2])){a.target='_blank';a.rel='noopener'}
+  var b=document.createElement('b');b.textContent=p[0];var t=document.createTextNode(p[1]+' ');var e=document.createElement('em');e.textContent=p[3]+' →';a.append(b,t,e);pf.appendChild(a)});}
+[].forEach.call(document.querySelectorAll('.seg.sm button'),function(b){b.onclick=function(){set(b.dataset.r)}});set(r);
+if(hk){document.getElementById('hookt').textContent='Why I sent this'+(co?' to '+co:'');document.getElementById('hookp').textContent=hk;document.getElementById('hook').hidden=false;}
 })();
 </script>
 </body>
