@@ -3,11 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Every Rupee · Deduction desk for FMCG finance teams</title>
+<title>Every Rupee · A distributor pays short. On day 31 it's still nobody's problem.</title>
 <meta name="description" content="Distributor short-payments, owned end to end: a working reconciliation product with 8 rules and 11 tests, built by Rupak Ghanpathi.">
-<meta property="og:title" content="Every Rupee · Deduction desk for FMCG finance teams">
-<meta property="og:description" content="From 1 Nov 2026, brands recover GST on after-sale discounts only via a GST credit note. A working reconciliation product, 8 rules, 11 tests.">
-<meta property="og:image" content="https://everyrupee-o2c.vercel.app/og.png">
+<meta property="og:title" content="A distributor pays short. On day 31 it&#39;s still nobody&#39;s problem.">
+<meta property="og:description" content="A working desk where every short-paid rupee gets a reason, an owner and an ending. Built solo by Rupak Ghanpathi from public filings.">
+<meta property="og:image" content="https://everyrupee-o2c.vercel.app/og.png?v=4">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,600&display=swap" rel="stylesheet">
 <style>
@@ -271,7 +271,7 @@ h2{font-weight:700}
     <tr><th>Who decides</th><td>Whoever replies first</td><td>Regional sales head, 3-day SLA (BR-8)</td></tr>
     <tr><th>How it ends</th><td>Silent write-off, or never</td><td>Credit note or recovery, with a posting reference</td></tr>
     <tr><th>Audit trail</th><td>Rebuilt from inboxes</td><td>Every action logged by name and time</td></tr>
-  </tbody></table><p class="cap">Illustrative: one gap from the sample data, worked end to end. "Today" is the common manual pattern, not a measured baseline.</p></div>
+  </tbody></table><p class="cap">Illustrative: one gap from the sample data, traced through the workflow. "Today" is the common manual pattern, not a measured baseline.</p></div>
   <p class="prf">0 auto write-offs · maker-checker above ₹10,000 · 8 rules, 11 tests, run in the browser</p>
 </section>
 
@@ -318,8 +318,9 @@ h2{font-weight:700}
   <div class="exp">
     <div class="ex1"><p class="k">The part nobody owns</p>
     <h2>A deduction can have a tax deadline.</h2>
-    <p>When a brand settles a scheme claim with a <b>GST credit note</b>, it gets back the GST already paid on the discount. That credit note must go out by <b>30 November after the financial year ends</b> (or the annual return date, if earlier). For FY 2025-26 supplies, that's <b>30 November 2026</b>.</p>
+    <p>When a brand settles a scheme claim with a <b>GST credit note</b>, it gets back the GST already paid on the discount. That credit note must go out by <b>30 November after the financial year ends</b> (or the annual return date, if earlier). For FY <span class="fyx">2025-26</span> supplies, that's <b>30 November <span class="fyy">2026</span></b>.</p>
     <p>Many brands settle schemes with a plain <b>financial credit note</b> instead and keep the GST cost. From 1 Nov 2026 the GST route gets easier, so more claims will qualify. An undecided deduction quietly loses that choice after the deadline.</p>
+    <p>The brand's GST gain is the distributor's input-credit reversal. That's why the two sides negotiate which kind of credit note gets issued.</p>
     <small>CGST Act s.34(2); s.15(3)(b) as amended by Finance Act 2026; CBIC Circular 251/08/2025. Summarised from public sources, Oct 2026. Not tax advice.</small></div>
     <div class="ex2"><b id="xd">–</b><span id="xl">days to the FY 2025-26 credit-note deadline</span></div>
   </div>
@@ -450,7 +451,7 @@ window.ERco=function(c,n){co=clean(c,40);nm=clean(n,30);apply();mail()};window.E
 if(hk){document.getElementById('hookt').textContent='Why I sent this'+(co?' to '+co:'');document.getElementById('hookp').textContent=hk;document.getElementById('hook').hidden=false;}})();</script>
 <script>(function(){var d=new Date(),y=d.getMonth()<11||(d.getMonth()===11&&false)?d.getFullYear():d.getFullYear()+1;
 var t=new Date(y,10,30,23,59,59);if(d>t)t=new Date(y+1,10,30,23,59,59);var n=Math.ceil((t-d)/864e5);
-var fy=(t.getFullYear()-1)+'-'+String(t.getFullYear()).slice(2);document.getElementById('xd').textContent=n;
+var fy=(t.getFullYear()-1)+'-'+String(t.getFullYear()).slice(2);document.getElementById('xd').textContent=n;document.querySelectorAll('.fyx').forEach(function(e){e.textContent=fy});document.querySelectorAll('.fyy').forEach(function(e){e.textContent=t.getFullYear()});
 document.getElementById('xl').textContent=(n===1?'day':'days')+' to the FY '+fy+' credit-note deadline';})();</script>
 </body>
 </html>
