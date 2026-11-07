@@ -10,6 +10,24 @@
 
   var OWNERS = { "Scheme claim": "Sales ops", "Damage / shortage": "Area sales manager", "Rate difference": "Pricing", "Returns": "Warehouse", "Unexplained": "AR lead" };
   var USERS = { maker: "Asha (AR executive)", checker: "Vikram (Finance controller)" };
+  /* Demo calendar: day 0 is 7 Nov 2026. Invoice dates are derived from their age. */
+  var D0 = new Date(2026, 10, 7);
+  function dateOf(day) { var d = new Date(D0); d.setDate(d.getDate() + day); return d; }
+  function fmt(d) { return d.toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" }); }
+  function invDate(inv) { return dateOf(S.day - inv.age); }
+  function fyStart(inv) { var d = invDate(inv); return d.getMonth() >= 3 ? d.getFullYear() : d.getFullYear() - 1; }
+  function fyLabel(inv) { var y = fyStart(inv); return "FY " + y + "-" + String(y + 1).slice(2); }
+  /* CGST s.34(2): a GST credit note for a supply must be declared by 30 November after the financial year ends (or the annual return date, if earlier). */
+  function cnDeadline(inv) { return new Date(fyStart(inv) + 1, 10, 30); }
+  function windowLeft(inv) { return Math.round((cnDeadline(inv) - dateOf(S.day)) / 864e5); }
+  var ACCT = { "Scheme claim": "Trade scheme discount", "Damage / shortage": "Transit damage claims", "Rate difference": "Price difference allowed", "Returns": "Sales returns" };
+  function arName(d) { return "Trade receivables · " + d.name.split(",")[0]; }
+  /* BR-9: every movement of money posts a balanced voucher */
+  function post(type, ref, narr, lines) {
+    S.seq.jv = (S.seq.jv || 0) + 1; S.journal = S.journal || [];
+    var pre = type === "Receipt" ? "RV-" : type === "Credit note" ? "CNV-" : "JV-";
+    S.journal.push({ id: pre + (1000 + S.seq.jv), day: S.day, type: type, ref: ref, narr: narr, lines: lines });
+  }
 
   function seed() {
     return {
@@ -29,9 +47,10 @@
         { no: "INV-3007", va: "CELLOVA0003", taxable: 677966, total: 800000, age: 40, open: 800000 },
         { no: "INV-3011", va: "CELLOVA0003", taxable: 338983, total: 400000, age: 12, open: 400000 },
         { no: "INV-4002", va: "CELLOVA0004", taxable: 211864, total: 250000, age: 52, open: 250000 },
-        { no: "INV-5020", va: "CELLOVA0005", taxable: 508475, total: 600000, age: 30, open: 600000 }
+        { no: "INV-5020", va: "CELLOVA0005", taxable: 508475, total: 600000, age: 30, open: 600000 },
+        { no: "INV-0988", va: "CELLOVA0005", taxable: 200000, total: 236000, age: 229, open: 236000 }
       ],
-      receipts: [], cases: [], notes: [], log: [], processed: []
+      receipts: [], cases: [], notes: [], log: [], processed: [], journal: [], suspense: 0
     };
   }
 
@@ -43,11 +62,12 @@
     "day 0,CELLOVA0003,787322,,Scheme claim,12000,yes",
     "day 0,CELLOVA0004,238000,INV-4002,Scheme claim,12000,yes",
     "day 0,CELLOVA0005,594492,INV-5020,Rate difference,5000,yes",
-    "day 0,CELLOVA0001,496576,INV-1042,,,"
+    "day 0,CELLOVA0001,496576,INV-1042,,,",
+    "day 0,CELLOVA0005,226360,INV-0988,Scheme claim,9440,no"
   ].join("\n");
 
   var S;
-  function load() { try { S = JSON.parse(localStorage.getItem(KEY)); } catch (e) { S = null; } if (!S || !S.dists) S = seed(); }
+  function load() { try { S = JSON.parse(localStorage.getItem(KEY)); } catch (e) { S = null; } if (!S || !S.dists || !S.journal) S = seed(); }
   function save() { if (QUIET) return; try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} }
   function log(rule, text) { S.log.unshift({ day: S.day, who: USERS[S.user], rule: rule, text: text }); }
   function dist(va) { return S.dists.filter(function (d) { return d.va === va; })[0]; }
@@ -56,23 +76,24 @@
   /* ---------- the engine ---------- */
   function processReceipt(r) {
     var d = dist(r.va);
-    if (!d) { log("BR-1", "Receipt " + inr(r.amount) + " on unknown account " + r.va + ": held for review, not applied."); S.receipts.push({ va: r.va, amount: r.amount, status: "Unidentified" }); return; }
+    if (!d) { log("BR-1", "Receipt " + inr(r.amount) + " on unknown account " + r.va + ": parked in suspense with the AR lead, not applied to any invoice."); S.receipts.push({ va: r.va, amount: r.amount, status: "Unidentified" }); S.suspense += r.amount; post("Receipt", r.va, "Unidentified receipt held in suspense", [["Bank (collections)", r.amount, 0], ["Suspense: unallocated receipts", 0, r.amount]]); return; }
     var inv = r.ref ? invByNo(r.ref) : null;
     if (!inv || inv.va !== d.va || inv.open <= 0) {
       inv = S.invoices.filter(function (i) { return i.va === d.va && i.open > 0; }).sort(function (a, b) { return b.age - a.age; })[0];
-      if (!inv) { log("BR-1", d.name + ": " + inr(r.amount) + " received with no open invoice. Held as on-account credit."); return; }
+      if (!inv) { log("BR-1", d.name + ": " + inr(r.amount) + " received with no open invoice. Held as on-account credit."); S.suspense += r.amount; post("Receipt", d.va, "On-account receipt, no open invoice", [["Bank (collections)", r.amount, 0], ["Customer advances · " + d.name.split(",")[0], 0, r.amount]]); return; }
       log("BR-1", d.name + ": no usable reference, applied to oldest open invoice " + inv.no + ".");
     } else log("BR-1", "Receipt " + inr(r.amount) + " tagged to " + d.name + " by virtual account; applied to " + inv.no + ".");
     var gap = inv.open - r.amount;
     inv.open = 0;
     var rec = { va: d.va, inv: inv.no, amount: r.amount, gap: Math.max(0, gap), tds: 0, accepted: 0, disputed: 0 };
     S.receipts.push(rec);
+    post("Receipt", inv.no, "Receipt from " + d.name, [["Bank (collections)", r.amount, 0], [arName(d), 0, r.amount]]);
     if (gap <= 0) { log("BR-1", inv.no + " paid in full."); return; }
     var left = gap;
     /* Split: 194Q TDS once purchases cross ₹50 lakh, 0.1% of taxable value */
     if (d.purchases > 5000000) {
       var tds = Math.round(inv.taxable * 0.001);
-      if (tds <= left) { rec.tds = tds; left -= tds; log("BR-2", inv.no + ": " + inr(tds) + " classified as TDS u/s 194Q (0.1% of " + inr(inv.taxable) + "), queued for the Form 26AS match. Not a loss."); }
+      if (tds <= left) { rec.tds = tds; left -= tds; log("BR-2", inv.no + ": " + inr(tds) + " classified as TDS u/s 194Q (0.1% of " + inr(inv.taxable) + "), queued for the Form 26AS match. Not a loss."); post("Journal", inv.no, "TDS u/s 194Q deducted by " + d.name, [["TDS receivable (194Q)", tds, 0], [arName(d), 0, tds]]); }
     }
     /* Validate the distributor's declared claim */
     if (r.claimType && r.claimAmt > 0 && left > 0) {
@@ -124,9 +145,20 @@
 
   function issueCN(c) {
     S.seq.cn++;
-    var n = { id: "CN-" + (200 + S.seq.cn), caseId: c.id, dist: c.dist, amount: c.amount, issued: S.day, irpDue: S.day + 30, reported: false };
+    var inv = invByNo(c.inv), d = dist(c.va), left = inv ? windowLeft(inv) : 999;
+    var acct = c.unbudgeted ? "Regional trade budget (sales)" : (ACCT[c.type] || "Trade adjustments");
+    var n = { id: "CN-" + (200 + S.seq.cn), caseId: c.id, dist: c.dist, inv: c.inv, amount: c.amount, issued: S.day, fy: inv ? fyLabel(inv) : "" };
+    if (left >= 0) {
+      /* Claims are treated as GST-inclusive at 18% (illustrative). */
+      n.kind = "GST"; n.gst = Math.round(c.amount - c.amount / 1.18); n.irpDue = S.day + 30; n.reported = false;
+      post("Credit note", c.inv, n.id + " GST credit note to " + c.dist + "; distributor reverses matching input tax credit", [[acct, c.amount - n.gst, 0], ["Output GST (reduced via s.34 credit note)", n.gst, 0], [arName(d), 0, c.amount]]);
+      log("BR-6", n.id + " GST credit note for " + inr(c.amount) + " (GST " + inr(n.gst) + ") to " + c.dist + ". Distributor reverses the matching input tax credit. Report to IRP by day " + n.irpDue + "; s.34 window for " + n.fy + " closes " + fmt(cnDeadline(inv)) + ".");
+    } else {
+      n.kind = "Financial"; n.gst = 0; n.irpDue = null;
+      post("Credit note", c.inv, n.id + " financial credit note to " + c.dist + "; no GST adjustment", [[acct, c.amount, 0], [arName(d), 0, c.amount]]);
+      log("BR-6", n.id + ": the s.34 window for " + n.fy + " closed on " + fmt(cnDeadline(inv)) + ". Issued as a financial credit note for " + inr(c.amount) + ": no GST reduction, so the brand bears " + inr(Math.round(c.amount - c.amount / 1.18)) + " of GST it can no longer recover.");
+    }
     S.notes.push(n); c.cn = n.id;
-    log("BR-6", n.id + " issued for " + inr(c.amount) + " to " + c.dist + ". Report to IRP by day " + n.irpDue + " (alert at day " + (S.day + 20) + ").");
   }
 
   /* BR-7 */
@@ -160,8 +192,9 @@
   function nextDay() {
     S.day++;
     S.cases.forEach(function (c) { if (c.status === "Open" && S.day > c.due && !c.escalated) { c.escalated = true; c.owner = "AR lead (escalated)"; log("SLA", c.id + " passed its SLA (day " + c.due + "). Escalated to the AR lead; history kept."); } });
-    S.notes.forEach(function (n) { if (!n.reported && S.day === n.issued + 20) log("BR-6", "Alert: " + n.id + " must be reported to the IRP by day " + n.irpDue + "."); });
+    S.notes.forEach(function (n) { if (n.irpDue && !n.reported && S.day === n.issued + 20) log("BR-6", "Alert: " + n.id + " must be reported to the IRP by day " + n.irpDue + "."); });
     S.invoices.forEach(function (i) { i.age++; });
+    S.cases.forEach(function (c) { var inv = invByNo(c.inv); if (c.status !== "Open" || c.type === "Unexplained" || !inv) return; var l = windowLeft(inv); if (l === 7) log("BR-6", "Alert: " + c.id + " is on a " + fyLabel(inv) + " invoice. The s.34 GST credit-note window closes in 7 days (" + fmt(cnDeadline(inv)) + "). Owner: " + c.owner + "."); if (l === -1) log("BR-6", c.id + ": s.34 window for " + fyLabel(inv) + " has closed. If approved now, it can only be a financial credit note."); });
     S.dists.forEach(creditCheck);
     save(); if (!QUIET) render();
   }
@@ -202,7 +235,7 @@
   function flash(msg, warn) { if (QUIET) return; var f = $("flash"); f.textContent = msg; f.className = "flash show" + (warn ? " warn" : ""); clearTimeout(flashT); flashT = setTimeout(function () { f.className = "flash"; }, 4200); }
 
   function render() {
-    $("day").textContent = "Day " + S.day;
+    $("day").textContent = "Day " + S.day + " · " + fmt(dateOf(S.day));
     $("who").value = S.user;
     ["tolerance", "approval"].forEach(function (k) { $("set-" + k).value = S.settings[k]; });
     var gap = 0, tds = 0, acc = 0, dis = 0;
@@ -230,15 +263,48 @@
       return "<article class='case" + (c.status !== "Open" ? " closed" : "") + (late ? " late" : "") + "'><header><b class='mono'>" + c.id + "</b><span class='type t-" + c.type.split(" ")[0].toLowerCase() + "'>" + esc(c.type) + "</span><b class='mono amt'>" + inr(c.amount) + "</b></header>" +
         "<p>" + esc(c.dist) + " · " + c.inv + (c.status === "Open" ? " · owner <b>" + esc(c.owner) + "</b> · SLA day " + c.due + (late ? " <span class='pill bad'>late</span>" : "") : "") + "</p>" +
         (c.checks ? "<table class='dt'><tr><th>Evidence</th><th>≤ limit</th><th>In budget</th><th>≤ 2× norm</th><th>BR-3 outcome</th></tr><tr>" + ["evidence", "limit", "budget", "norm"].map(function (k) { return "<td class='" + (c.checks[k] ? "y" : "n") + "'>" + (c.checks[k] ? "✓" : "✗") + "</td>"; }).join("") + "<td>" + (c.checks.evidence && c.checks.limit && c.checks.budget && c.checks.norm ? "Auto-accept" : "To " + esc(c.owner)) + "</td></tr></table>" : "<p class='trace2'>" + (c.type === "Unexplained" ? "BR-4 · US-4 · UAT-07: no reason code, so it can't be auto-accepted or written off." : "") + "</p>") +
+        (function () { var inv = invByNo(c.inv); if (c.status !== "Open" || c.type === "Unexplained" || !inv) return ""; var l = windowLeft(inv); if (l > 30) return ""; return l >= 0 ? "<p class='gstw'><b>GST window: " + l + " days.</b> " + fyLabel(inv) + " invoice. Approve by " + fmt(cnDeadline(inv)) + " to issue a GST credit note (s.34); after that, a financial credit note only.</p>" : "<p class='gstw closed'><b>GST window closed</b> on " + fmt(cnDeadline(inv)) + ". If approved, this becomes a financial credit note and the brand bears " + inr(Math.round(c.amount - c.amount / 1.18)) + " of GST.</p>"; })() +
         (c.maker && c.status === "Open" ? "<p class='why'>Recommended by " + esc(USERS[c.maker]) + "; waiting for a second approver.</p>" : "") +
         "<div class='acts'>" + actions + "</div></article>";
     }).join("") : "<p class='empty'>No cases yet. Load today's bank statement above.</p>";
 
     $("dist-body").innerHTML = S.dists.map(function (d) { var x = exposure(d.va); return "<tr><td>" + esc(d.name) + "<br><span class='mono tiny'>" + d.va + "</span></td><td class='mono r'>" + inr(d.purchases) + (d.purchases > 5000000 ? "<br><span class='tiny'>194Q applies</span>" : "") + "</td><td class='mono r'>" + inr(d.schemeLeft) + "</td><td class='mono r'>" + (x.amt ? inr(x.amt) : "—") + (x.flagged ? "<br><span class='pill bad'>credit review</span>" : "") + "</td><td>" + (d.ord === "flag" ? "<span class='ordst bad'>Held for review</span>" : d.ord === "ok" ? "<span class='ordst ok'>Released</span>" : "") + "<button class='btn small' data-order='" + d.va + "'>" + (d.ord ? "Order again" : "New order") + "</button></td></tr>"; }).join("");
 
-    $("cn-body").innerHTML = S.notes.length ? S.notes.map(function (n) { var left = n.irpDue - S.day; return "<tr><td class='mono'>" + n.id + "</td><td>" + esc(n.dist.split(",")[0]) + "</td><td class='mono r'>" + inr(n.amount) + "</td><td class='mono r'>" + (left >= 0 ? left + " days" : "<span class='pill bad'>overdue</span>") + "</td></tr>"; }).join("") : "<tr><td colspan='4' class='empty'>None yet.</td></tr>";
+    $("cn-body").innerHTML = S.notes.length ? S.notes.map(function (n) { var left = n.irpDue == null ? null : n.irpDue - S.day; return "<tr><td class='mono'>" + n.id + "<br><span class='tiny'>" + (n.kind === "GST" ? "GST · " + inr(n.gst) + " GST" : "Financial · no GST") + "</span></td><td>" + esc(n.dist.split(",")[0]) + "</td><td class='mono r'>" + inr(n.amount) + "</td><td class='mono r'>" + (left == null ? "<span class='tiny'>not reportable</span>" : left >= 0 ? left + " days" : "<span class='pill bad'>overdue</span>") + "</td></tr>"; }).join("") : "<tr><td colspan='4' class='empty'>None yet.</td></tr>";
+    renderTower(); renderJournal();
 
     $("log").innerHTML = S.log.length ? S.log.slice(0, 60).map(function (l) { return "<li><span class='mono'>Day " + l.day + "</span> <span class='rule'>" + esc(l.rule) + "</span> " + esc(l.text) + "</li>"; }).join("") : "<li class='empty'>Nothing yet.</li>";
+  }
+
+  /* Control tower: what a finance head looks at first */
+  function tower() {
+    var open = S.cases.filter(function (c) { return c.status === "Open"; });
+    var b = [0, 0, 0, 0];
+    open.forEach(function (c) { var inv = invByNo(c.inv), a = inv ? inv.age : 0; b[a <= 30 ? 0 : a <= 60 ? 1 : a <= 90 ? 2 : 3] += c.amount; });
+    var late = {}; open.forEach(function (c) { if (S.day > c.due) late[c.owner] = (late[c.owner] || 0) + 1; });
+    var risk = 0, lost = 0;
+    open.forEach(function (c) { var inv = invByNo(c.inv); if (c.type !== "Unexplained" && inv && windowLeft(inv) >= 0 && windowLeft(inv) <= 30) risk += Math.round(c.amount - c.amount / 1.18); });
+    S.notes.forEach(function (n) { if (n.kind === "Financial") lost += Math.round(n.amount - n.amount / 1.18); });
+    var irp = S.notes.filter(function (n) { return n.irpDue != null && !n.reported; }).length;
+    return { buckets: b, late: late, risk: risk, lost: lost, irp: irp, suspense: S.suspense || 0, open: open.reduce(function (s, c) { return s + c.amount; }, 0) };
+  }
+  function renderTower() {
+    var el = $("tower-body"); if (!el) return;
+    var t = tower(), lateKeys = Object.keys(t.late), mx = Math.max.apply(null, t.buckets.concat([1]));
+    el.innerHTML = "<div class='tw4'>" +
+      "<div class='tw'><span>Unallocated cash</span><b>" + inr(t.suspense) + "</b><em>Receipts in suspense, never applied to an invoice</em></div>" +
+      "<div class='tw'><span>Disputed receivables</span><b>" + inr(t.open) + "</b><em>Every rupee has an owner and a deadline</em></div>" +
+      "<div class='tw" + (t.risk ? " warn" : "") + "'><span>GST at risk</span><b>" + inr(t.risk) + "</b><em>GST on open claims whose s.34 window closes within 30 days</em></div>" +
+      "<div class='tw" + (t.lost ? " bad" : "") + "'><span>GST lost</span><b>" + inr(t.lost) + "</b><em>Claims settled after the window: financial credit notes</em></div></div>" +
+      "<div class='tw2'><div class='card'><h3>Disputes by invoice age</h3>" + ["0–30 days", "31–60 days", "61–90 days", "90+ days"].map(function (l, i) { return "<div class='agerow'><span>" + l + "</span><i style='width:" + Math.round(t.buckets[i] / mx * 100) + "%'></i><b class='mono'>" + inr(t.buckets[i]) + "</b></div>"; }).join("") + "</div>" +
+      "<div class='card'><h3>Missed deadlines, by owner</h3>" + (lateKeys.length ? lateKeys.map(function (k) { return "<div class='agerow'><span>" + esc(k) + "</span><b class='mono'>" + t.late[k] + " case" + (t.late[k] > 1 ? "s" : "") + "</b></div>"; }).join("") : "<p class='empty'>No case is past its deadline. Use Next day to see escalations.</p>") + "<p class='tiny' style='margin-top:10px'>Credit notes awaiting IRP report: <b>" + t.irp + "</b></p></div></div>";
+  }
+  function renderJournal() {
+    var el = $("jv-body"); if (!el) return;
+    var J = (S.journal || []).slice().reverse();
+    var dr = 0, cr = 0; (S.journal || []).forEach(function (v) { v.lines.forEach(function (l) { dr += l[1]; cr += l[2]; }); });
+    $("jv-sum").innerHTML = (S.journal || []).length + " vouchers · debits " + inr(dr) + " · credits " + inr(cr) + " · " + (dr === cr ? "<span class='pill ok'>balanced</span>" : "<span class='pill bad'>out of balance</span>");
+    el.innerHTML = J.length ? J.slice(0, 40).map(function (v) { return "<tr class='vh'><td class='mono'>" + v.id + "</td><td colspan='3'>" + esc(v.type) + " · " + esc(v.ref) + " · " + esc(v.narr) + "</td></tr>" + v.lines.map(function (l) { return "<tr><td></td><td>" + (l[2] ? "&nbsp;&nbsp;To " : "") + esc(l[0]) + "</td><td class='mono r'>" + (l[1] ? inr(l[1]) : "") + "</td><td class='mono r'>" + (l[2] ? inr(l[2]) : "") + "</td></tr>"; }).join(""); }).join("") : "<tr><td colspan='4' class='empty'>No postings yet. Load today's statement.</td></tr>";
   }
 
   function download(name, text, type) { var b = new Blob([text], { type: type }); var a = document.createElement("a"); a.href = URL.createObjectURL(b); a.download = name; document.body.appendChild(a); a.click(); a.remove(); }
@@ -266,6 +332,12 @@
     ["UAT-10", "BR-7, US-7", "Old dispute, then a new order", "Order flagged for review, not blocked", function () { processReceipt(R("CELLOVA0004", 238000, "INV-4002", "Scheme claim", 12000, true)); order("CELLOVA0004"); return { pass: /flagged for credit review/.test(S.log[0].text), actual: S.log[0].text.slice(0, 48) + "…" }; }]
   ];
   TESTS.push(["UAT-11", "BR-8", "Scheme deduction with no approved budget", "Routed to the Regional sales head; charge to sales budget or recover", function () { processReceipt(R("CELLOVA0004", 238000, "INV-4002", "Scheme claim", 12000, true)); var c = S.cases.filter(function (x) { return x.type === "Scheme claim"; })[0]; act(c.id, "approve"); S.user = "checker"; act(c.id, "approve"); return { pass: c.unbudgeted && c.status === "Accepted" && S.tradeCharged === 12000, actual: "owner Regional sales head: " + !!c.unbudgeted + " · charged to trade budget " + inr(S.tradeCharged || 0) }; }]);
+  var OLD = function () { processReceipt(R("CELLOVA0005", 226360, "INV-0988", "Scheme claim", 9440, false)); return S.cases.filter(function (x) { return x.inv === "INV-0988" && x.type === "Scheme claim"; })[0]; };
+  TESTS.push(["UAT-12", "BR-6, US-8", "Claim on a FY 2025-26 invoice approved inside the s.34 window", "GST credit note; GST reduced; distributor reverses ITC", function () { var c = OLD(); act(c.id, "evidence"); if (c.status === "Open") act(c.id, "approve"); var n = S.notes[0], v = S.journal[S.journal.length - 1]; var gstLine = v.lines.some(function (l) { return /Output GST/.test(l[0]); }); return { pass: !!n && n.kind === "GST" && n.gst === 1440 && gstLine, actual: n ? n.kind + " credit note, GST " + inr(n.gst) : "No note" }; }]);
+  TESTS.push(["UAT-13", "BR-6, US-8", "Same claim approved after 30 Nov (window closed)", "Financial credit note only; no GST reduction; loss shown", function () { var c = OLD(); for (var i = 0; i < 24; i++) nextDay(); c.evidence = true; act(c.id, "approve"); var n = S.notes[0], v = S.journal[S.journal.length - 1]; var gstLine = v.lines.some(function (l) { return /Output GST/.test(l[0]); }); return { pass: !!n && n.kind === "Financial" && !gstLine && tower().lost === 1440, actual: n ? n.kind + " credit note; GST lost " + inr(tower().lost) : "No note" }; }]);
+  TESTS.push(["UAT-14", "BR-9, US-9", "Full day: sample statement, every case approved", "Every voucher balances; receivables credited never exceed invoices", function () { runQuiet(); S.user = "checker"; S.cases.forEach(function (c) { if (c.status === "Open" && c.type !== "Unexplained") { c.evidence = true; act(c.id, "approve"); } }); var bad = S.journal.filter(function (v) { var d = 0, k = 0; v.lines.forEach(function (l) { d += l[1]; k += l[2]; }); return d !== k; }).length; var ar = 0; S.journal.forEach(function (v) { v.lines.forEach(function (l) { if (/^Trade receivables/.test(l[0])) ar += l[2] - l[1]; }); }); var inv = S.invoices.reduce(function (s, i) { return s + i.total; }, 0); return { pass: S.journal.length > 0 && bad === 0 && ar <= inv, actual: S.journal.length + " vouchers, " + bad + " unbalanced; AR credited " + inr(ar) }; }]);
+  TESTS.push(["UAT-15", "BR-1, BR-9", "Receipt on an unknown virtual account (negative)", "Parked in suspense; applied to no invoice", function () { processReceipt(R("CELLOVA0099", 50000)); var touched = S.invoices.some(function (i) { return i.open !== i.total; }); return { pass: S.suspense === 50000 && !touched, actual: "Suspense " + inr(S.suspense) + "; invoices touched: " + touched }; }]);
+  function runQuiet() { parseCSV(SAMPLE).forEach(processReceipt); }
   function runUAT() {
     var rows = TESTS.map(function (t) { var o = scenario(t[4]); return [t[0], t[1], t[2], t[3], o.actual, o.pass]; });
     var passed = rows.filter(function (r) { return r[5]; }).length;
@@ -315,6 +387,7 @@
   if (location.hash === "#rules") { var dr = $("rules"); if (dr) dr.open = true; }
   $("reset").onclick = function () { S = seed(); save(); render(); refill(); flash("Reset to a fresh morning.", false); };
   $("dl-cases").onclick = function () { download("cases.csv", csv([["Case", "Distributor", "Invoice", "Type", "Amount", "Owner", "Status", "Opened (day)", "SLA (day)", "Credit note"]].concat(S.cases.map(function (c) { return [c.id, c.dist, c.inv, c.type, c.amount, c.owner, c.status, c.opened, c.due, c.cn || ""]; }))), "text/csv"); };
+  if ($("dl-jv")) $("dl-jv").onclick = function () { var rows = [["Voucher No", "Date", "Voucher Type", "Ledger", "Debit", "Credit", "Reference", "Narration"]]; (S.journal || []).forEach(function (v) { v.lines.forEach(function (l) { rows.push([v.id, fmt(dateOf(v.day)), v.type, l[0], l[1] || "", l[2] || "", v.ref, v.narr]); }); }); download("journal-vouchers.csv", csv(rows), "text/csv"); };
   $("dl-log").onclick = function () { download("audit-trail.csv", csv([["Day", "User", "Rule", "Event"]].concat(S.log.slice().reverse().map(function (l) { return [l.day, l.who, l.rule, l.text]; }))), "text/csv"); };
   document.addEventListener("click", function (e) {
     var b = e.target.closest("[data-a]"); if (b) act(b.dataset.id, b.dataset.a);

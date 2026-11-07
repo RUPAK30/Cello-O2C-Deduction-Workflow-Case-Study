@@ -8,7 +8,8 @@ window.O2C = {
     ["BR-5", "Control", "Above the approval threshold (illustratively ₹10,000) a second person approves; self-approval is blocked."],
     ["BR-6", "Prevent", "Valid claims are settled as credit notes. Credit notes are reported to the IRP within 30 days (e-invoicing, turnover ₹10 Cr+, from 1 April 2025) and GST credit notes are issued no later than 30 November of the following year (Section 34)."],
     ["BR-7", "Credit", "When disputed deductions exceed a threshold or age past a limit, the next order is flagged for credit review."],
-    ["BR-8", "Control", "A scheme deduction with no approved scheme budget behind it (a verbal promise) goes to the Regional sales head within 3 days: charge it to the region's trade budget, or reject and recover from the distributor. It never sits in unallocated receivables."]
+    ["BR-8", "Control", "A scheme deduction with no approved scheme budget behind it (a verbal promise) goes to the Regional sales head within 3 days: charge it to the region's trade budget, or reject and recover from the distributor. It never sits in unallocated receivables."],
+    ["BR-9", "Post", "Every movement of money posts a balanced voucher: receipts, TDS, credit notes and suspense. GST is reduced only through a GST credit note issued inside the s.34 window; after it closes, the claim is settled by a financial credit note and the GST cost is shown, not hidden."]
   ],
   CODES: [
     ["Scheme claim", "Scheme circular or agreement, plus eligibility", "Within that distributor's scheme budget"],
@@ -24,7 +25,9 @@ window.O2C = {
     ["US-4", "Route disputes", "As an AR lead, I want every unevidenced deduction to open a case with a reason code, owner and SLA, so nothing waits for month-end.", "Given a damage claim without proof of delivery, when it is classified, then a dispute opens, is assigned to the area sales manager, the owner is notified and the SLA timer starts."],
     ["US-5", "Maker-checker", "As a Finance Controller, I want deductions above the threshold approved by a second person, so write-offs are controlled.", "Given a case above ₹10,000, when its maker approves it, then the action is blocked, logged and routed to a checker."],
     ["US-6", "Settle upfront", "As a Sales manager, I want valid scheme benefits issued as credit notes before payment, so the distributor pays in full.", "Given an approved claim, when the credit note is issued, then a 30-day IRP reporting deadline is set and alerts at day 20."],
-    ["US-7", "Credit flag", "As a credit controller, I want ageing disputes to flag the next order, so exposure doesn't compound.", "Given disputed deductions above the threshold or age limit, when the distributor places an order, then the order is flagged for review, not blocked."]
+    ["US-7", "Credit flag", "As a credit controller, I want ageing disputes to flag the next order, so exposure doesn't compound.", "Given disputed deductions above the threshold or age limit, when the distributor places an order, then the order is flagged for review, not blocked."],
+    ["US-8", "GST credit-note window", "As a Finance Controller, I want claims on older invoices flagged before the s.34 deadline, so GST is not lost by default.", "Given an open claim on a FY 2025-26 invoice, when it is approved by 30 November 2026, then a GST credit note is issued; when approved after, then a financial credit note is issued and the GST cost is reported."],
+    ["US-9", "Balanced postings", "As a Finance Controller, I want every receipt, deduction and credit note posted as a balanced voucher, so the desk ties to the ledger.", "Given any action that moves money, when it completes, then a voucher posts with equal debits and credits, exportable as a journal file."]
   ],
   UAT: [
     ["UAT-01", "BR-1, US-1", "Unreferenced receipt on a virtual account", "Tagged to the distributor; applied to the oldest open invoice; logged"],
@@ -37,7 +40,11 @@ window.O2C = {
     ["UAT-08", "US-4", "Dispute passes its SLA", "Escalated to the AR lead; history kept"],
     ["UAT-09", "BR-6, US-6", "Credit note issued", "30-day IRP deadline set; alert at day 20"],
     ["UAT-10", "BR-7, US-7", "Disputes above ₹20,000 or older than 45 days, new order placed", "Order flagged for credit review, not blocked"],
-    ["UAT-11", "BR-8", "Scheme deduction with no approved scheme budget", "Routed to the Regional sales head; charged to the trade budget or recovered from the distributor"]
+    ["UAT-11", "BR-8", "Scheme deduction with no approved scheme budget", "Routed to the Regional sales head; charged to the trade budget or recovered from the distributor"],
+    ["UAT-12", "BR-6, US-8", "Claim on a FY 2025-26 invoice approved inside the s.34 window", "GST credit note; GST reduced; distributor reverses ITC"],
+    ["UAT-13", "BR-6, US-8", "Same claim approved after 30 November", "Financial credit note only; GST cost reported"],
+    ["UAT-14", "BR-9, US-9", "Full day of receipts and approvals", "Every voucher balances; receivables credited never exceed invoices"],
+    ["UAT-15", "BR-1, BR-9", "Receipt on an unknown virtual account (negative)", "Parked in suspense; applied to no invoice"]
   ],
   render: function (doc) {
     var o = this, fill = function (id, html) { var el = doc.getElementById(id); if (el) el.innerHTML = html; };

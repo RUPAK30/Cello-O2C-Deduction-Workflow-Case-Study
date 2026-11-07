@@ -7,7 +7,7 @@
 <meta name="description" content="Business analysis case study by Rupak Ghanpathi: current-state analysis, business rules, user stories, RACI and executable acceptance tests for distributor short-payment reconciliation.">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Distributor short-payment reconciliation: a business analysis case study">
-<meta property="og:description" content="Problem statement, current and target process, eight business rules, user stories and eleven executable UAT cases.">
+<meta property="og:description" content="Problem statement, current and target process, nine business rules, user stories and fifteen executable UAT cases, plus a lender mode.">
 <meta property="og:url" content="https://everyrupee-o2c.vercel.app/">
 <meta property="og:image" content="https://everyrupee-o2c.vercel.app/og.png">
 <meta property="og:image:width" content="1200">
@@ -79,8 +79,8 @@ details.fold[open]>summary{margin-bottom:14px}
     <li><a href="#why"><b>Problem framing</b><span>Problem statement from public filings</span></a></li>
     <li><a href="#race"><b>Process mapping</b><span>Current state vs target state</span></a></li>
     <li><a href="#spec" data-tab="raci"><b>Stakeholders &amp; RACI</b><span>Six roles mapped to each step</span></a></li>
-    <li><a href="desk.html#rules"><b>Business rules</b><span>Eight rules and a decision table</span></a></li>
-    <li><a href="desk.html?uat=1"><b>Stories &amp; UAT</b><span>Eleven acceptance tests, executable</span></a></li>
+    <li><a href="desk.html#rules"><b>Business rules</b><span>Nine rules and a decision table</span></a></li>
+    <li><a href="desk.html?uat=1"><b>Stories &amp; UAT</b><span>Fifteen acceptance tests, executable</span></a></li>
     <li><a href="#fail" data-open="1"><b>Risk &amp; validation</b><span>Risks, assumptions and a stop rule</span></a></li>
   </ol>
 </header>
@@ -310,7 +310,7 @@ details.fold[open]>summary{margin-bottom:14px}
   <ol class="plain">
     <li><b>v1 · The assignment.</b> A deduction workflow: a case with a reason code and owner, SLA routing, maker-checker, ERP as system of record.</li>
     <li><b>v2 · The research.</b> TDS treated as a loss, 90–95% of deduction value usually valid, missed credit-note windows: answered by four layers (Identify, Split, Validate, Prevent).</li>
-    <li><b>v3 · An executable specification.</b> The page had become a long read. The rules now run as a desk: the eleven UAT cases execute against it and report pass or fail, and every action is traced to its rule, story and test. The full specification sits behind one tap.</li>
+    <li><b>v3 · An executable specification.</b> The page had become a long read. The rules now run as a desk: the UAT cases execute against it and report pass or fail, and every action is traced to its rule, story and test. The full specification sits behind one tap.</li>
   </ol>
 </details>
 </section>
