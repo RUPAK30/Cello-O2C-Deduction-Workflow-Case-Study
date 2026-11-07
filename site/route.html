@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Quote to Cash · One Rupee's Route</title>
+<meta name="description" content="One discount, one deduction, one page: how a sales promise in Ten Today becomes a cleared, split or blocked rupee in Every Rupee.">
+<link rel="icon" href="favicon.svg">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#0F172A;--txt:#334155;--mut:#64748B;--line:#E2E8F0;--navy:#0F2742;--teal:#0F766E;--tealbg:#F0FDFA;--amber:#B45309;--amberbg:#FFFBEB;--red:#B91C1C;--redbg:#FEF2F2;--bg:#F8FAFC;--card:#fff}
+*{box-sizing:border-box}body{margin:0;font:15px/1.55 Inter,Arial,sans-serif;color:var(--txt);background:var(--bg)}
+.w{max-width:880px;margin:0 auto;padding:28px 16px 60px}
+.k{font-size:.72rem;font-weight:700;letter-spacing:.14em;color:var(--teal);text-transform:uppercase;margin:0 0 6px}
+h1{color:var(--ink);font-size:1.75rem;line-height:1.25;margin:0 0 10px}
+.lead{font-size:1.02rem;margin:0 0 22px;max-width:680px}
+.cast{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 22px}.cast span{background:#fff;border:1px solid var(--line);border-radius:99px;padding:5px 12px;font-size:.82rem}
+.mode{display:flex;gap:8px;margin:0 0 18px;flex-wrap:wrap}.mode button{font:600 .85rem Inter,Arial;padding:9px 14px;border-radius:10px;border:1px solid var(--line);background:#fff;color:var(--txt);cursor:pointer}.mode button.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+.step{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin:0 0 12px;display:grid;grid-template-columns:44px 1fr;gap:4px 14px}
+.n{width:36px;height:36px;border-radius:50%;background:var(--navy);color:#fff;display:grid;place-items:center;font-weight:700;grid-row:span 3}
+.app{font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--mut)}
+.step h2{font-size:1.05rem;color:var(--ink);margin:0}
+.step p{margin:2px 0 0}
+.out{margin-top:10px;border-radius:10px;padding:10px 12px;font-size:.9rem;background:var(--tealbg);border:1px solid #CCFBF1}
+.out.amber{background:var(--amberbg);border-color:#FDE68A}.out.red{background:var(--redbg);border-color:#FECACA}
+.mono{font-family:ui-monospace,Menlo,monospace;font-size:.85em}
+.rec{display:grid;grid-template-columns:repeat(3,1fr);gap:6px 12px;margin-top:8px;font-size:.84rem}.rec b{display:block;font-size:.68rem;letter-spacing:.06em;text-transform:uppercase;color:var(--mut)}
+.bar{display:flex;height:30px;border-radius:8px;overflow:hidden;margin-top:8px;font-size:.78rem;font-weight:600;color:#fff}.bar i{display:grid;place-items:center;font-style:normal}
+.why{background:#fff;border:1px solid var(--line);border-left:4px solid var(--teal);border-radius:12px;padding:16px 18px;margin-top:18px}
+.why h3{margin:0 0 6px;color:var(--ink);font-size:1rem}
+.links{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}.links a{font:600 .88rem Inter,Arial;padding:10px 14px;border-radius:10px;text-decoration:none;border:1px solid var(--line);background:#fff;color:var(--navy)}.links a.p{background:var(--navy);color:#fff;border-color:var(--navy)}
+.note{font-size:.78rem;color:var(--mut);margin-top:18px}
+@media(max-width:560px){h1{font-size:1.4rem}.step{grid-template-columns:1fr}.n{grid-row:auto}.rec{grid-template-columns:1fr 1fr}}
+</style></head><body><main class="w">
+<p class="k">Quote to cash · one rupee's route</p>
+<h1>A discount promised in sales is paid for in finance. Here is one, end to end.</h1>
+<p class="lead">Rahul, a sales rep, promises Krishna Marketing a discount to close an order. Weeks later the distributor deducts ₹9,440 from its payment. Neither team alone can say whether that's right. Follow it through both tools, on one page.</p>
+<div class="cast"><span><b>Rahul</b> · sales rep</span><span><b>Kavita</b> · sales manager, approves discounts</span><span><b>Asha</b> · finance, works deductions</span><span><b>Krishna Marketing</b> · distributor</span></div>
+
+<p class="k" style="margin-top:4px">Pick how the approval was written</p>
+<div class="mode" role="tablist">
+<button class="on" data-m="pre">₹8,000 before GST, invoice on time</button>
+<button data-m="inc">₹8,000 including GST</button>
+<button data-m="late">Invoice after the approval expired</button>
+</div>
+
+<section class="step"><div class="n">1</div><span class="app">Ten Today · sales</span><h2>The promise gets a record</h2>
+<p>Kavita approves Rahul's discount. Instead of a WhatsApp "ok", it becomes a record finance will see later.</p>
+<div class="out"><div class="rec">
+<div><b>Approval ID</b><span class="mono apv">APV-2026-041</span></div><div><b>Distributor</b>Krishna Marketing</div><div><b>Rep / approver</b>Rahul / Kavita</div>
+<div><b>Cap</b><span id="cap">₹8,000 before GST</span></div><div><b>Valid for invoices to</b>30 Sep 2026</div><div><b>Status</b>Sent to Every Rupee</div></div></div></section>
+
+<section class="step"><div class="n">2</div><span class="app">Every Rupee · finance</span><h2>The deduction arrives</h2>
+<p>Krishna Marketing pays <span id="inv">INV-5031 (dated 23 Sep)</span> ₹9,440 short and quotes <span class="mono apv">APV-2026-041</span>. The desk finds the approval itself; nobody emails sales.</p></section>
+
+<section class="step"><div class="n">3</div><span class="app">Every Rupee · finance</span><h2 id="h3">Cleared up to the cap, compared like with like</h2>
+<p id="p3"></p>
+<div class="bar" id="bar"></div>
+<div class="out" id="o3"></div></section>
+
+<section class="step"><div class="n">4</div><span class="app">Back in Ten Today · sales</span><h2>Before the next discount, Kavita sees whose move it is</h2>
+<p>Krishna Marketing asks for another discount. Kavita's approval card shows two numbers from finance, not one.</p>
+<div class="out" id="o4"></div></section>
+
+<div class="why"><h3>Why this matters</h3>
+<p>Today a short-payment like this sits in receivables while finance chases sales over email. Here the approval decides it in minutes: the part that was promised clears, the part that wasn't goes to the person who promised it, and finance's own backlog never blocks a sale.</p></div>
+
+<div class="links"><a class="p" href="desk.html#apvc">Run it in Every Rupee</a><a href="https://tentoday.vercel.app/cockpit.html">See the approval in Ten Today</a><a href="index.html">Back to Every Rupee</a></div>
+<p class="note">Sample data. The two tools are separate demos that share this record format (BR-10, BR-11 in Every Rupee; R7 in Ten Today), each tested: Every Rupee UAT-16 to 19, Ten Today UAT-16 to 18. GST treatment summarised from public sources, Oct 2026. Not tax advice.</p>
+</main>
+<script>
+var M={
+pre:{id:"APV-2026-041",cap:"₹8,000 before GST",inv:"INV-5031 (dated 23 Sep)",h:"Cleared in full: ₹8,000 + 18% GST is ₹9,440",p:"The approval was before tax, so the credit note carries the GST. ₹9,440 is exactly what was promised.",bar:[[100,"#0F766E","₹9,440 cleared by rule"]],o:"<b>Closed by rule.</b> GST credit note for ₹9,440 (GST ₹1,440), filed before the 30 Nov deadline. Ledger entry balanced. Nothing goes to Rahul.",oc:"",f:"<b>Waiting on finance:</b> ₹0 · <b>Rep's to fix, over 15 days:</b> ₹0 → <b>Kavita can approve.</b>",fc:""},
+inc:{id:"APV-2026-042",cap:"₹8,000 including GST",inv:"INV-5031 (dated 23 Sep)",h:"Split at the cap: ₹8,000 clears, ₹1,440 doesn't",p:"This approval already included GST, so ₹8,000 is the ceiling. The desk clears what was approved and sends back only the excess, not the whole ₹9,440.",bar:[[84.7,"#0F766E","₹8,000 cleared"],[15.3,"#B45309","₹1,440"]],o:"<b>₹8,000 closed by rule</b> with a credit note. <b>₹1,440 goes to Rahul</b>, who made the promise: show the approval for it, or recover it from the distributor.",oc:"amber",f:"<b>Waiting on finance:</b> ₹18,000 (a damage claim under review; <b>doesn't block</b>) · <b>Rahul's ₹1,440, now 16 days old:</b> blocks → <b>New discount on hold until Rahul attaches proof or collects.</b>",fc:"red"},
+late:{id:"APV-2026-041",cap:"₹8,000 before GST",inv:"INV-5020 (dated 8 Oct)",h:"Nothing clears: the approval had expired",p:"The approval covered invoices up to 30 Sep, for a month-end push. The distributor bought on 8 Oct and still took the discount.",bar:[[100,"#B91C1C","₹9,440 held: lapsed approval used"]],o:"<b>Routed to Kavita</b>, who signed the approval, with 3 days to decide: extend it and clear, or recover from the distributor. Finance doesn't guess.",oc:"red",f:"<b>Waiting on finance:</b> ₹0 · <b>Lapsed claim, under 15 days:</b> ₹9,440 (shown, not blocking yet) → <b>Kavita can approve, and sees the open claim first.</b>",fc:"amber"}};
+function show(k){var m=M[k];document.querySelectorAll('.mode button').forEach(function(b){b.classList.toggle('on',b.dataset.m===k)});
+document.getElementById('cap').textContent=m.cap;document.querySelectorAll('.apv').forEach(function(e){e.textContent=m.id});document.getElementById('inv').textContent=m.inv;document.getElementById('h3').textContent=m.h;document.getElementById('p3').textContent=m.p;
+document.getElementById('bar').innerHTML=m.bar.map(function(x){return "<i style='width:"+x[0]+"%;background:"+x[1]+"'>"+x[2]+"</i>"}).join("");
+var o=document.getElementById('o3');o.className='out '+m.oc;o.innerHTML=m.o;var f=document.getElementById('o4');f.className='out '+m.fc;f.innerHTML=m.f;}
+document.querySelectorAll('.mode button').forEach(function(b){b.onclick=function(){show(b.dataset.m)}});show('pre');
+</script></body></html>
