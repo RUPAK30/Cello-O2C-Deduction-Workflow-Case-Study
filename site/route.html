@@ -19,7 +19,7 @@ h1{font-size:1.8rem;line-height:1.22;margin:0 0 10px}.lead{color:#CBD5E1;margin:
 .mode button small{display:block;font-weight:500;color:var(--mut);font-size:.74rem;margin-top:2px}
 .mode button.on{background:var(--navy);color:#fff;border-color:var(--navy)}.mode button.on small{color:#CBD5E1}
 .bar2{display:flex;justify-content:space-between;align-items:center;margin:22px 0 10px;gap:10px;flex-wrap:wrap}.bar2 h2{margin:0;color:var(--ink);font-size:1.15rem}
-.play{font:600 .85rem Inter,Arial;padding:9px 14px;border-radius:10px;border:0;background:var(--teal);color:#fff;cursor:pointer}
+details.lg{margin-top:8px}details.lg summary{cursor:pointer;font-size:.78rem;font-weight:600;color:var(--navy);list-style:none}details.lg summary::-webkit-details-marker{display:none}details.lg summary:before{content:"▸ ";color:var(--mut)}details.lg[open] summary:before{content:"▾ "}details.lg summary span{color:var(--teal);font-weight:600;margin-left:4px}.pc{display:flex;align-items:center;gap:10px}#prog{font-size:.8rem;color:var(--mut);font-weight:600}.ev.now .box{border-color:var(--teal);box-shadow:0 0 0 3px #CCFBF1}.play{font:600 .85rem Inter,Arial;padding:9px 14px;border-radius:10px;border:0;background:var(--teal);color:#fff;cursor:pointer}
 ol.tl{list-style:none;margin:0;padding:0;position:relative}
 ol.tl:before{content:"";position:absolute;left:17px;top:6px;bottom:6px;width:2px;background:var(--line)}
 .ev{position:relative;padding:0 0 14px 48px;transition:opacity .35s,transform .35s}
@@ -39,13 +39,13 @@ table.jv td{padding:4px 6px;border-top:1px solid #F1F5F9}table.jv td.n{text-alig
 table.jv tr.hd td{color:var(--mut);font-size:.68rem;text-transform:uppercase;letter-spacing:.06em;border:0}
 .close{background:#fff;border:2px solid var(--teal);border-radius:14px;padding:16px 18px;margin:6px 0 0}
 .close h3{margin:0 0 8px;color:var(--ink);font-size:1.05rem}
-table.rc{width:100%;border-collapse:collapse;font-size:.88rem}table.rc td{padding:5px 0;border-bottom:1px solid #F1F5F9}table.rc td.n{text-align:right;font-family:ui-monospace,Menlo,monospace}
+table.rc{width:100%;border-collapse:collapse;font-size:.88rem}table.rc td{padding:5px 0;border-bottom:1px solid #F1F5F9}table.rc td.n{text-align:right;white-space:nowrap;font-family:ui-monospace,Menlo,monospace}
 table.rc tr.t td{font-weight:700;color:var(--ink);border-bottom:0;border-top:2px solid var(--ink)}
 .kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}.kpis div{background:var(--bg);border-radius:10px;padding:8px 10px;font-size:.78rem}.kpis b{display:block;font-size:1.05rem;color:var(--ink)}
 .why{background:#fff;border:1px solid var(--line);border-left:4px solid var(--teal);border-radius:12px;padding:14px 16px;margin:22px 0 0}
 .links{display:flex;gap:10px;flex-wrap:wrap;margin:18px 0 0}.links a{font:600 .86rem Inter,Arial;padding:10px 14px;border-radius:10px;text-decoration:none;border:1px solid var(--line);background:#fff;color:var(--navy)}.links a.p{background:var(--navy);color:#fff;border-color:var(--navy)}
 .note{font-size:.76rem;color:var(--mut);margin:16px 0 50px}
-@media(max-width:600px){h1{font-size:1.4rem}.mode{grid-template-columns:1fr}.mode button small{display:inline;margin-left:6px}.kpis{grid-template-columns:1fr 1fr 1fr}.ev{padding-left:40px}ol.tl:before{left:13px}.dot{left:4px}}
+@media(max-width:600px){h1{font-size:1.4rem}.mode{grid-template-columns:repeat(3,1fr);gap:6px}.mode button{padding:8px 8px;font-size:.76rem;text-align:center}.mode button small{display:none}.pick .w{padding-top:8px;padding-bottom:8px}.pick p{display:none}.kpis{grid-template-columns:1fr 1fr 1fr}.ev{padding-left:40px}ol.tl:before{left:13px}.dot{left:4px}}
 </style></head><body>
 <header class="top"><div class="w">
 <p class="k">Quote to cash · one discount, end to end</p>
@@ -54,21 +54,21 @@ table.rc tr.t td{font-weight:700;color:var(--ink);border-bottom:0;border-top:2px
 <div class="cast"><span><b>Rahul</b> · sales rep</span><span><b>Kavita</b> · sales manager</span><span><b>Asha</b> · AR executive</span><span><b>Vikram</b> · finance controller</span><span><b>Krishna Marketing, Surat</b> · distributor</span></div>
 </div></header>
 <nav class="pick"><div class="w"><p>Pick the outcome</p><div class="mode">
-<button data-m="pre" class="on">1 · Clean match<small>₹8,000 + GST approved</small></button>
-<button data-m="inc">2 · Over-deduction<small>₹8,000 incl. GST approved</small></button>
-<button data-m="late">3 · Expired approval<small>invoice after the window</small></button>
+<button data-m="pre" class="on">1 · Clean<small>₹8,000 + GST approved</small></button>
+<button data-m="inc">2 · Over-deducted<small>₹8,000 incl. GST approved</small></button>
+<button data-m="late">3 · Expired<small>invoice after the window</small></button>
 </div></div></nav>
 <main class="w">
-<div class="bar2"><h2 id="ttl"></h2><button class="play" id="play">▶ Play it step by step</button></div>
+<div class="bar2"><h2 id="ttl"></h2><span class="pc"><span id="prog"></span><button class="play" id="play">▶ Play it step by step</button></span></div>
 <ol class="tl" id="tl"></ol>
 <div class="close" id="close"></div>
 <div class="why"><b style="color:var(--ink)">What changes for the business.</b> Without the shared record, each of these is a ₹9,440 gap in receivables while finance and sales argue over email. With it, the approved part clears by rule the day the money lands, the unapproved part goes to the person who made the promise, and finance's own backlog never stops a sale.</div>
-<div class="links"><a class="p" href="desk.html#apvc">Run it yourself in Every Rupee</a><a href="https://tentoday.vercel.app/cockpit.html">The approval in Ten Today</a><a href="index.html">Every Rupee home</a></div>
+<div class="links"><a class="p" href="desk.html#apvc">Run it yourself in Every Rupee</a><a href="https://tentoday.vercel.app/cockpit.html?km=1">Try the approval in Ten Today</a><a href="index.html">Every Rupee home</a></div>
 <p class="note">Sample data; amounts and rules match the working demos (Every Rupee BR-9 to BR-11, UAT-16 to 19; Ten Today R7, UAT-16 to 18). The two demos are separate sites that share this record format. GST: 18%, treatment summarised from public sources, Oct 2026. Not tax advice.</p>
 </main>
 <script>
 var R=function(n){return "₹"+n.toLocaleString("en-IN")};
-function jv(id,lines){return "<table class='jv'><tr class='hd'><td>"+id+"</td><td class='n'>Debit</td><td class='n'>Credit</td></tr>"+lines.map(function(l){return "<tr><td>"+l[0]+"</td><td class='n'>"+(l[1]?R(l[1]):"")+"</td><td class='n'>"+(l[2]?R(l[2]):"")+"</td></tr>"}).join("")+"</table>"}
+function jv(id,lines){return "<details class='lg'><summary>Ledger entry · "+id.split(" · ")[0]+" <span>balanced ✓</span></summary><table class='jv'><tr class='hd'><td>"+id+"</td><td class='n'>Debit</td><td class='n'>Credit</td></tr>"+lines.map(function(l){return "<tr><td>"+l[0]+"</td><td class='n'>"+(l[1]?R(l[1]):"")+"</td><td class='n'>"+(l[2]?R(l[2]):"")+"</td></tr>"}).join("")+"</table></details>"}
 var START=[
  ["18 Sep","tt","Ten Today · Rahul","Asks for a 5% scheme discount","Krishna Marketing will lift a ₹4,00,000 order before month-end if it gets the scheme. Floor is 4%; customer has no overdue balance.","",""],
 ];
@@ -107,9 +107,12 @@ document.getElementById('ttl').textContent=s.t;
 document.getElementById('tl').innerHTML=s.ev.map(function(e,i){var app=e[1]==="tt"?"tt":"er";return "<li class='ev "+app+(anim?" hide":"")+"'><span class='dot'></span><div class='box'><div class='meta'><b style='color:var(--ink)'>"+e[0]+"</b><span class='tag'>"+(app==="tt"?"Ten Today":"Every Rupee")+"</span><span>"+e[2].split("·").slice(1).join("·")+"</span></div><b class='h'>"+e[3]+"</b><p>"+e[4]+"</p>"+(e[5]?"<span class='chip "+(e[5]==="ok"?"ok":e[5]==="am"?"am":"rd")+"'>"+e[6]+"</span>":"")+(e[7]||"")+"</div></li>"}).join("");
 var tot=s.rc.reduce(function(a,b){return a+b[1]},0);
 var c=document.getElementById('close');c.style.opacity=anim?0:1;
-c.innerHTML="<h3>✓ Closed: every rupee of the invoice accounted for</h3><table class='rc'>"+s.rc.map(function(r){return "<tr><td>"+r[0]+"</td><td class='n'>"+R(r[1])+"</td></tr>"}).join("")+"<tr class='t'><td>Invoice total</td><td class='n'>"+R(tot)+" ✓</td></tr></table><p style='margin:10px 0 0;font-size:.9rem'>"+s.end+" Every voucher above balances.</p><div class='kpis'>"+s.k.map(function(x){return "<div><b>"+x[0]+"</b>"+x[1]+"</div>"}).join("")+"</div>";
-if(anim){var li=document.querySelectorAll('#tl .ev'),i=0;timer=setInterval(function(){if(i<li.length){li[i].classList.remove('hide');li[i].scrollIntoView({behavior:'smooth',block:'center'});i++}else{clearInterval(timer);c.style.transition='opacity .4s';c.style.opacity=1;c.scrollIntoView({behavior:'smooth',block:'center'})}},1100)}}
+c.innerHTML="<h3>✓ Closed: every rupee of the invoice accounted for</h3><table class='rc'>"+s.rc.map(function(r){return "<tr><td>"+r[0]+"</td><td class='n'>"+R(r[1])+"</td></tr>"}).join("")+"<tr class='t'><td>Invoice total</td><td class='n'>✓ "+R(tot)+"</td></tr></table><p style='margin:10px 0 0;font-size:.9rem'>"+s.end+" Every voucher above balances.</p><div class='kpis'>"+s.k.map(function(x){return "<div><b>"+x[0]+"</b>"+x[1]+"</div>"}).join("")+"</div>";
+var pb=document.getElementById('play'),pg=document.getElementById('prog');pg.textContent="";pb.textContent="▶ Play it step by step";playing=false;
+if(anim){var li=document.querySelectorAll('#tl .ev');step=0;playing=true;pb.textContent="❚❚ Pause";
+tick=function(){if(!playing)return;document.querySelectorAll('.ev.now').forEach(function(x){x.classList.remove('now')});if(step<li.length){li[step].classList.remove('hide');li[step].classList.add('now');li[step].scrollIntoView({behavior:'smooth',block:'center'});step++;pg.textContent="Step "+step+" of "+li.length}else{clearInterval(timer);playing=false;c.style.transition='opacity .4s';c.style.opacity=1;c.scrollIntoView({behavior:'smooth',block:'center'});pg.textContent="Settled ✓";pb.textContent="↻ Replay"}};tick();timer=setInterval(tick,1600)}}
+var playing=false,step=0,tick=function(){};
 document.querySelectorAll('.mode button').forEach(function(b){b.onclick=function(){render(b.dataset.m,false);history.replaceState(null,"","#"+b.dataset.m)}});
-document.getElementById('play').onclick=function(){render(cur,true)};
+document.getElementById('play').onclick=function(){var pb=this;if(playing){playing=false;clearInterval(timer);pb.textContent="▶ Resume";return}if(/Resume/.test(pb.textContent)){playing=true;pb.textContent="❚❚ Pause";timer=setInterval(tick,1600);tick();return}render(cur,true)};
 var h=(location.hash||"").slice(1);render(S[h]?h:"pre",false);
 </script></body></html>
