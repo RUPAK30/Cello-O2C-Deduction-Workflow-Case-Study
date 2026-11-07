@@ -24,7 +24,7 @@ Full sources and what the project does not claim: [sources.html](https://everyru
 | **The desk** | Load a sample bank statement (or upload a CSV, read only in your browser), classify short-payments, work cases as Asha in AR, approve, issue credit notes, see the audit trail |
 | **9 business rules** | BR-1 to BR-9: payer matching, TDS split, scheme and damage validation, maker-checker, balanced ledger postings, GST credit notes, escalation of unbudgeted schemes |
 | **15 UAT tests** | Run in the browser in one click, including the cases that must be blocked: [desk.html?uat=1](https://everyrupee-o2c.vercel.app/desk.html?uat=1) |
-| **Lender mode** | [lender.html](https://everyrupee-o2c.vercel.app/lender.html): NACH returns classified by NPCI reason code, penal charges kept separate (RBI, Aug 2023), SMA buckets, maker-checker on waivers; 5 rules, 10 tests |
+| **Lender mode** | [lender.html](https://everyrupee-o2c.vercel.app/lender.html): NACH returns classified by NPCI reason code, penal charges kept separate (RBI, Aug 2023), SMA buckets, maker-checker on waivers; 5 rules, 12 tests |
 | **Ledger** | Every receipt, TDS line and credit note posts a balanced voucher; journal exports as CSV |
 | **Documents** | [BRD (PDF)](site/Cello_O2C_BRD.pdf) · [One-pager (PDF)](site/Cello_O2C_One_Pager.pdf) · [Case study](https://everyrupee-o2c.vercel.app/case-study.html) |
 

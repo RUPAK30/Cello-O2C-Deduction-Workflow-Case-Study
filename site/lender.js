@@ -116,7 +116,12 @@
     post("Receipt", l.id, "Part payment via " + channel + " from " + l.name, lines);
     log("LR-4", l.id + ": " + inr(amt) + " via " + channel + " applied in the disclosed order: " + parts.join(", ") + ". Still overdue " + inr(l.overdue) + (l.penal ? " plus penal charge " + inr(l.penal) : "") + ". No interest charged on the penal charge.");
     if (l.overdue > 0 && !S.cases.some(function (c) { return c.loan === l.id && c.status === "Open"; })) { var c = openCase(l, "Part-paid overdue", "", l.overdue); c.next = "Contact first"; c.owner = "Collections caller"; log("LR-4", l.id + ": " + sma(l.dpd) + " at " + l.dpd + " days past due. Case " + c.id + " to the Collections caller."); }
-    if (l.overdue === 0) { l.dpd = 0; S.cases.forEach(function (c) { if (c.loan === l.id && c.status === "Open") { c.status = "Paid"; c.closedBy = "Payment " + channel; } }); log("LR-4", l.id + ": overdue cleared; loan back to Standard."); }
+    if (l.overdue === 0) {
+      l.dpd = 0;
+      var open = S.cases.filter(function (c) { return c.loan === l.id && c.status === "Open"; });
+      if (l.penal > 0) { open.forEach(function (c) { c.next = "Collect or waive penal"; c.kind = "Penal charge due"; c.code = ""; c.amount = l.penal; c.owner = "Collections caller"; }); if (!open.length) { var pc = openCase(l, "Penal charge due", "", l.penal); pc.next = "Collect or waive penal"; } log("LR-4", l.id + ": EMI overdue cleared; loan back to Standard. Penal charge " + inr(l.penal) + " still due: case stays open with the Collections caller."); }
+      else { open.forEach(function (c) { c.status = "Paid"; c.closedBy = "Payment " + channel; }); log("LR-4", l.id + ": overdue cleared; loan back to Standard."); }
+    }
   }
 
   function act(id, what) {
@@ -132,12 +137,14 @@
         else { if (c.code !== "59") raisePenal(l, c); log("LR-2", l.id + ": re-presentation " + l.retries + " of " + S.settings.retries + " returned again (insufficient balance)."); }
       }
     }
-    else if (what === "mandate") { c.next = "Mandate requested"; c.status = "Mandate sent"; c.closedBy = USERS[S.user]; log("LR-2", c.id + ": fresh e-mandate link sent to " + l.name + " by " + USERS[S.user] + ". EMI stays overdue until collected."); }
+    else if (what === "mandate") { c.next = "Awaiting new mandate"; c.mandateSent = true; c.due = S.day + 3; log("LR-2", c.id + ": fresh e-mandate link sent to " + l.name + " by " + USERS[S.user] + ". Case stays open with Mandate ops; EMI stays overdue until collected."); }
+    else if (what === "mandate-ok") { l.retries = 0; c.next = "Re-present"; c.kind = "New mandate registered"; c.code = ""; log("LR-2", c.id + ": new mandate registered for " + l.name + ". EMI can now be presented on the new mandate."); }
+    else if (what === "collect") { var pp = l.penal; if (!pp) return; l.penal = 0; S.collected += pp; post("Receipt", l.id, "Penal charge collected via UPI link", [["Bank (collections)", pp, 0], ["Penal charges receivable · " + l.name, 0, pp]]); c.status = "Paid"; c.closedBy = USERS[S.user]; log("LR-3", l.id + ": penal charge " + inr(pp) + " collected by payment link. Case closed."); }
     else if (what === "waive") {
       var p = l.penal; if (!p) { flash("No penal charge to waive.", true); return; }
       if (p > S.settings.waiver && c.waiveBy === S.user) { log("LR-5", "Blocked: " + USERS[S.user] + " tried to approve their own waiver of " + inr(p) + " on " + l.id + ". Needs a second approver."); flash("Blocked by maker-checker: switch to the Collections manager.", true); }
       else if (p > S.settings.waiver && !c.waiveBy) { c.waiveBy = S.user; log("LR-5", c.id + ": waiver of " + inr(p) + " recommended by " + USERS[S.user] + "; above " + inr(S.settings.waiver) + ", a second person approves."); flash("Recommended. A second person must approve this waiver.", false); }
-      else { l.penal = 0; post("Journal", l.id, "Penal charge waived", [["Penal charges waived", p, 0], ["Penal charges receivable · " + l.name, 0, p]]); log("LR-5", l.id + ": penal charge " + inr(p) + " waived by " + USERS[S.user] + (c.waiveBy ? " (recommended by " + USERS[c.waiveBy] + ")" : "") + ". The EMI itself is still owed; nothing is written off."); }
+      else { l.penal = 0; post("Journal", l.id, "Penal charge waived", [["Penal charges waived", p, 0], ["Penal charges receivable · " + l.name, 0, p]]); log("LR-5", l.id + ": penal charge " + inr(p) + " waived by " + USERS[S.user] + (c.waiveBy ? " (recommended by " + USERS[c.waiveBy] + ")" : "") + (l.overdue ? ". The EMI itself is still owed; nothing is written off." : ". Nothing else is due.")); if (!l.overdue) { c.status = "Closed"; c.closedBy = USERS[S.user]; } }
     }
     save(); if (!QUIET) render();
   }
@@ -179,7 +186,8 @@
     $("k-col").textContent = S.presented ? inr(S.collected) : "—";
     $("k-od").textContent = S.presented ? inr(od) : "—";
     $("k-open").textContent = open.length;
-    $("k-unowned").textContent = S.presented ? "₹0" : "—";
+    var unowned = S.loans.reduce(function (s, l) { var owned = S.cases.some(function (c) { return c.loan === l.id && c.status === "Open"; }); return s + (owned ? 0 : (l.overdue || 0) + (l.penal || 0)); }, 0);
+    $("k-unowned").textContent = S.presented ? inr(unowned) : "—";
     $("loan-body").innerHTML = S.loans.map(function (l) { var k = sma(l.dpd); return "<tr><td><b>" + esc(l.name) + "</b><br><span class='mono tiny'>" + l.id + " · " + esc(l.product) + "</span></td><td class='mono r'>" + inr(l.emi) + "</td><td class='mono r'>" + (l.overdue ? inr(l.overdue) : "—") + "</td><td class='mono r'>" + (l.penal ? inr(l.penal) : "—") + "</td><td><span class='sma " + k.toLowerCase().replace("-", "") + "'>" + k + "</span><br><span class='tiny'>" + l.dpd + " DPD</span></td></tr>"; }).join("");
     $("case-list").innerHTML = S.cases.length ? S.cases.slice().reverse().map(function (c) {
       var l = loan(c.loan), late = c.status === "Open" && S.day > c.due, k = CODES[c.code];
@@ -187,6 +195,8 @@
         (c.contacted ? "" : "<button class='btn small' data-k='contact' data-id='" + c.id + "'>Log borrower contact</button>") +
         (c.next === "Re-present" ? "<button class='btn small primary' data-k='represent' data-id='" + c.id + "'>Re-present EMI</button>" : "") +
         (c.next === "Fresh mandate" ? "<button class='btn small primary' data-k='mandate' data-id='" + c.id + "'>Send fresh e-mandate</button>" : "") +
+        (c.next === "Awaiting new mandate" ? "<button class='btn small primary' data-k='mandate-ok' data-id='" + c.id + "'>Mark new mandate registered</button>" : "") +
+        (c.next === "Collect or waive penal" ? "<button class='btn small primary' data-k='collect' data-id='" + c.id + "'>Collect penal by payment link</button>" : "") +
         (l.penal ? "<button class='btn small' data-k='waive' data-id='" + c.id + "'>" + (c.waiveBy && c.waiveBy !== S.user ? "Approve waiver (2nd)" : "Waive penal " + inr(l.penal)) + "</button>" : "");
       return "<article class='case" + (c.status !== "Open" ? " closed" : "") + (late ? " late" : "") + "'><header><b class='mono'>" + c.id + "</b><span class='type'>" + (c.code ? "NACH " + c.code + " · " : "") + esc(c.kind) + "</span><b class='mono amt'>" + inr(c.amount) + "</b></header>" +
         "<p>" + esc(c.name) + " · " + c.loan + (c.status === "Open" ? " · owner <b>" + esc(c.owner) + "</b> · contact by day " + c.due + (late ? " <span class='pill bad'>late</span>" : "") : "") + "</p>" +
@@ -225,6 +235,8 @@
     ["LT-07", "LR-5", "Executive approves own ₹1,500 waiver (negative)", "Blocked; needs a second approver; the EMI is still owed", function () { process(L("NACH", "LN-24012", 7200, 0, "04")); var l = loan("LN-24012"); l.penal = 1500; var c = caseOf("LN-24012"); act(c.id, "waive"); act(c.id, "waive"); var blocked = l.penal === 1500; S.user = "checker"; act(c.id, "waive"); return { pass: blocked && l.penal === 0 && l.overdue === 7200, actual: (blocked ? "Blocked for maker" : "Not blocked") + "; after checker penal " + inr(l.penal) + ", EMI owed " + inr(l.overdue) }; }],
     ["LT-08", "LR-1", "UPI payment for an unknown loan (negative)", "Parked in suspense; applied to no loan", function () { process({ channel: "UPI", loan: "LN-29999", umrn: "", due: 0, collected: 2000, code: "" }); return { pass: S.suspense === 2000 && S.loans.every(function (l) { return l.id === "LN-24016" || !l.overdue; }), actual: "Suspense " + inr(S.suspense) }; }],
     ["LT-10", "LR-3", "NACH return 06, payment stopped by the borrower", "Penal charge held until contact; raised only after", function () { process(L("NACH", "LN-24014", 12500, 0, "06")); var l = loan("LN-24014"), held = l.penal === 0, c = caseOf("LN-24014"); act(c.id, "contact"); return { pass: held && l.penal === 500 && c.owner === "Collections lead", actual: "Before contact " + (held ? "no charge" : "charged") + "; after " + inr(l.penal) }; }],
+    ["LT-11", "LR-2, LR-4", "Dead mandate: fresh mandate sent", "Case stays open with an owner until the EMI is collected", function () { process(L("NACH", "LN-24013", 3900, 0, "01")); var c = caseOf("LN-24013"); act(c.id, "mandate"); return { pass: c.status === "Open" && c.next === "Awaiting new mandate" && loan("LN-24013").overdue === 3900, actual: c.status + ", " + c.next + ", overdue " + inr(loan("LN-24013").overdue) }; }],
+    ["LT-12", "LR-3, LR-4", "EMI recovered on re-presentation, penal still due", "Loan back to Standard; penal stays owned until collected or waived", function () { process(L("NACH", "LN-24012", 7200, 0, "04")); var c = caseOf("LN-24012"); act(c.id, "represent"); var l = loan("LN-24012"); var ok1 = l.overdue === 0 && c.status === "Open" && l.penal === 500; act(c.id, "collect"); return { pass: ok1 && c.status === "Paid" && l.penal === 0 && balanced(), actual: "After EMI: " + c.next + "; after collection: " + c.status }; }],
     ["LT-09", "LR-4", "Unpaid EMI ages 31 days", "Reclassified SMA-0 to SMA-1; case escalated after missed contact", function () { process(L("NACH", "LN-24012", 7200, 0, "04")); for (var i = 0; i < 30; i++) nextDay(); var l = loan("LN-24012"), c = caseOf("LN-24012"); return { pass: sma(l.dpd) === "SMA-1" && c.escalated, actual: l.dpd + " DPD, " + sma(l.dpd) + ", owner " + c.owner }; }]
   ];
   function runUAT() {

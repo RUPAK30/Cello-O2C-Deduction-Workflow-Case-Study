@@ -188,7 +188,7 @@ td,th{padding:12px 14px!important}
 <header class="ph"><div class="dk phin">
   <nav class="phl"><a href="./">Overview</a><a href="#work">Workspace</a><a href="sources.html">Sources</a></nav>
   <a class="plogo" href="./" aria-label="Every Rupee home"><svg width="28" height="28" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="Every Rupee"><circle cx="16" cy="16" r="13" fill="none" stroke="#64748B" stroke-width="4.5" stroke-dasharray="2.48 79.20" transform="rotate(-90 16 16)"/><circle cx="16" cy="16" r="13" fill="none" stroke="#0071E3" stroke-width="4.5" stroke-dasharray="31.07 50.61" stroke-dashoffset="-4.08" transform="rotate(-90 16 16)"/><circle cx="16" cy="16" r="13" fill="none" stroke="#0071E3" stroke-width="4.5" stroke-dasharray="43.32 38.36" stroke-dashoffset="-36.76" transform="rotate(-90 16 16)"/><text x="16" y="21.2" text-anchor="middle" font-family="Inter,Arial,sans-serif" font-weight="700" font-size="14" fill="#111827">₹</text></svg><span>Every Rupee</span></a>
-  <div class="phr"><a class="pt" href="mailto:rupakr2g@gmail.com?subject=Every%20Rupee%20%E2%80%94%20let%27s%20talk">Talk to Rupak</a><button class="pb g" type="button" onclick="document.getElementById('run-uat').click()">Run the 10 tests<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5 3l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div>
+  <div class="phr"><a class="pt" href="mailto:rupakr2g@gmail.com?subject=Every%20Rupee%20%E2%80%94%20let%27s%20talk">Talk to Rupak</a><button class="pb g" type="button" onclick="document.getElementById('run-uat').click()">Run the 12 tests<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5 3l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div>
 </div></header>
 
 <div class="modes dk"><span>Mode</span><a href="desk.html">Brand · distributor payments</a><a class="on" href="lender.html">Lender · loan repayments</a></div>
@@ -207,7 +207,7 @@ td,th{padding:12px 14px!important}
     <li><i>4</i><div><b>Own the overdue</b><span>Each overdue loan has an owner, an RBI SMA bucket and a contact deadline.</span></div></li>
    </ol>
   </div>
-  <button class="btn primary" id="run-uat" type="button" hidden style="display:none!important">Run the 10 tests</button>
+  <button class="btn primary" id="run-uat" type="button" hidden style="display:none!important">Run the 12 tests</button>
 </div></section>
 <div class="bar-top"><div class="dk row" style="width:100%">
   <span class="cbl">Controls</span><span class="day" id="day">Day 0</span>
@@ -298,7 +298,7 @@ var S=[
 {h:"Today's file comes in",p:"One EMI came in, four bounced, one borrower paid part by UPI, and ₹2,000 matches no loan, so it sits in suspense instead of being guessed onto someone's account.",go:function(){if(!document.querySelector('#case-list article'))q('#load-sample').click();setTimeout(function(){LSHOW('#l-in');hl('#loan-body')},150)}},
 {h:"The reason code decides",p:"Each bounce carries an NPCI code. Code 01 (account closed) needs a fresh mandate: re-presenting would just bounce again. Code 59 (bank's network) is retried with no charge. Code 06 (borrower stopped it) means talk first.",go:function(){LSHOW('#l-cases');hl('#case-list')}},
 {h:"Charges stay fair",p:"Penal charges are kept separate from the loan and earn no interest, as RBI requires. A waiver above ₹1,000 needs a second person. Nothing is ever written off by a rule.",go:function(){LSHOW('#l-cases');hl('#case-list article')}},
-{h:"The collections head's view",p:"Overdue by RBI bucket (SMA-0, 1 and 2), dead mandates, money in suspense, and every posting as a balanced voucher. Tap Run tests: 10 checks, including the ones that must be blocked.",go:function(){LSHOW('#l-tower');hl('#tower-body')}}];
+{h:"The collections head's view",p:"Overdue by RBI bucket (SMA-0, 1 and 2), dead mandates, money in suspense, and every posting as a balanced voucher. Tap Run tests: 12 checks, including the ones that must be blocked.",go:function(){LSHOW('#l-tower');hl('#tower-body')}}];
 var i=0,T=q('#tour'),B=q('#tourbtn');
 function show(){var x=S[i];x.go();setTimeout(function(){q('#tn').textContent=i?'STEP '+i+' OF '+(S.length-1):'START HERE';q('#th').textContent=x.h;q('#tp').textContent=x.p;q('#tgo').textContent=!i?'Show me →':i<S.length-1?'Next →':'Finish';q('#tbk').hidden=i<2},220)}
 B.onclick=function(){i=0;T.hidden=false;B.hidden=true;show()};q('#tgo').onclick=function(){if(i<S.length-1){i++;show()}else{T.hidden=true;B.hidden=false;hl(null)}};q('#tbk').onclick=function(){if(i>1){i--;show()}};q('#tx').onclick=function(){T.hidden=true;B.hidden=false;hl(null)};
