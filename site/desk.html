@@ -188,7 +188,7 @@ td,th{padding:12px 14px!important}
 <header class="ph"><div class="dk phin">
   <nav class="phl"><a href="./">Overview</a><a href="#recv">Workspace</a><a href="sources.html">Sources</a></nav>
   <a class="plogo" href="./" aria-label="Every Rupee home"><svg width="28" height="28" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="Every Rupee"><circle cx="16" cy="16" r="13" fill="none" stroke="#64748B" stroke-width="4.5" stroke-dasharray="2.48 79.20" transform="rotate(-90 16 16)"/><circle cx="16" cy="16" r="13" fill="none" stroke="#0071E3" stroke-width="4.5" stroke-dasharray="31.07 50.61" stroke-dashoffset="-4.08" transform="rotate(-90 16 16)"/><circle cx="16" cy="16" r="13" fill="none" stroke="#0071E3" stroke-width="4.5" stroke-dasharray="43.32 38.36" stroke-dashoffset="-36.76" transform="rotate(-90 16 16)"/><text x="16" y="21.2" text-anchor="middle" font-family="Inter,Arial,sans-serif" font-weight="700" font-size="14" fill="#111827">₹</text></svg><span>Every Rupee</span></a>
-  <div class="phr"><a class="pt" href="mailto:rupakr2g@gmail.com?subject=Every%20Rupee%20%E2%80%94%20let%27s%20talk">Talk to Rupak</a><button class="pb g" type="button" onclick="document.getElementById('run-uat').click()">Run the 15 tests<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5 3l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div>
+  <div class="phr"><a class="pt" href="mailto:rupakr2g@gmail.com?subject=Every%20Rupee%20%E2%80%94%20let%27s%20talk">Talk to Rupak</a><button class="pb g" type="button" onclick="document.getElementById('run-uat').click()">Run the 19 tests<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5 3l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div>
 </div></header>
 
 <div class="modes dk"><span>Mode</span><a class="on" href="desk.html">Brand · distributor payments</a><a href="lender.html">Lender · loan repayments</a></div>
@@ -208,7 +208,7 @@ td,th{padding:12px 14px!important}
     <li><i>4</i><div><b>Close and prevent</b><span>Each gap is settled or recovered; old disputes flag the next order.</span></div></li>
    </ol>
   </div>
-  <button class="btn primary" id="run-uat" type="button" hidden style="display:none!important">Run the 15 tests</button>
+  <button class="btn primary" id="run-uat" type="button" hidden style="display:none!important">Run the 19 tests</button>
 </div></section>
 <div class="bar-top"><div class="dk row" style="width:100%">
   <span class="cbl">Controls</span><span class="day" id="day">Day 0</span>
@@ -320,6 +320,11 @@ td,th{padding:12px 14px!important}
           <p class="sub">Open disputes above ₹20,000 or older than 45 days flag the next order for review (BR-7).</p>
           <div class="tbl"><table><thead><tr><th>Distributor</th><th class="r">FY purchases</th><th class="r">Scheme left</th><th class="r">Disputed</th><th></th></tr></thead><tbody id="dist-body"></tbody></table></div>
         </div>
+        <div class="card" style="margin-bottom:16px" id="apvc">
+          <h2>Sales approvals from Ten Today</h2>
+          <p class="sub">The promise, made before the invoice. A deduction quoting an approval clears up to its cap (BR-10); what the approver sees before the next discount (BR-11).</p>
+          <div id="apv-body"></div>
+        </div>
         <div class="card" style="margin-bottom:16px">
           <h2>Credit notes</h2>
           <p class="sub">Report to the IRP within 30 days (BR-6).</p>
@@ -393,7 +398,7 @@ var S=[
 {h:"People decide the rest",p:function(){return "Asha works each open case before its deadline. Anything above ₹10,000 also needs Vikram, the finance controller. No rule can write money off. Each case ends in a credit note or a recovery."},go:function(){tab('#cases');hl('#case-list')}},
 {h:"The next order is checked",p:function(){return "I've just placed a new order for a distributor with an unsettled gap. His row now says Held for review: a manager takes a look first. The order is flagged, never blocked."},go:function(){tab('#dists');var b=[].slice.call(document.querySelectorAll('[data-order]'));var r=b.filter(function(x){return x.closest('tr').querySelector('.pill.bad')})[0]||b[0];if(r){r.click();setTimeout(function(){var o=document.querySelector('.ordst');var tr=o&&o.closest('tr');document.querySelectorAll('.hl').forEach(function(e){e.classList.remove('hl')});if(tr){tr.classList.add('hl');tr.scrollIntoView({behavior:'smooth',block:'start'})}},120)}}},
 {h:"The finance head's view",p:function(){return "The control tower shows cash nobody has matched, disputes by age, missed deadlines, and GST at risk. One claim sits on a FY 2025-26 invoice: its GST credit-note window closes 30 Nov 2026. Settle it after that, and the GST is lost."},go:function(){tab('#tower');hl('#tower-body')}},
-{h:"Every step is on record",p:function(){return "Who did what, when, under which rule: "+(v('#k-rules')||"every")+" actions logged, and every rupee posted as a balanced voucher you can export to the ledger. Want proof the edge cases hold? Tap Run tests: 15 checks, including ones that must be blocked."},go:function(){tab('#auditc');hl('#auditc')}}];
+{h:"Every step is on record",p:function(){return "Who did what, when, under which rule: "+(v('#k-rules')||"every")+" actions logged, and every rupee posted as a balanced voucher you can export to the ledger. Want proof the edge cases hold? Tap Run tests: 19 checks, including ones that must be blocked."},go:function(){tab('#auditc');hl('#auditc')}}];
 var i=0,T=q('#tour'),B=q('#tourbtn');
 function dots(){var o='';for(var k=1;k<S.length;k++)o+='<i class="'+(k<=i?'on':'')+'"></i>';return o}
 function show(){var x=S[i];T.classList.add('sw');setTimeout(function(){x.go();setTimeout(function(){

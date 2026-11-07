@@ -48,7 +48,13 @@
         { no: "INV-3011", va: "CELLOVA0003", taxable: 338983, total: 400000, age: 12, open: 400000 },
         { no: "INV-4002", va: "CELLOVA0004", taxable: 211864, total: 250000, age: 52, open: 250000 },
         { no: "INV-5020", va: "CELLOVA0005", taxable: 508475, total: 600000, age: 30, open: 600000 },
-        { no: "INV-0988", va: "CELLOVA0005", taxable: 200000, total: 236000, age: 229, open: 236000 }
+        { no: "INV-0988", va: "CELLOVA0005", taxable: 200000, total: 236000, age: 229, open: 236000 },
+        { no: "INV-5031", va: "CELLOVA0005", taxable: 338983, total: 400000, age: 45, open: 400000 }
+      ],
+      /* Shared approval records from Ten Today (the sales to-do module): the promise, made before the invoice */
+      approvals: [
+        { id: "APV-2026-041", va: "CELLOVA0005", rep: "Rahul", approver: "Kavita (manager)", cap: 8000, taxIncl: false, windowEnd: "2026-09-30", used: 0 },
+        { id: "APV-2026-042", va: "CELLOVA0005", rep: "Rahul", approver: "Kavita (manager)", cap: 8000, taxIncl: true, windowEnd: "2026-09-30", used: 0 }
       ],
       receipts: [], cases: [], notes: [], log: [], processed: [], journal: [], suspense: 0
     };
@@ -56,18 +62,19 @@
 
   /* bank statement sample: date, virtual account, amount, reference, then the distributor's remittance claims */
   var SAMPLE = [
-    "date,virtual_account,amount,reference,claim_type,claim_amount,evidence",
+    "date,virtual_account,amount,reference,claim_type,claim_amount,evidence,approval_id",
     "day 0,CELLOVA0001,991153,INV-1041,Scheme claim,8000,yes",
     "day 0,CELLOVA0002,284000,INV-2015,Damage / shortage,11000,no",
     "day 0,CELLOVA0003,787322,,Scheme claim,12000,yes",
     "day 0,CELLOVA0004,238000,INV-4002,Scheme claim,12000,yes",
     "day 0,CELLOVA0005,594492,INV-5020,Rate difference,5000,yes",
     "day 0,CELLOVA0001,496576,INV-1042,,,",
-    "day 0,CELLOVA0005,226360,INV-0988,Scheme claim,9440,no"
+    "day 0,CELLOVA0005,226360,INV-0988,Scheme claim,9440,no",
+    "day 0,CELLOVA0005,390221,INV-5031,Scheme claim,9440,yes,APV-2026-041"
   ].join("\n");
 
   var S;
-  function load() { try { S = JSON.parse(localStorage.getItem(KEY)); } catch (e) { S = null; } if (!S || !S.dists || !S.journal) S = seed(); }
+  function load() { try { S = JSON.parse(localStorage.getItem(KEY)); } catch (e) { S = null; } if (!S || !S.dists || !S.journal || !S.approvals) S = seed(); }
   function save() { if (QUIET) return; try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} }
   function log(rule, text) { S.log.unshift({ day: S.day, who: USERS[S.user], rule: rule, text: text }); }
   function dist(va) { return S.dists.filter(function (d) { return d.va === va; })[0]; }
@@ -98,9 +105,12 @@
     /* Validate the distributor's declared claim */
     if (r.claimType && r.claimAmt > 0 && left > 0) {
       var amt = Math.min(r.claimAmt, left); left -= amt;
-      var c = newCase(d, inv, r.claimType, amt, r.evidence);
-      autoCheck(c, true);
-      if (c.status === "Accepted") rec.accepted += amt; else rec.disputed += amt;
+      if (r.apv && r.claimType === "Scheme claim") matchApproval(d, inv, r.apv, amt, rec);
+      else {
+        var c = newCase(d, inv, r.claimType, amt, r.evidence);
+        autoCheck(c, true);
+        if (c.status === "Accepted") rec.accepted += amt; else rec.disputed += amt;
+      }
     }
     /* Anything still unexplained becomes a dispute; never written off */
     if (left > 0) {
@@ -109,6 +119,44 @@
       log("BR-4", inv.no + ": " + inr(left) + " unexplained. Case " + u.id + " opened for " + u.owner + "; never written off by a rule.");
     }
     creditCheck(d);
+  }
+
+  /* BR-10: a scheme deduction quoting a Ten Today approval is matched to that approval, split at the cap.
+     The cap is compared like for like: a pre-tax cap clears up to cap + 18% GST, because the credit note carries the GST. */
+  function apvById(id) { return (S.approvals || []).filter(function (a) { return a.id === id; })[0]; }
+  function capLimit(a) { return a.taxIncl ? a.cap : Math.round(a.cap * 1.18); }
+  function matchApproval(d, inv, id, amt, rec) {
+    var a = apvById(id), c;
+    if (!a || a.va !== d.va) {
+      c = newCase(d, inv, "Scheme claim", amt, false); c.apv = id; c.repOwned = true; c.reason = "quotes " + id + ", which is not an approval for this distributor";
+      rec.disputed += amt; log("BR-10", c.id + " " + inr(amt) + " quotes " + id + ", but no such approval exists for " + d.name + ". Treated as an unbacked claim."); return;
+    }
+    var end = new Date(a.windowEnd + "T23:59:59");
+    if (invDate(inv) > end) {
+      c = newCase(d, inv, "Scheme claim", amt, false); c.apv = a.id; c.lapsed = true; c.repOwned = true; c.owner = a.approver; c.due = S.day + 3;
+      c.reason = "lapsed approval used: " + inv.no + " is dated " + fmt(invDate(inv)) + ", " + a.id + " covered invoices up to " + fmt(end);
+      rec.disputed += amt;
+      log("BR-10", c.id + " " + inr(amt) + ": lapsed approval used. " + inv.no + " (" + fmt(invDate(inv)) + ") falls after " + a.id + "'s window (" + fmt(end) + "). Routed to " + a.approver + ", who signed it, with a 3-day SLA."); return;
+    }
+    var m = Math.max(0, Math.min(amt, capLimit(a) - a.used)), x = amt - m;
+    if (m > 0) {
+      c = newCase(d, inv, "Scheme claim", m, true); c.apv = a.id; c.status = "Accepted"; c.closedBy = "Rule BR-10 (" + a.id + ")"; a.used += m;
+      issueCN(c); rec.accepted += m;
+      log("BR-10", c.id + " " + inr(m) + " matched to " + a.id + " (cap " + inr(a.cap) + (a.taxIncl ? " incl. GST" : " + GST = " + inr(capLimit(a))) + ", approved by " + a.approver + " for " + a.rep + "). Cleared by rule.");
+    }
+    if (x > 0) {
+      c = newCase(d, inv, "Scheme claim", x, false); c.apv = a.id; c.repOwned = true; c.owner = "Sales rep · " + a.rep;
+      c.reason = "above " + a.id + "'s cap; the rep made a promise nobody approved";
+      rec.disputed += x;
+      log("BR-10", c.id + " " + inr(x) + " is above " + a.id + "'s cap. Only the excess goes back to " + a.rep + " (sales rep): show the approval, or recover it from the distributor.");
+    }
+  }
+  /* BR-11: what Ten Today's approver sees before the next discount. Finance's backlog never blocks a deal;
+     rep-owned or unverified claims older than 15 days do. */
+  function salesFeed(va) {
+    var open = S.cases.filter(function (c) { return c.va === va && c.status === "Open"; }), f = { financePending: 0, blocking: 0, young: 0 };
+    open.forEach(function (c) { var unbacked = c.repOwned || !c.evidence, age = S.day - c.opened; if (!unbacked) f.financePending += c.amount; else if (age > 15) f.blocking += c.amount; else f.young += c.amount; });
+    f.block = f.blocking > 0; return f;
   }
 
   function newCase(d, inv, type, amt, evidence) {
@@ -212,8 +260,8 @@
     var ix = function (n) { return head.indexOf(n); };
     if (ix("virtual_account") < 0 || ix("amount") < 0) throw new Error("The file needs at least virtual_account and amount columns.");
     return rows.filter(function (r) { return r.length > 1 && r[ix("amount")]; }).map(function (r) {
-      var g = function (n) { return ix(n) >= 0 ? r[ix(n)] : ""; };
-      return { va: g("virtual_account").toUpperCase(), amount: Number(g("amount").replace(/[₹,\s]/g, "")) || 0, ref: g("reference").toUpperCase(), claimType: g("claim_type"), claimAmt: Number(g("claim_amount").replace(/[₹,\s]/g, "")) || 0, evidence: /^(y|yes|true|1)$/i.test(g("evidence")) };
+      var g = function (n) { return ix(n) >= 0 ? (r[ix(n)] || "") : ""; };
+      return { va: g("virtual_account").toUpperCase(), amount: Number(g("amount").replace(/[₹,\s]/g, "")) || 0, ref: g("reference").toUpperCase(), claimType: g("claim_type"), claimAmt: Number(g("claim_amount").replace(/[₹,\s]/g, "")) || 0, evidence: /^(y|yes|true|1)$/i.test(g("evidence")), apv: g("approval_id").toUpperCase() };
     });
   }
   function runStatement(text, label) {
@@ -272,6 +320,7 @@
 
     $("cn-body").innerHTML = S.notes.length ? S.notes.map(function (n) { var left = n.irpDue == null ? null : n.irpDue - S.day; return "<tr><td class='mono'>" + n.id + "<br><span class='tiny'>" + (n.kind === "GST" ? "GST · " + inr(n.gst) + " GST" : "Financial · no GST") + "</span></td><td>" + esc(n.dist.split(",")[0]) + "</td><td class='mono r'>" + inr(n.amount) + "</td><td class='mono r'>" + (left == null ? "<span class='tiny'>not reportable</span>" : left >= 0 ? left + " days" : "<span class='pill bad'>overdue</span>") + "</td></tr>"; }).join("") : "<tr><td colspan='4' class='empty'>None yet.</td></tr>";
     renderTower(); renderJournal();
+    if ($("apv-body")) $("apv-body").innerHTML = (S.approvals || []).map(function (x) { var d = dist(x.va); return "<div class='apv'><p><b class='mono'>" + x.id + "</b> · " + esc(d.name.split(",")[0]) + "<br><span class='tiny'>Rep " + x.rep + " · approved by " + esc(x.approver) + " · cap " + inr(x.cap) + (x.taxIncl ? " incl. GST" : " + GST (clears up to " + inr(capLimit(x)) + ")") + " · invoices up to " + fmt(new Date(x.windowEnd)) + " · used " + inr(x.used) + "</span></p></div>"; }).join("") + (function () { var f = salesFeed("CELLOVA0005"); return "<p class='tiny' style='margin-top:10px'><b>Feed to Ten Today, Krishna Marketing:</b> waiting on Finance " + inr(f.financePending) + " (doesn't block) · rep-owned or unverified over 15 days " + inr(f.blocking) + (f.young ? " · under 15 days " + inr(f.young) : "") + " → next discount <b>" + (f.block ? "blocked until proof or recovery" : "can be approved") + "</b></p>"; })();
 
     $("log").innerHTML = S.log.length ? S.log.slice(0, 60).map(function (l) { return "<li><span class='mono'>Day " + l.day + "</span> <span class='rule'>" + esc(l.rule) + "</span> " + esc(l.text) + "</li>"; }).join("") : "<li class='empty'>Nothing yet.</li>";
   }
@@ -317,7 +366,7 @@
     var out; try { out = fn(); } catch (e) { out = { pass: false, actual: "Error: " + e.message }; }
     S = keep; QUIET = false; return out;
   }
-  var R = function (va, amount, ref, type, camt, ev) { return { va: va, amount: amount, ref: ref || "", claimType: type || "", claimAmt: camt || 0, evidence: !!ev }; };
+  var R = function (va, amount, ref, type, camt, ev, apv) { return { va: va, amount: amount, ref: ref || "", claimType: type || "", claimAmt: camt || 0, evidence: !!ev, apv: apv || "" }; };
   var lastCase = function () { return S.cases[S.cases.length - 1]; };
   var TESTS = [
     ["UAT-01", "BR-1, US-1", "Unreferenced receipt on a virtual account", "Applied to the distributor's oldest open invoice", function () { processReceipt(R("CELLOVA0003", 800000)); var r = S.receipts[0]; return { pass: r.inv === "INV-3007", actual: "Applied to " + r.inv }; }],
@@ -337,6 +386,12 @@
   TESTS.push(["UAT-13", "BR-6, US-8", "Same claim approved after 30 Nov (window closed)", "Financial credit note only; no GST reduction; loss shown", function () { var c = OLD(); for (var i = 0; i < 24; i++) nextDay(); c.evidence = true; act(c.id, "approve"); var n = S.notes[0], v = S.journal[S.journal.length - 1]; var gstLine = v.lines.some(function (l) { return /Output GST/.test(l[0]); }); return { pass: !!n && n.kind === "Financial" && !gstLine && tower().lost === 1440, actual: n ? n.kind + " credit note; GST lost " + inr(tower().lost) : "No note" }; }]);
   TESTS.push(["UAT-14", "BR-9, US-9", "Full day: sample statement, every case approved", "Every voucher balances; receivables credited never exceed invoices", function () { runQuiet(); S.user = "checker"; S.cases.forEach(function (c) { if (c.status === "Open" && c.type !== "Unexplained") { c.evidence = true; act(c.id, "approve"); } }); var bad = S.journal.filter(function (v) { var d = 0, k = 0; v.lines.forEach(function (l) { d += l[1]; k += l[2]; }); return d !== k; }).length; var ar = 0; S.journal.forEach(function (v) { v.lines.forEach(function (l) { if (/^Trade receivables/.test(l[0])) ar += l[2] - l[1]; }); }); var inv = S.invoices.reduce(function (s, i) { return s + i.total; }, 0); return { pass: S.journal.length > 0 && bad === 0 && ar <= inv, actual: S.journal.length + " vouchers, " + bad + " unbalanced; AR credited " + inr(ar) }; }]);
   TESTS.push(["UAT-15", "BR-1, BR-9", "Receipt on an unknown virtual account (negative)", "Parked in suspense; applied to no invoice", function () { processReceipt(R("CELLOVA0099", 50000)); var touched = S.invoices.some(function (i) { return i.open !== i.total; }); return { pass: S.suspense === 50000 && !touched, actual: "Suspense " + inr(S.suspense) + "; invoices touched: " + touched }; }]);
+  /* INV-5031: ₹4,00,000, TDS ₹339, so a ₹9,440 deduction arrives as ₹3,90,221. INV-5020: TDS ₹508. */
+  var KM = function (apv, amt) { processReceipt(R("CELLOVA0005", 400000 - 339 - amt, "INV-5031", "Scheme claim", amt, false, apv)); return S.cases.filter(function (c) { return c.apv; }); };
+  TESTS.push(["UAT-16", "BR-10, US-10", "₹9,440 deducted against a ₹8,000 pre-tax approval", "Fully cleared by rule: ₹8,000 + 18% GST; GST credit note; nothing sent to the rep", function () { var cs = KM("APV-2026-041", 9440), n = S.notes[0]; return { pass: cs.length === 1 && cs[0].status === "Accepted" && n && n.kind === "GST" && n.gst === 1440, actual: cs.map(function (c) { return c.status + " " + inr(c.amount); }).join(", ") + (n ? "; " + n.kind + " CN, GST " + inr(n.gst) : "") }; }]);
+  TESTS.push(["UAT-17", "BR-10, US-10", "₹9,440 deducted against an ₹8,000 tax-inclusive approval", "Split at the cap: ₹8,000 cleared; only ₹1,440 goes to the rep", function () { var cs = KM("APV-2026-042", 9440); var ok = cs.length === 2 && cs[0].status === "Accepted" && cs[0].amount === 8000 && cs[1].status === "Open" && cs[1].amount === 1440 && /Rahul/.test(cs[1].owner); return { pass: ok, actual: cs.map(function (c) { return c.status + " " + inr(c.amount) + " (" + (c.closedBy || c.owner) + ")"; }).join(" · ") }; }]);
+  TESTS.push(["UAT-18", "BR-10, US-10", "Approval for invoices to 30 Sep used on an 8 Oct invoice (negative)", "Lapsed approval used: nothing cleared; routed to the approver who signed", function () { processReceipt(R("CELLOVA0005", 600000 - 508 - 8000, "INV-5020", "Scheme claim", 8000, false, "APV-2026-042")); var c = lastCase(), a = apvById("APV-2026-042"); return { pass: c.lapsed && c.status === "Open" && /Kavita/.test(c.owner) && a.used === 0 && S.notes.length === 0, actual: c.status + ", owner " + c.owner + ", approval used " + inr(a.used) }; }]);
+  TESTS.push(["UAT-19", "BR-11, US-11", "Finance backlog vs rep-owned excess, before and after 15 days", "Only the rep-owned ₹1,440 blocks the next discount, and only after 15 days", function () { KM("APV-2026-042", 9440); processReceipt(R("CELLOVA0005", 600000 - 508 - 12000, "INV-5020", "Rate difference", 12000, true)); for (var i = 0; i < 5; i++) nextDay(); var early = salesFeed("CELLOVA0005"); for (i = 0; i < 11; i++) nextDay(); var late = salesFeed("CELLOVA0005"); return { pass: !early.block && late.block && late.blocking === 1440 && late.financePending === 12000, actual: "day 5: block " + early.block + " · day 16: finance pending " + inr(late.financePending) + " (no block), rep-owned " + inr(late.blocking) + " → block " + late.block }; }]);
   function runQuiet() { parseCSV(SAMPLE).forEach(processReceipt); }
   function runUAT() {
     var rows = TESTS.map(function (t) { var o = scenario(t[4]); return [t[0], t[1], t[2], t[3], o.actual, o.pass]; });
