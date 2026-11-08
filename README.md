@@ -1,5 +1,7 @@
 # Every Rupee: short-payment reconciliation for FMCG finance teams
 
+> **Interactive product version:** https://every-rupee-finance-guide.lovable.app · code: https://github.com/RUPAK30/every-rupee-gets-owner
+
 > **Live prototype:** [everyrupee-o2c.vercel.app](https://everyrupee-o2c.vercel.app) · **Try the desk:** [/desk.html](https://everyrupee-o2c.vercel.app/desk.html) · Portfolio case study by **Rupak Ghanpathi**, built solo, sample data
 
 [![Every Rupee homepage](preview.png)](https://everyrupee-o2c.vercel.app)
