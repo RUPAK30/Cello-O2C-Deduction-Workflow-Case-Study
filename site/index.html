@@ -73,12 +73,23 @@ table.rc tr.t td{font-weight:700;color:var(--ink);border-bottom:0;border-top:2px
 .pr a{background:var(--paper);padding:13px 15px;text-decoration:none;color:var(--txt);display:flex;flex-direction:column;gap:2px}.pr a:hover{background:#fff}
 .pr b{color:var(--ink);font-size:.92rem}.pr span{font-size:.82rem;color:var(--mut)}
 @media(max-width:700px){.next.two,.pr{grid-template-columns:1fr}}
+.plain{display:flex;gap:14px;align-items:center;flex-wrap:wrap;background:#fff;border:1px solid #EDE5D8;border-radius:14px;padding:14px 16px;margin:0 0 20px;max-width:760px}
+.plain p{margin:0;flex:1 1 380px;font-size:.95rem}.plain b{color:var(--ink)}
+#xp{font:600 .92rem Inter,Arial;background:var(--tt);color:#fff;border:0;border-radius:10px;padding:11px 16px;cursor:pointer;white-space:nowrap;box-shadow:0 6px 16px -8px rgba(194,65,12,.6)}
+.xg{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);width:min(560px,calc(100% - 24px));background:#111827;color:#F9FAFB;border-radius:16px;padding:16px 18px 14px;z-index:50;box-shadow:0 18px 40px -10px rgba(0,0,0,.45);font-size:.98rem;line-height:1.5}
+.xg .st{font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:#FDBA74;font-weight:700;margin:0 0 6px}
+.xg p{margin:0 0 12px}.xg b{color:#fff}
+.xg .bar{height:3px;background:#374151;border-radius:3px;overflow:hidden;margin:0 0 12px}.xg .bar i{display:block;height:100%;width:0;background:#FDBA74}
+.xg .ctl{display:flex;justify-content:space-between;align-items:center;gap:8px}.xg button{font:600 .85rem Inter,Arial;border-radius:9px;padding:8px 13px;cursor:pointer;border:1px solid #4B5563;background:transparent;color:#E5E7EB}
+.xg button.n{background:#fff;color:#111827;border-color:#fff}.xg .x{border:0;padding:4px 6px;color:#9CA3AF}
+.xhl{scroll-margin-top:96px;outline:3px solid #FDBA74!important;outline-offset:4px;border-radius:12px;transition:outline-color .3s}
 </style></head><body>
 <div class="mast"><div class="w"><a class="wm" href="index.html">One Rupee's <i>Route</i></a><nav><a class="n2" href="https://every-rupee-gets-owner.lovable.app"><i></i>Product ↗</a><a class="n1 on" aria-current="page" href="index.html"><i></i>Case study</a></nav></div></div>
 <header class="top"><div class="w">
 <p class="k">A quote-to-cash case · sample data</p>
 <h1>A discount promised in sales gets paid for in finance. Follow one rupee all the way to closed books.</h1>
 <p class="lead">Two products, one shared approval record. Pick an outcome and watch every date, decision and ledger entry until the invoice balances to the rupee.</p>
+<div class="plain"><p><b>In plain words:</b> a salesperson promises a shop a discount. Weeks later the shop pays less than the bill. This shows who decides whether that's right, and how the books still balance to the last rupee.</p><button id="xp" type="button">▶ 60-second explainer</button></div>
 <div class="rt"><span class="a">Ten Today · the promise</span><span class="ln"></span><span class="b">Every Rupee · the payment</span><span class="rec">linked by one approval record</span></div>
 <div class="cast"><span class="s"><b>Rahul</b> · sales rep</span><span class="s"><b>Kavita</b> · sales manager</span><span class="f"><b>Asha</b> · AR executive</span><span class="f"><b>Vikram</b> · finance controller</span><span><b>Krishna Marketing, Surat</b> · distributor</span></div>
 </div></header>
@@ -156,4 +167,29 @@ var playing=false,step=0,tick=function(){};
 document.querySelectorAll('.mode button').forEach(function(b){b.onclick=function(){render(b.dataset.m,false);history.replaceState(null,"","#"+b.dataset.m)}});
 document.getElementById('play').onclick=function(){var pb=this;if(playing){playing=false;clearInterval(timer);pb.textContent="▶ Resume";return}if(/Resume/.test(pb.textContent)){playing=true;pb.textContent="❚❚ Pause";timer=setInterval(tick,1600);tick();return}render(cur,true)};
 var h=(location.hash||"").slice(1);render(S[h]?h:"pre",false);
+</script><script>
+(function(){
+var T=[
+ {sel:'h1',t:'The setup',p:'A shop, <b>Krishna Marketing</b>, wants to buy ₹4 lakh of stock from a brand. To win the order, the salesperson <b>Rahul</b> offers a discount.'},
+ {sel:'.rt .a',t:'The promise',p:'His manager <b>Kavita</b> approves it in <b>Ten Today</b>, the sales app. The approval is saved as a record: how much, for whom, and until when.'},
+ {sel:'#tl li:nth-child(4)',mode:'inc',t:'The payment',p:'Weeks later the shop pays, but <b>₹9,440 less</b> than the bill, and says "that\'s our discount". Normally this sits unexplained for weeks while sales and finance argue over email.'},
+ {sel:'#tl li:nth-child(5)',mode:'inc',t:'The check',p:'<b>Every Rupee</b>, the finance app, finds the saved approval. The approved ₹8,000 is cleared automatically. Only the extra ₹1,440 goes back to Rahul, who made the promise. Finance doesn\'t chase it.'},
+ {sel:'#close',mode:'inc',t:'The ending',p:'Nothing is quietly written off. Every rupee of the bill is accounted for, and the totals match <b>exactly</b>. Three different endings are shown here: clean, over-deducted, and an expired approval.'},
+ {sel:'#proof',t:'Why it matters',p:'Money that used to sit unowned for weeks is settled in days, by the right person. Every rule is tested: <b>31 out of 31 tests pass</b>. Built by Rupak, ex-HDFC Bank Business Analyst, to show how he works.'}
+],i=0,box,tm,hl,DUR=10000;
+function clear(){clearTimeout(tm);if(hl)hl.classList.remove('xhl');}
+function show(){clear();var s=T[i];
+ if(s.mode&&typeof render==='function'&&cur!==s.mode)render(s.mode,false);
+ hl=document.querySelector(s.sel);if(hl){hl.classList.add('xhl');hl.scrollIntoView({behavior:'smooth',block:'start'});}
+ box.innerHTML='<div class="st">'+(i+1)+' of '+T.length+' · '+s.t+'</div><p>'+s.p+'</p><div class="bar"><i></i></div><div class="ctl"><button class="x" data-a="x">Close</button><span><button data-a="b"'+(i?'':' disabled style="opacity:.4"')+'>Back</button> <button class="n" data-a="n">'+(i<T.length-1?'Next':'Done')+'</button></span></div>';
+ var bar=box.querySelector('.bar i');requestAnimationFrame(function(){bar.style.transition='width '+DUR+'ms linear';bar.style.width='100%';});
+ tm=setTimeout(function(){if(i<T.length-1){i++;show();}},DUR);}
+function end(){clear();if(box)box.remove();box=null;}
+function start(){i=0;if(!box){box=document.createElement('div');box.className='xg';box.setAttribute('role','dialog');box.setAttribute('aria-label','60-second explainer');document.body.appendChild(box);
+ box.addEventListener('click',function(e){var a=e.target.getAttribute('data-a');if(a==='x')end();if(a==='b'&&i>0){i--;show();}if(a==='n'){if(i<T.length-1){i++;show();}else end();}});}
+ show();}
+document.getElementById('xp').addEventListener('click',start);
+document.addEventListener('keydown',function(e){if(e.key==='Escape')end();});
+if(/[?&]explain=1/.test(location.search))setTimeout(start,600);
+})();
 </script></body></html>
