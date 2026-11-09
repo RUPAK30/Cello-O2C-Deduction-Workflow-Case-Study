@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Every Rupee · A distributor pays short. On day 31 it's still nobody's problem.</title>
-<meta name="description" content="Distributor short-payments, owned end to end: a working reconciliation product with brand and lender modes, 16 rules and 25 tests, built by Rupak Ghanpathi.">
+<meta name="description" content="Distributor short-payments, owned end to end: a working reconciliation product with brand and lender modes, 16 rules and 31 tests, built by Rupak Ghanpathi.">
 <meta property="og:title" content="A distributor pays short. On day 31 it&#39;s still nobody&#39;s problem.">
 <meta property="og:description" content="A working desk where every short-paid rupee gets a reason, an owner and an ending. Built solo by Rupak Ghanpathi from public filings.">
 <meta property="og:image" content="https://everyrupee-o2c.vercel.app/og.png?v=6">
@@ -568,9 +568,9 @@ window.ERco=function(c,n){co=clean(c,40);nm=clean(n,30);apply();mail()};window.E
 <script>(function(){var P=new URLSearchParams(location.search),hk=(P.get('hook')||'').replace(/[<>]/g,'').trim().slice(0,240),co=(P.get('for')||'').replace(/[<>"]/g,'').trim().slice(0,40);
 if(hk){document.getElementById('hookt').textContent='Why I sent this'+(co?' to '+co:'');document.getElementById('hookp').textContent=hk;document.getElementById('hook').hidden=false;}})();</script>
 <script>(function(){var d=new Date(),y=d.getMonth()<11||(d.getMonth()===11&&false)?d.getFullYear():d.getFullYear()+1;
-var t=new Date(y,10,30,23,59,59);if(d>t)t=new Date(y+1,10,30,23,59,59);var n=Math.ceil((t-d)/864e5);
+var t=new Date(y,10,30,23,59,59);if(d>t)t=new Date(y+1,10,30,23,59,59);var n=Math.round((new Date(t.getFullYear(),t.getMonth(),t.getDate())-new Date(d.getFullYear(),d.getMonth(),d.getDate()))/864e5);
 var fy=(t.getFullYear()-1)+'-'+String(t.getFullYear()).slice(2);document.getElementById('xd').textContent=n;document.querySelectorAll('.fyx').forEach(function(e){e.textContent=fy});document.querySelectorAll('.fyy').forEach(function(e){e.textContent=t.getFullYear()});
-document.getElementById('xl').textContent=(n===1?'day':'days')+' to the FY '+fy+' credit-note deadline';})();</script>
+if(n===0){document.getElementById('xd').textContent='Today';document.getElementById('xl').textContent='is the last day for FY '+fy+' GST credit notes';}else document.getElementById('xl').textContent=(n===1?'day':'days')+' to the FY '+fy+' credit-note deadline';})();</script>
 <script>(function(){
 function openFor(h){if(!h)return;var t=document.querySelector(h);if(!t)return;var d=t.closest('details.dp');if(d&&!d.open){d.open=true}setTimeout(function(){t.scrollIntoView({behavior:'smooth',block:'start'})},30)}
 document.addEventListener('click',function(e){var a=e.target.closest('a[href^="#"]');if(!a)return;var h=a.getAttribute('href');var t=h.length>1&&document.querySelector(h);if(t&&t.closest('details.dp')){e.preventDefault();openFor(h);history.replaceState(null,'',h)}});
