@@ -58,7 +58,7 @@ table.rc tr.t td{font-weight:700;color:var(--ink);border-bottom:0;border-top:2px
 @media(max-width:600px){.rt{display:grid;grid-template-columns:auto;justify-items:start;gap:6px}.rt .ln{width:2px;height:16px;flex:none;margin-left:22px;background:linear-gradient(180deg,var(--tt),var(--navy))}.rt .ln:after{right:-5px;top:auto;bottom:-8px;border:5px solid transparent;border-top:7px solid var(--navy)}.mast nav a{margin-left:10px;font-size:.76rem}.mode button{white-space:nowrap;font-size:.72rem}h1{font-size:1.65rem}.mode{grid-template-columns:repeat(3,1fr);gap:6px}.mode button{padding:8px 8px;font-size:.76rem;text-align:center}.mode button small{display:none}.pick .w{padding-top:8px;padding-bottom:8px}.pick p{display:none}.kpis{grid-template-columns:1fr 1fr 1fr}.ev{padding-left:40px}ol.tl:before{left:13px}.dot{left:4px}}
 .mast nav{display:flex;gap:6px;flex-wrap:wrap}.mast nav a{display:flex;align-items:center;gap:7px;margin:0!important;padding:6px 10px;border:1px solid #EDE5D8;border-radius:99px;background:#fff;font-size:.8rem;color:var(--ink)}
 .mast nav a small{font-weight:500;color:var(--mut);font-size:.72rem}.mast nav a i{width:8px;height:8px;border-radius:50%;display:inline-block}
-.mast nav .n1 i{background:var(--tt)}.mast nav .n2 i{background:var(--navy)}.mast nav .n3 i{background:#9CA3AF}.mast nav a:hover{border-color:#D6C9B5}
+.mast nav .n1 i{background:var(--tt)}.mast nav .n2 i{background:var(--navy)}.mast nav .n3 i{background:#9CA3AF}.mast nav a:hover{border-color:#D6C9B5}.mast nav a.on{background:var(--ttbg);border-color:#F8D3B8;color:var(--tt)}
 .nx{font:600 1.3rem Fraunces,Georgia,serif;color:var(--ink);margin:30px 0 12px}
 .next{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
 .nc{display:flex;flex-direction:column;gap:4px;padding:16px;border-radius:14px;background:var(--paper);border:1px solid #EDE5D8;border-top:4px solid #9CA3AF;text-decoration:none;color:var(--txt)}
@@ -68,7 +68,7 @@ table.rc tr.t td{font-weight:700;color:var(--ink);border-bottom:0;border-top:2px
 .nc.s em{color:var(--tt)}.nc.f em{color:var(--navy)}.nc.l em{color:#4B5563}.nc:hover{border-color:#D6C9B5}
 @media(max-width:700px){.next{grid-template-columns:1fr}.mast nav a small{display:none}}
 </style></head><body>
-<div class="mast"><div class="w"><a class="wm" href="route.html">One Rupee's <i>Route</i></a><nav><a class="n1" href="https://tentoday.vercel.app/cockpit.html?km=1"><i></i>Ten Today<small>sales app</small></a><a class="n2" href="https://every-rupee-gets-owner.lovable.app/demo"><i></i>Every Rupee<small>finance app</small></a><a class="n3" href="index.html"><i></i>The lab<small>tests &amp; specs</small></a></nav></div></div>
+<div class="mast"><div class="w"><a class="wm" href="route.html">One Rupee's <i>Route</i></a><nav><a class="n2" href="https://every-rupee-gets-owner.lovable.app"><i></i>Product ↗</a><a class="n1 on" aria-current="page"><i></i>Case study</a><a class="n3" href="index.html"><i></i>Docs &amp; tests</a></nav></div></div>
 <header class="top"><div class="w">
 <p class="k">A quote-to-cash case · sample data</p>
 <h1>A discount promised in sales gets paid for in finance. Follow one rupee all the way to closed books.</h1>
@@ -90,7 +90,7 @@ table.rc tr.t td{font-weight:700;color:var(--ink);border-bottom:0;border-top:2px
 <div class="next">
 <a class="nc s" href="https://tentoday.vercel.app/cockpit.html?km=1"><small>1 · The promise · sales app</small><b>Approve the discount in Ten Today</b><span>See Kavita's approval blocked by Rahul's open claim, then cleared once he attaches proof.</span><em>Open Ten Today →</em></a>
 <a class="nc f" href="https://every-rupee-gets-owner.lovable.app/demo"><small>2 · The payment · finance app</small><b>Match the payments in Every Rupee</b><span>Press auto-match and watch it hold the one payment it can't place instead of guessing.</span><em>Open Every Rupee →</em></a>
-<a class="nc l" href="index.html"><small>3 · The proof · lab</small><b>Run the 31 tests yourself</b><span>Every rule behind this walkthrough, checked in your browser.</span><em>Open the lab →</em></a>
+<a class="nc l" href="index.html"><small>3 · The proof · docs &amp; tests</small><b>Run the 31 tests yourself</b><span>Every rule behind this walkthrough, checked in your browser.</span><em>Open docs &amp; tests →</em></a>
 </div>
 <p class="note">Sample data; amounts and rules match the working demos (Every Rupee BR-9 to BR-11, UAT-16 to 19; Ten Today R7, UAT-16 to 18). The two demos are separate sites that share this record format. GST: 18%, treatment summarised from public sources, Oct 2026. Not tax advice.</p>
 </main>
