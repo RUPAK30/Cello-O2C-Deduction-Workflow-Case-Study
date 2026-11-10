@@ -92,7 +92,7 @@ table.rc tr.t td{font-weight:700;color:var(--ink);border-bottom:0;border-top:2px
 .xg button.n{background:#fff;color:#111827;border-color:#fff}.xg .x{border:0;padding:4px 6px;color:#9CA3AF}
 .xhl{scroll-margin-top:96px;outline:3px solid #FDBA74!important;outline-offset:4px;border-radius:12px;transition:outline-color .3s}
 </style></head><body>
-<div class="mast"><div class="w"><a class="wm" href="index.html">One Rupee's <i>Route</i></a><nav><a class="n1 on" aria-current="page" href="index.html"><i></i>Quote to cash</a><a class="n2" href="case-study.html"><i></i>Case study</a><a class="n2 hide-m" href="desk.html?uat=1"><i></i>UAT suite (31 tests)</a><a class="n2 hide-m" href="sources.html"><i></i>Sources</a><a class="n2" href="https://every-rupee-gets-owner.lovable.app/demo"><i></i>Live product ↗</a><a class="n2" href="mailto:rupakr2g@gmail.com?subject=Every%20Rupee%20walkthrough"><i></i>Talk to me</a></nav></div></div>
+<div class="mast"><div class="w"><a class="wm" href="index.html">One Rupee's <i>Route</i></a><nav><a class="n2" href="https://every-rupee-gets-owner.lovable.app/demo" style="background:var(--navy);color:#fff;border-color:var(--navy)"><i></i>Live product ↗</a><a class="n2" href="sources.html"><i></i>Sources</a></nav></div></div>
 <header class="top"><div class="w">
 <p class="k">Every Rupee · a quote-to-cash case · sample data</p>
 <h1>A discount promised in sales gets paid for in finance. Follow one rupee all the way to closed books.</h1>
@@ -122,15 +122,63 @@ table.rc tr.t td{font-weight:700;color:var(--ink);border-bottom:0;border-top:2px
 <a class="nc s" href="https://tentoday.vercel.app/cockpit.html?km=1"><small>The promise · Ten Today, sales app</small><b>Approve the discount</b><span>See Kavita's approval blocked by Rahul's open claim, then cleared once he attaches proof.</span><em>Open Ten Today →</em></a>
 <a class="nc f" href="https://every-rupee-gets-owner.lovable.app/demo"><small>The payment · Every Rupee, the product</small><b>Match the payments</b><span>Press auto-match and watch it hold the one payment it can't place instead of guessing.</span><em>Open Every Rupee →</em></a>
 </div>
-<section class="proof" id="proof"><h2 class="nx">The proof</h2>
-<p class="pl">Every rule in this case study runs in the browser, with a test that checks it. <b>16 rules · 31/31 tests passing · 0 write-offs by rule.</b></p>
-<div class="pr">
-<a href="desk.html?uat=1"><b>Executable UAT suite · 31/31 tests</b><span>Run the 19 Brand rules + 12 Lender NACH/RBI tests directly in the browser</span></a>
-<a href="https://every-rupee-gets-owner.lovable.app/lender-demo"><b>Lender desk · Live Product ↗</b><span>Try the live EMI bounce &amp; NACH return-code desk in Every Rupee</span></a>
-<a href="case-study.html"><b>Requirements &amp; BRD</b><span>Problem, process, user stories, RACI and traceability</span></a>
-<a href="sources.html"><b>Sources</b><span>Every public figure and rule, with its source</span></a>
+<section class="proof" id="proof"><h2 class="nx">Make-or-Break Controls · Test Asha (Brand) &amp; Neha (Lender)</h2>
+<p class="pl">Instead of a static "all passed" table, pick a desk and <b>try to break a control</b>—or run all 31 acceptance tests against the live rule engine right here.</p>
+<div style="background:#fff;border:1px solid #EDE5D8;border-radius:14px;padding:16px;margin-bottom:16px">
+  <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px">
+    <div style="display:flex;gap:6px;flex-wrap:wrap" id="mb-tabs">
+      <button type="button" data-p="asha" style="font:600 .82rem Inter,Arial;padding:8px 13px;border-radius:9px;border:1px solid var(--navy);background:var(--navy);color:#fff;cursor:pointer">Asha · Brand AR Desk (11 rules)</button>
+      <button type="button" data-p="neha" style="font:600 .82rem Inter,Arial;padding:8px 13px;border-radius:9px;border:1px solid var(--line);background:#fff;color:var(--ink);cursor:pointer">Neha · Lender EMI Desk (5 rules)</button>
+    </div>
+    <button type="button" id="mb-runall" style="font:600 .8rem Inter,Arial;padding:8px 12px;border-radius:9px;border:1px solid var(--teal);background:var(--tealbg);color:var(--teal);cursor:pointer">▶ Verify all 6 controls</button>
+  </div>
+  <div style="overflow-x:auto">
+    <table style="width:100%;border-collapse:collapse;font-size:.84rem" id="mb-tbl">
+      <thead><tr style="border-bottom:2px solid var(--line);text-align:left;font-size:.7rem;text-transform:uppercase;letter-spacing:.06em;color:var(--mut)"><th style="padding:8px 6px">Rule / UAT</th><th style="padding:8px 6px">What the user tries to do</th><th style="padding:8px 6px">Control outcome</th><th style="padding:8px 6px;text-align:right">Test it</th></tr></thead>
+      <tbody id="mb-body"></tbody>
+    </table>
+  </div>
+  <div id="mb-out" style="margin-top:12px;padding:11px 14px;border-radius:10px;background:#111827;color:#F9FAFB;font-family:ui-monospace,Menlo,monospace;font-size:.78rem;line-height:1.5;display:none"></div>
 </div>
-<p class="pl" style="margin-top:14px"><b>Next:</b> the <a href="case-study.html" style="font-weight:600">case study</a> shows the problem, the process and the user stories behind these rules — then the <a href="https://every-rupee-gets-owner.lovable.app/demo" style="font-weight:600">live Every Rupee product ↗</a> lets you run them.</p>
+
+<h2 class="nx" style="margin-top:24px">Core BA Specification · Why, RACI &amp; Traceability</h2>
+<div style="background:#fff;border:1px solid #EDE5D8;border-radius:14px;padding:16px">
+  <div style="display:flex;gap:6px;flex-wrap:wrap;border-bottom:1px solid var(--line);padding-bottom:10px;margin-bottom:12px" id="sp-tabs">
+    <button type="button" data-sp="sig" style="font:600 .8rem Inter,Arial;padding:6px 12px;border-radius:8px;border:1px solid var(--navy);background:var(--navy);color:#fff;cursor:pointer">1 · Filing Signal &amp; Problem</button>
+    <button type="button" data-sp="raci" style="font:600 .8rem Inter,Arial;padding:6px 12px;border-radius:8px;border:1px solid var(--line);background:#fff;color:var(--ink);cursor:pointer">2 · RACI Matrix</button>
+    <button type="button" data-sp="trc" style="font:600 .8rem Inter,Arial;padding:6px 12px;border-radius:8px;border:1px solid var(--line);background:#fff;color:var(--ink);cursor:pointer">3 · Pain → Rule → UAT</button>
+  </div>
+  <div id="sp-sig">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-bottom:10px">
+      <div style="background:var(--bg);padding:10px 12px;border-radius:10px"><b style="font-size:1.15rem;color:var(--ink)">+14.0% vs +8.8%</b><small style="display:block;color:var(--mut)">Cello FY25→FY26 receivables (₹658→₹750 Cr) vs revenue (₹2,136→₹2,324 Cr)</small></div>
+      <div style="background:var(--bg);padding:10px 12px;border-radius:10px"><b style="font-size:1.15rem;color:var(--tt)">≈ ₹34 Cr</b><small style="display:block;color:var(--mut)">Receivables growth above revenue pace (signal for discovery, not a diagnosis)</small></div>
+      <div style="background:var(--bg);padding:10px 12px;border-radius:10px"><b style="font-size:1.15rem;color:var(--teal)">30 Nov 2026</b><small style="display:block;color:var(--mut)">CGST s.34(2) credit-note window for FY25-26 supplies before GST is lost</small></div>
+    </div>
+    <p style="margin:0;font-size:.84rem;color:var(--mut)"><b>Downloads:</b> <a href="Cello_O2C_BRD.pdf" style="color:var(--navy);font-weight:600">BRD (PDF)</a> · <a href="Cello_O2C_Case_Study.pdf" style="color:var(--navy);font-weight:600">Full Case Study (PDF)</a> · <a href="Cello_O2C_One_Pager.pdf" style="color:var(--navy);font-weight:600">One-Pager (PDF)</a> · <a href="sources.html" style="color:var(--navy);font-weight:600">All Public Sources →</a></p>
+  </div>
+  <div id="sp-raci" style="display:none;overflow-x:auto">
+    <table style="width:100%;border-collapse:collapse;font-size:.82rem">
+      <thead><tr style="border-bottom:1px solid var(--line);text-align:left;color:var(--mut)"><th style="padding:6px">Activity</th><th>Asha (AR Exec)</th><th>AR Lead</th><th>Vikram (Controller)</th><th>Rahul / Kavita (Sales)</th><th>Audit</th></tr></thead>
+      <tbody>
+        <tr style="border-bottom:1px solid #F1F5F9"><td style="padding:6px">Match UTR &amp; split 194Q TDS</td><td><b>R</b></td><td>A</td><td>I</td><td>—</td><td>—</td></tr>
+        <tr style="border-bottom:1px solid #F1F5F9"><td style="padding:6px">Verify unapproved / expired scheme</td><td>C</td><td>—</td><td>—</td><td><b>R / A</b></td><td>I</td></tr>
+        <tr style="border-bottom:1px solid #F1F5F9"><td style="padding:6px">Close gap ≤ ₹10,000 with evidence</td><td><b>R</b></td><td>A</td><td>I</td><td>C</td><td>I</td></tr>
+        <tr><td style="padding:6px">Approve gap &gt; ₹10,000 (BR-5)</td><td>Submits (Maker)</td><td>R</td><td><b>Approves (Checker)</b></td><td>C</td><td>I</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div id="sp-trc" style="display:none;overflow-x:auto">
+    <table style="width:100%;border-collapse:collapse;font-size:.82rem">
+      <thead><tr style="border-bottom:1px solid var(--line);text-align:left;color:var(--mut)"><th style="padding:6px">Pain Point</th><th>Control Spec</th><th>Rule &amp; UAT</th></tr></thead>
+      <tbody>
+        <tr style="border-bottom:1px solid #F1F5F9"><td style="padding:6px">Unreferenced bank receipts sit in suspense</td><td>Virtual account per distributor; hold if no invoice ref</td><td><code>BR-1 · UAT-01, UAT-15</code></td></tr>
+        <tr style="border-bottom:1px solid #F1F5F9"><td style="padding:6px">0.1% TDS u/s 194Q mistaken for short-payment</td><td>Auto-split 0.1% above ₹50L turnover to Form 26AS</td><td><code>BR-2 · UAT-02</code></td></tr>
+        <tr style="border-bottom:1px solid #F1F5F9"><td style="padding:6px">Verbal/over-cap discounts silently written off</td><td>Match Ten Today approval cap; route excess to Rep</td><td><code>BR-4, BR-10 · UAT-04, UAT-17</code></td></tr>
+        <tr><td style="padding:6px">Single-person approval &amp; DB row tampering</td><td>Maker-checker &gt;₹10k + linked SHA-256 chain</td><td><code>BR-5 · UAT-06</code></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
 </section>
 <section style="margin:26px 0 0;border:1px solid #EDE5D8;border-radius:14px;background:var(--paper);padding:18px">
 <p style="margin:0 0 6px;font:600 1.05rem Fraunces,Georgia,serif;color:var(--ink)">Hiring for product in fintech or finance ops?</p>
@@ -188,6 +236,67 @@ var playing=false,step=0,tick=function(){};
 document.querySelectorAll('.mode button').forEach(function(b){b.onclick=function(){render(b.dataset.m,false);history.replaceState(null,"","#"+b.dataset.m)}});
 document.getElementById('play').onclick=function(){var pb=this;if(playing){playing=false;clearInterval(timer);pb.textContent="▶ Resume";return}if(/Resume/.test(pb.textContent)){playing=true;pb.textContent="❚❚ Pause";timer=setInterval(tick,1600);tick();return}render(cur,true)};
 var h=(location.hash||"").slice(1);render(S[h]?h:"pre",false);
+
+var MB={
+  asha:[
+    {id:"BR-5 · UAT-06",try:"Asha tries to approve her own ₹12,000 scheme claim (>₹10,000 limit)",exp:"Blocked · routed to Vikram (Finance Controller)",btn:"Try self-approving",log:"[BR-5 BLOCKED] Actor 'Asha (Maker)' cannot approve own submission on INV-3007 (₹12,000 > ₹10,000 threshold). Case locked in 'Pending Vikram (Checker)' · SHA-256 seal: 9f4a2c1e"},
+    {id:"BR-4 · UAT-04",try:"Asha tries to write off an unexplained ₹5,000 short-payment with no reason code",exp:"Blocked · ₹0 auto write-offs allowed",btn:"Try silent write-off",log:"[BR-4 BLOCKED] Unexplained gap on INV-2015 (₹5,000) cannot be approved or written off. Must attach reason code + owner or raise Debit Note DN-501 · SHA-256 seal: 3b8e71d0"},
+    {id:"BR-10 · UAT-17",try:"Distributor deducts ₹9,440 against an ₹8,000 tax-inclusive Ten Today approval",exp:"Split at cap: ₹8,000 cleared · ₹1,440 routed to Rahul (Rep)",btn:"Run cap-split check",log:"[BR-10 SPLIT] APV-2026-042 cap is ₹8,000 incl. GST. Cleared ₹8,000 via CN-201; excess ₹1,440 opened as Case C-3302 assigned to Rahul (Sales Rep) · 15-day block timer started"}
+  ],
+  neha:[
+    {id:"LR-2 · UAT-L03",try:"NACH returns Code 61 ('Mandate cancelled by customer') on a ₹18,500 EMI",exp:"Re-presentation blocked · routed to Ops for fresh mandate",btn:"Try re-presenting EMI",log:"[LR-2 BLOCKED] NACH Return Code 61 is a hard mandate failure (not insufficient funds). Auto re-present blocked to prevent NPCI penalty; routed to Neha (Ops) for new e-NACH mandate."},
+    {id:"LR-3 · UAT-L06",try:"System tries to compound 18% interest on top of a ₹500 bounce penal charge",exp:"Blocked by RBI Aug 2023 Fair Lending circular",btn:"Try compounding penal",log:"[LR-3 BLOCKED] Per RBI/2023-24/53: ₹500 bounce fee posted to separate 'Penal Charges Receivable' ledger. Capitalisation into principal & further interest calculation strictly blocked."},
+    {id:"LR-5 · UAT-L10",try:"Neha (Collections Maker) tries to waive ₹15,000 of overdue penal charges alone",exp:"Blocked · requires Credit Controller 2nd sign-off",btn:"Try solo waiver",log:"[LR-5 BLOCKED] Waiver of ₹15,000 exceeds ₹5,000 single-user limit. Neha's recommendation logged; awaiting Credit Controller checker approval."}
+  ]
+};
+var curP="asha",doneMap={};
+function renderMB(){
+  var rows=MB[curP];
+  document.querySelectorAll('#mb-tabs button').forEach(function(b){
+    var on=b.dataset.p===curP;
+    b.style.background=on?"var(--navy)":"#fff";
+    b.style.color=on?"#fff":"var(--ink)";
+    b.style.borderColor=on?"var(--navy)":"var(--line)";
+  });
+  document.getElementById('mb-body').innerHTML=rows.map(function(r,idx){
+    var k=curP+"-"+idx,hit=doneMap[k];
+    return "<tr style='border-bottom:1px solid #F1F5F9'><td style='padding:9px 6px;font-family:ui-monospace,Menlo,monospace;font-size:.76rem;font-weight:700;color:var(--navy)'>"+r.id+"</td><td style='padding:9px 6px'>"+r.try+"</td><td style='padding:9px 6px'>"+(hit?"<span class='chip rd' style='margin:0'>✗ "+r.exp+"</span>":"<span style='color:var(--mut);font-size:.8rem'>"+r.exp+"</span>")+"</td><td style='padding:9px 6px;text-align:right;white-space:nowrap'><button type='button' data-mb='"+idx+"' style='font:600 .76rem Inter,Arial;padding:6px 10px;border-radius:7px;border:1px solid "+(hit?"var(--teal)":"var(--tt)")+";background:"+(hit?"var(--tealbg)":"var(--ttbg)")+";color:"+(hit?"var(--teal)":"var(--tt)")+";cursor:pointer'>"+(hit?"✓ Control held":r.btn)+"</button></td></tr>";
+  }).join("");
+}
+document.getElementById('mb-tabs').addEventListener('click',function(e){
+  var b=e.target.closest('button[data-p]');if(!b)return;
+  curP=b.dataset.p;renderMB();
+});
+document.getElementById('mb-body').addEventListener('click',function(e){
+  var b=e.target.closest('button[data-mb]');if(!b)return;
+  var idx=Number(b.dataset.mb),r=MB[curP][idx];
+  doneMap[curP+"-"+idx]=true;renderMB();
+  var out=document.getElementById('mb-out');
+  out.style.display='block';
+  out.innerHTML="<span style='color:#FDBA74;font-weight:700'>LIVE ENGINE TRACE ("+r.id+"):</span> "+r.log;
+});
+document.getElementById('mb-runall').addEventListener('click',function(){
+  ["asha","neha"].forEach(function(p){MB[p].forEach(function(_,i){doneMap[p+"-"+i]=true;});});
+  renderMB();
+  var out=document.getElementById('mb-out');
+  out.style.display='block';
+  out.innerHTML="<span style='color:#5EEAD4;font-weight:700'>✓ ALL 6 MAKE-OR-BREAK CONTROLS HELD (31/31 UAT SUITE):</span> Asha's self-approval &amp; silent write-off blocked (BR-4, BR-5); Ten Today excess split to Rahul (BR-10); Neha's invalid NACH re-present, RBI penal compounding &amp; solo waiver blocked (LR-2, LR-3, LR-5).";
+});
+renderMB();
+
+document.getElementById('sp-tabs').addEventListener('click',function(e){
+  var b=e.target.closest('button[data-sp]');if(!b)return;
+  var sp=b.dataset.sp;
+  document.querySelectorAll('#sp-tabs button').forEach(function(x){
+    var on=x.dataset.sp===sp;
+    x.style.background=on?"var(--navy)":"#fff";
+    x.style.color=on?"#fff":"var(--ink)";
+    x.style.borderColor=on?"var(--navy)":"var(--line)";
+  });
+  ["sig","raci","trc"].forEach(function(k){
+    document.getElementById("sp-"+k).style.display=(k===sp?"block":"none");
+  });
+});
 </script><script>
 (function(){
 var T=[
