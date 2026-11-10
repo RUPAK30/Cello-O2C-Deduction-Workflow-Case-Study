@@ -114,11 +114,12 @@ a{color:#111827}
 .m-dis{border-top:3px solid #0071E3!important}.m-dis b{color:#B25000}
 html,body{overflow-x:clip}
 .appbar .logo{gap:10px}.appbar .logo svg{flex:none}.lw{display:flex;flex-direction:column;line-height:1.05}.lw b{font-size:.98rem;letter-spacing:-.02em}.lw small{font-size:.68rem;color:var(--muted);font-weight:500;letter-spacing:.01em}@media(max-width:640px){.appbar .logo span{display:flex!important}.lw small{display:none}}
-/* Centered brand in the app bar */
-.appbar .in{display:grid;grid-template-columns:1fr auto 1fr;height:64px}
-.appbar .logo{grid-column:2;justify-self:center;gap:12px}
-.appbar .logo svg{width:36px;height:36px}
-.lw{align-items:flex-start}.lw b{font-size:1.12rem}.lw small{font-size:.72rem}
-.appbar nav{grid-column:3;justify-self:end;margin-left:0}
+/* Left-aligned brand + single-line nav in the app bar */
+.appbar .in{display:flex;align-items:center;justify-content:space-between;height:64px;gap:12px}
+.appbar .logo{gap:10px;flex-shrink:0}
+.appbar .logo svg{width:32px;height:32px}
+.lw{align-items:flex-start}.lw b{font-size:1.05rem}.lw small{font-size:.68rem}
+.appbar nav{margin-left:auto;display:flex;align-items:center;gap:4px;flex-wrap:nowrap}
+.appbar nav a{white-space:nowrap}
 .bar-top{top:64px}.tabs2{top:64px}html{scroll-padding-top:128px}
-@media(max-width:640px){.appbar .in{grid-template-columns:auto 1fr auto}.appbar .logo{grid-column:1;justify-self:start}}
+@media(max-width:760px){.appbar nav a.hide-s{display:none}.lw small{display:none}}

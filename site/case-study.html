@@ -47,7 +47,7 @@ details.fold[open]>summary{margin-bottom:14px}
 <link rel="stylesheet" href="product.css">
 </head>
 <body><div style="background:#111827;color:#E5E7EB;font:500 12.5px/1.4 Inter,Arial,sans-serif;padding:8px 16px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap"><span><a href="index.html#proof" style="color:#fff;text-decoration:none">← <b>Every Rupee</b> case study · the proof</a></span><a href="https://every-rupee-gets-owner.lovable.app" style="color:#5EEAD4;text-decoration:none;font-weight:600">Product ↗</a></div>
-<header class="appbar"><div class="in"><a class="logo" href="./"><svg width="30" height="30" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="Every rupee, split and owned"><circle cx="16" cy="16" r="13" fill="none" stroke="#64748B" stroke-width="4.5" stroke-dasharray="2.48 79.20" stroke-dashoffset="0.00" transform="rotate(-90 16 16)"/><circle cx="16" cy="16" r="13" fill="none" stroke="#0071E3" stroke-width="4.5" stroke-dasharray="31.07 50.61" stroke-dashoffset="-4.08" transform="rotate(-90 16 16)"/><circle cx="16" cy="16" r="13" fill="none" stroke="#0071E3" stroke-width="4.5" stroke-dasharray="43.32 38.36" stroke-dashoffset="-36.76" transform="rotate(-90 16 16)"/><text x="16" y="21.2" text-anchor="middle" font-family="Inter,Arial,sans-serif" font-weight="700" font-size="14" fill="#111827">₹</text></svg><span class="lw"><b>Every Rupee</b><small>Short-payment reconciliation</small></span></a><nav><a href="index.html" class="hide-s">Quote to cash</a><a href="case-study.html" class="hide-s on">Case study</a><a href="brd.html" class="hide-s">BRD</a><a href="desk.html">Brand desk</a><a href="lender.html" class="hide-s">Lender desk</a><a href="sources.html" class="hide-s">Sources</a><a href="https://every-rupee-gets-owner.lovable.app" class="pri">Product ↗</a></nav></div></header>
+<header class="appbar"><div class="in"><a class="logo" href="./"><svg width="30" height="30" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="Every rupee, split and owned"><circle cx="16" cy="16" r="13" fill="none" stroke="#64748B" stroke-width="4.5" stroke-dasharray="2.48 79.20" stroke-dashoffset="0.00" transform="rotate(-90 16 16)"/><circle cx="16" cy="16" r="13" fill="none" stroke="#0071E3" stroke-width="4.5" stroke-dasharray="31.07 50.61" stroke-dashoffset="-4.08" transform="rotate(-90 16 16)"/><circle cx="16" cy="16" r="13" fill="none" stroke="#0071E3" stroke-width="4.5" stroke-dasharray="43.32 38.36" stroke-dashoffset="-36.76" transform="rotate(-90 16 16)"/><text x="16" y="21.2" text-anchor="middle" font-family="Inter,Arial,sans-serif" font-weight="700" font-size="14" fill="#111827">₹</text></svg><span class="lw"><b>Every Rupee</b><small>Short-payment reconciliation</small></span></a><nav><a href="index.html" class="hide-s">Quote to cash</a><a href="case-study.html" class="hide-s on">Case study</a><a href="brd.html" class="hide-s">BRD</a><a href="desk.html?uat=1">UAT suite (31 tests)</a><a href="sources.html" class="hide-s">Sources</a><a href="https://every-rupee-gets-owner.lovable.app/demo" class="pri">Live product ↗</a></nav></div></header>
 
 <header class="wrap hero">
   <div class="hero-grid"><div>
@@ -55,8 +55,8 @@ details.fold[open]>summary{margin-bottom:14px}
   <h1>Distributor short-payment reconciliation</h1>
   <p class="lede" style="margin-bottom:6px">How a manufacturer should reconcile distributor payments that arrive below the invoice: process, rules, stories and executable tests.</p>
   </div>
-  <a class="preview" href="desk.html" aria-label="Open the executable specification">
-    <div class="pv-h"><b>Reconciliation desk</b><span class="pv-chip">Day 0 · sample data</span></div>
+  <a class="preview" href="https://every-rupee-gets-owner.lovable.app/demo" aria-label="Open the live reconciliation product">
+    <div class="pv-h"><b>Reconciliation desk · Live Product</b><span class="pv-chip">Day 0 · sample data</span></div>
     <div class="pv-k"><div><span>Short-paid</span><b>₹58,457</b></div><div><span>By rule</span><b>26%</b></div><div><span>Unowned</span><b class="ok">₹0</b></div></div>
     <div class="pv-bar"><i style="width:4%;background:#64748B"></i><i style="width:22%;background:#B7791F"></i><i style="width:74%;background:#C2410C"></i></div>
     <ul class="pv-l">
@@ -64,7 +64,7 @@ details.fold[open]>summary{margin-bottom:14px}
       <li><code>C-3304</code><span>Scheme · above limit</span><b>₹12,000</b><em class="w">2nd approver</em></li>
       <li><code>C-3301</code><span>Scheme · evidenced</span><b>₹8,000</b><em class="g">Auto · CN-201</em></li>
     </ul>
-    <div class="pv-f"><span class="pv-chip g">UAT 11 / 11 passing</span><span>Open →</span></div>
+    <div class="pv-f"><span class="pv-chip g">31 / 31 UAT passing</span><span>Open live product ↗</span></div>
   </a>
   </div>
   <div class="money" aria-label="Where every rupee of a ₹20,000 short payment goes">
@@ -91,7 +91,7 @@ details.fold[open]>summary{margin-bottom:14px}
     <div class="wwh-c"><b>When: the trigger</b><p>A receipt posts below the invoice value.<br><span class="mini">Today</span> weeks of email.<br><span class="mini">Target</span> every rupee classified and owned the same day.</p></div>
     <div class="wwh-c"><b>How: the proposed process</b><ol><li>Identify the payer (BR-1)</li><li>Separate statutory TDS (BR-2)</li><li>Validate claims against evidence (BR-3)</li><li>Route the remainder to an owner with an SLA (BR-4 to BR-7)</li><li>Send unbudgeted scheme claims to the regional sales head (BR-8)</li></ol></div>
   </div>
-  <p style="margin:16px 0 8px"><a class="cta" href="desk.html">Open the executable specification →</a></p>
+  <p style="margin:16px 0 8px;display:flex;gap:10px;flex-wrap:wrap"><a class="cta" href="https://every-rupee-gets-owner.lovable.app/demo">Open the live product →</a><a class="btn" href="desk.html?uat=1" style="text-decoration:none;font-weight:600">Run the 31-test UAT suite →</a></p>
 </section>
 
 
@@ -316,7 +316,7 @@ details.fold[open]>summary{margin-bottom:14px}
 </section>
 </main>
 
-<p style="max-width:880px;margin:0 auto;padding:0 16px"><span style="display:block;margin:28px 0 0;padding:16px 18px;border:1px solid #E2E8F0;border-left:4px solid #0071E3;border-radius:12px;background:#fff"><b>Next:</b> the rules in this case study are not a diagram — the <a href="desk.html" style="font-weight:600">brand desk</a> runs them in the browser, with 19 tests you can trigger yourself.</span></p>
+<p style="max-width:880px;margin:0 auto;padding:0 16px"><span style="display:block;margin:28px 0 0;padding:16px 18px;border:1px solid #E2E8F0;border-left:4px solid #0071E3;border-radius:12px;background:#fff"><b>Next:</b> try the <a href="https://every-rupee-gets-owner.lovable.app/demo" style="font-weight:600">live Every Rupee product ↗</a> or run the <a href="desk.html?uat=1" style="font-weight:600">executable UAT suite (31 tests)</a> right in your browser.</span></p>
 
 <footer class="wrap foot">
   <p>Self-initiated. Built from Cello World Ltd's public filings (FY26 consolidated, FY25 restated) and public industry research. Internal processes are hypotheses, not confirmed company practice. Tools such as virtual accounts, Slack or a workflow platform are proposals, not claims about Cello's systems. Tax rules are summarised from public sources, Oct 2026. Not tax advice.</p>
