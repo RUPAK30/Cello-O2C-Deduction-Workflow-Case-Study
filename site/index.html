@@ -125,6 +125,225 @@ table.rc tr.t td{font-weight:700;color:var(--ink);border-bottom:0;border-top:2px
 </div>
 <section class="proof" id="proof">
   <div id="sn-case-study-card" style="background:#fff;border:1px solid #EDE5D8;border-top:4px solid #0071E3;border-radius:14px;padding:18px 20px;margin-bottom:18px">
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:12px">
+      <div>
+        <span style="font-size:.7rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#0071E3">Enterprise ITIL Architecture · 10-Second Live Animated Walkthrough</span>
+        <h3 style="margin:2px 0 0;font:600 1.25rem Fraunces,Georgia,serif;color:var(--ink)">How Every Rupee Resolves Short-Payments via ServiceNow</h3>
+      </div>
+      <div style="display:flex;gap:8px;align-items:center">
+        <span id="sn-flow-badge" style="font-size:.78rem;font-weight:700;padding:4px 10px;border-radius:99px;background:#EFF6FF;color:#1D4ED8">Step 1 · Short-Payment Dispatched (Day 0)</span>
+        <button id="sn-flow-replay" type="button" style="font:600 .76rem Inter,Arial;padding:4px 9px;border-radius:6px;border:1px solid #CBD5E1;background:#fff;cursor:pointer">↻ Replay</button>
+      </div>
+    </div>
+
+    <!-- 3 Animated Steps Grid -->
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px" id="sn-flow-steps">
+      <div id="sn-step-1" style="background:#F8FAFC;border:2px solid #0071E3;border-radius:10px;padding:12px;transition:all .35s">
+        <div style="display:flex;justify-content:space-between;font-size:.7rem;color:#64748B;font-weight:700;margin-bottom:4px">
+          <span style="color:#0071E3">1 · SHORT-PAYMENT DETECTED</span>
+          <span style="font-family:ui-monospace,Menlo,monospace">Day 0</span>
+        </div>
+        <b style="display:block;font-size:.88rem;color:#0F2742;margin-bottom:4px">Dispatched to ServiceNow Table API</b>
+        <p style="font-size:.78rem;color:#475569;margin:0 0 6px;line-height:1.45">Unapproved gap is matched in &lt;5 ms. Engine fires <code>POST /api/now/table/change_request</code> with 7-day Normal or 2-day Emergency SLA.</p>
+        <span style="display:inline-block;font-size:.7rem;font-weight:700;padding:2px 6px;border-radius:4px;background:#DBEAFE;color:#1E40AF">CHG-NRM-102 (Active)</span>
+      </div>
+
+      <div id="sn-step-2" style="background:#F8FAFC;border:1px solid #E2E8F0;border-radius:10px;padding:12px;opacity:.65;transition:all .35s">
+        <div style="display:flex;justify-content:space-between;font-size:.7rem;color:#64748B;font-weight:700;margin-bottom:4px">
+          <span style="color:#0071E3">2 · MANDATORY PROOF GATE</span>
+          <span style="font-family:ui-monospace,Menlo,monospace">Day 1</span>
+        </div>
+        <b style="display:block;font-size:.88rem;color:#0F2742;margin-bottom:4px">sys_attachment Gate Enforced</b>
+        <p style="font-size:.78rem;color:#475569;margin:0 0 6px;line-height:1.45">Ticket stays locked. Sales/Logistics attaches signed GRN or approved Trade Circular to prevent silent write-offs.</p>
+        <span id="sn-badge-2" style="display:inline-block;font-size:.7rem;font-weight:700;padding:2px 6px;border-radius:4px;background:#FEF3C7;color:#92400E">Awaiting Signed GRN</span>
+      </div>
+
+      <div id="sn-step-3" style="background:#F8FAFC;border:1px solid #E2E8F0;border-radius:10px;padding:12px;opacity:.65;transition:all .35s">
+        <div style="display:flex;justify-content:space-between;font-size:.7rem;color:#64748B;font-weight:700;margin-bottom:4px">
+          <span style="color:#0071E3">3 · HOD &amp; PVT SIGN-OFF</span>
+          <span style="font-family:ui-monospace,Menlo,monospace">Day 2 (Within SLA)</span>
+        </div>
+        <b style="display:block;font-size:.88rem;color:#0F2742;margin-bottom:4px">Post-Validation Test Pass</b>
+        <p style="font-size:.78rem;color:#475569;margin:0 0 6px;line-height:1.45">Finance Head (Vikram) signs off. Post-Validation Testing verifies GST credit-note &amp; ledger balance before ticket closes.</p>
+        <span id="sn-badge-3" style="display:inline-block;font-size:.7rem;font-weight:700;padding:2px 6px;border-radius:4px;background:#F1F5F9;color:#64748B">Pending PVT</span>
+      </div>
+    </div>
+  </div>
+
+  <script>
+  (function(){
+    var step = 1;
+    var timer;
+    var b1 = document.getElementById('sn-step-1');
+    var b2 = document.getElementById('sn-step-2');
+    var b3 = document.getElementById('sn-step-3');
+    var badge = document.getElementById('sn-flow-badge');
+    var replayBtn = document.getElementById('sn-flow-replay');
+    if (!b1 || !b2 || !b3) return;
+
+    function runFlow() {
+      if (step === 1) {
+        b1.style.border = '2px solid #0071E3'; b1.style.opacity = '1';
+        b2.style.border = '1px solid #E2E8F0'; b2.style.opacity = '.65';
+        b3.style.border = '1px solid #E2E8F0'; b3.style.opacity = '.65';
+        if (badge) { badge.textContent = 'Step 1 · Short-Payment Dispatched (Day 0)'; badge.style.background = '#EFF6FF'; badge.style.color = '#1D4ED8'; }
+        step = 2;
+      } else if (step === 2) {
+        b1.style.border = '1px solid #E2E8F0'; b1.style.opacity = '.85';
+        b2.style.border = '2px solid #D97706'; b2.style.opacity = '1';
+        var bd2 = document.getElementById('sn-badge-2');
+        if (bd2) { bd2.textContent = '✓ Signed_GRN_Verified.pdf Attached'; bd2.style.background = '#DCFCE7'; bd2.style.color = '#15803D'; }
+        if (badge) { badge.textContent = 'Step 2 · Mandatory Proof Attached via sys_attachment'; badge.style.background = '#FEF3C7'; badge.style.color = '#B45309'; }
+        step = 3;
+      } else if (step === 3) {
+        b2.style.border = '1px solid #E2E8F0'; b2.style.opacity = '.85';
+        b3.style.border = '2px solid #16A34A'; b3.style.opacity = '1';
+        var bd3 = document.getElementById('sn-badge-3');
+        if (bd3) { bd3.textContent = '✓ PVT Passed · Closed (Resolved)'; bd3.style.background = '#DCFCE7'; bd3.style.color = '#15803D'; }
+        if (badge) { badge.textContent = 'Step 3 · PVT Passed · Ticket Closed Successfully (Day 2)'; badge.style.background = '#DCFCE7'; badge.style.color = '#15803D'; }
+        step = 4;
+      } else {
+        step = 1;
+      }
+    }
+
+    timer = setInterval(runFlow, 2500);
+    if (replayBtn) {
+      replayBtn.onclick = function() {
+        clearInterval(timer);
+        step = 1;
+        runFlow();
+        timer = setInterval(runFlow, 2500);
+      };
+    }
+  })();
+  </scriptl>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Every Rupee · Quote to Cash — one rupee's route from approval to closed books</title>
+<meta name="description" content="One discount, followed from the sales approval to a closed invoice and balanced books: three real outcomes, every step dated, every entry posted.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Every Rupee · Quote to Cash — one rupee's route from approval to closed books">
+<meta property="og:description" content="A discount promised in sales gets paid for in finance. Pick an outcome and watch every date, decision and ledger entry until the invoice balances to the rupee.">
+<meta property="og:url" content="https://everyrupee-o2c.vercel.app/">
+<meta property="og:image" content="https://everyrupee-o2c.vercel.app/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="canonical" href="https://everyrupee-o2c.vercel.app/">
+<link rel="icon" href="favicon.svg">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,500;9..144,600&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#0F172A;--txt:#334155;--mut:#64748B;--line:#E2E8F0;--navy:#0F2742;--teal:#0F766E;--tealbg:#F0FDFA;--amber:#B45309;--amberbg:#FFFBEB;--red:#B91C1C;--redbg:#FEF2F2;--bg:#FBF8F3;--tt:#C2410C;--ttbg:#FFF4EC;--paper:#FFFDF9}
+*{box-sizing:border-box}body{margin:0;font:15px/1.55 Inter,Arial,sans-serif;color:var(--txt);background:var(--bg)}
+.w{max-width:880px;margin:0 auto;padding:0 16px}
+.mast{border-bottom:1px solid #EDE5D8;background:var(--paper)}.mast .w{display:flex;justify-content:space-between;align-items:center;gap:10px;padding-top:12px;padding-bottom:12px;flex-wrap:wrap}
+.wm{font:600 1.05rem Fraunces,Georgia,serif;color:var(--ink);text-decoration:none;letter-spacing:-.01em}.wm i{font-style:normal;color:var(--tt)}
+.mast nav a{font:600 .8rem Inter,Arial;color:var(--txt);text-decoration:none;margin-left:14px}.mast nav a:hover{color:var(--ink)}.mast nav a:first-child{margin-left:0}
+.top{background:radial-gradient(60% 90% at 0% 0%,#FFE8D6 0%,transparent 60%),radial-gradient(60% 90% at 100% 0%,#DCE7F5 0%,transparent 60%),var(--paper)}
+.top .w{padding-top:44px;padding-bottom:30px}
+.k{font-size:.72rem;font-weight:700;letter-spacing:.16em;color:var(--mut);text-transform:uppercase;margin:0 0 12px}
+h1{font:600 clamp(1.9rem,4.4vw,2.9rem)/1.12 Fraunces,Georgia,serif;color:var(--ink);margin:0 0 14px;letter-spacing:-.02em;max-width:760px}
+.lead{color:var(--txt);margin:0 0 22px;max-width:660px;font-size:1.02rem}
+.rt{display:flex;align-items:center;gap:10px;margin:0 0 22px;font-size:.82rem;font-weight:600;flex-wrap:wrap}
+.rt .a{color:var(--tt);background:var(--ttbg);border:1px solid #F8D3B8;padding:6px 12px;border-radius:99px}
+.rt .b{color:var(--navy);background:#EEF3FA;border:1px solid #CFDCEE;padding:6px 12px;border-radius:99px}
+.rt .ln{flex:0 1 90px;height:2px;background:linear-gradient(90deg,var(--tt),var(--navy));border-radius:2px;position:relative}.rt .ln:after{content:"";position:absolute;right:-1px;top:-4px;border:5px solid transparent;border-left:7px solid var(--navy)}
+.rt .rec{color:var(--mut);font-weight:500}
+.cast{display:flex;flex-wrap:wrap;gap:8px}.cast span{background:#fff;border:1px solid #EDE5D8;border-radius:99px;padding:4px 11px;font-size:.8rem;color:var(--txt)}.cast span.s{border-color:#F8D3B8}.cast span.f{border-color:#CFDCEE}
+.pick{position:sticky;top:0;z-index:5;background:rgba(251,248,243,.96);backdrop-filter:blur(6px);border-bottom:1px solid var(--line)}
+.pick .w{padding-top:12px;padding-bottom:12px}.pick p{margin:0 0 8px;font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--teal)}
+.mode{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.mode button{font:600 .84rem/1.3 Inter,Arial;padding:10px 12px;border-radius:10px;border:1px solid var(--line);background:#fff;color:var(--txt);cursor:pointer;text-align:left}
+.mode button small{display:block;font-weight:500;color:var(--mut);font-size:.74rem;margin-top:2px}
+.mode button.on{background:var(--navy);color:#fff;border-color:var(--navy)}.mode button.on small{color:#CBD5E1}
+.bar2{display:flex;justify-content:space-between;align-items:center;margin:22px 0 10px;gap:10px;flex-wrap:wrap}.bar2 h2{margin:0;color:var(--ink);font:600 1.3rem Fraunces,Georgia,serif}
+details.lg{margin-top:8px}details.lg summary{cursor:pointer;font-size:.78rem;font-weight:600;color:var(--navy);list-style:none}details.lg summary::-webkit-details-marker{display:none}details.lg summary:before{content:"▸ ";color:var(--mut)}details.lg[open] summary:before{content:"▾ "}details.lg summary span{color:var(--teal);font-weight:600;margin-left:4px}.pc{display:flex;align-items:center;gap:10px}#prog{font-size:.8rem;color:var(--mut);font-weight:600}.ev.now .box{border-color:var(--teal);box-shadow:0 0 0 3px #CCFBF1}.play{font:600 .85rem Inter,Arial;padding:9px 14px;border-radius:10px;border:0;background:var(--teal);color:#fff;cursor:pointer}
+ol.tl{list-style:none;margin:0;padding:0;position:relative}
+ol.tl:before{content:"";position:absolute;left:17px;top:6px;bottom:6px;width:2px;background:var(--line)}
+.ev{position:relative;padding:0 0 14px 48px;transition:opacity .35s,transform .35s}
+.ev.hide{opacity:0;transform:translateY(8px)}
+.dot{position:absolute;left:8px;top:14px;width:20px;height:20px;border-radius:50%;background:#fff;border:3px solid var(--navy)}
+.ev.tt .dot{border-color:var(--tt)}.ev.end .dot{background:var(--teal);border-color:var(--teal)}
+.box{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.meta{display:flex;gap:8px;flex-wrap:wrap;align-items:center;font-size:.74rem;color:var(--mut);margin-bottom:3px}
+.tag{font-weight:700;letter-spacing:.06em;text-transform:uppercase;font-size:.66rem;padding:2px 7px;border-radius:5px;background:#EEF2F7;color:var(--navy)}
+.ev.tt .tag{background:var(--ttbg);color:var(--tt)}.ev.tt .box{border-left:3px solid var(--tt)}.ev.er .box{border-left:3px solid var(--navy)}
+.box b.h{display:block;color:var(--ink);font-size:.97rem}
+.box p{margin:2px 0 0;font-size:.9rem}
+.chip{display:inline-block;margin-top:7px;font-size:.78rem;font-weight:600;padding:3px 9px;border-radius:6px}
+.ok{background:var(--tealbg);color:var(--teal)}.am{background:var(--amberbg);color:var(--amber)}.rd{background:var(--redbg);color:var(--red)}
+table.jv{width:100%;border-collapse:collapse;margin-top:8px;font-size:.8rem}
+table.jv td{padding:4px 6px;border-top:1px solid #F1F5F9}table.jv td.n{text-align:right;font-family:ui-monospace,Menlo,monospace;white-space:nowrap}
+table.jv tr.hd td{color:var(--mut);font-size:.68rem;text-transform:uppercase;letter-spacing:.06em;border:0}
+.close{background:#fff;border:2px solid var(--teal);border-radius:14px;padding:16px 18px;margin:6px 0 0}
+.close h3{margin:0 0 8px;color:var(--ink);font:600 1.2rem Fraunces,Georgia,serif}
+table.rc{width:100%;border-collapse:collapse;font-size:.88rem}table.rc td{padding:5px 0;border-bottom:1px solid #F1F5F9}table.rc td.n{text-align:right;white-space:nowrap;font-family:ui-monospace,Menlo,monospace}
+table.rc tr.t td{font-weight:700;color:var(--ink);border-bottom:0;border-top:2px solid var(--ink)}
+.kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}.kpis div{background:var(--bg);border-radius:10px;padding:8px 10px;font-size:.78rem}.kpis b{display:block;font-size:1.05rem;color:var(--ink)}
+.why{background:#fff;border:1px solid var(--line);border-left:4px solid var(--teal);border-radius:12px;padding:14px 16px;margin:22px 0 0}
+.links{display:flex;gap:10px;flex-wrap:wrap;margin:18px 0 0}.links a{font:600 .86rem Inter,Arial;padding:10px 14px;border-radius:10px;text-decoration:none;border:1px solid var(--line);background:#fff;color:var(--navy)}.links a.p{background:var(--navy);color:#fff;border-color:var(--navy)}
+.note{font-size:.76rem;color:var(--mut);margin:16px 0 50px}
+@media(max-width:600px){.rt{display:grid;grid-template-columns:auto;justify-items:start;gap:6px}.rt .ln{width:2px;height:16px;flex:none;margin-left:22px;background:linear-gradient(180deg,var(--tt),var(--navy))}.rt .ln:after{right:-5px;top:auto;bottom:-8px;border:5px solid transparent;border-top:7px solid var(--navy)}.mast nav a{margin-left:10px;font-size:.76rem}.mode button{white-space:nowrap;font-size:.72rem}h1{font-size:1.65rem}.mode{grid-template-columns:repeat(3,1fr);gap:6px}.mode button{padding:8px 8px;font-size:.76rem;text-align:center}.mode button small{display:none}.pick .w{padding-top:8px;padding-bottom:8px}.pick p{display:none}.kpis{grid-template-columns:1fr 1fr 1fr}.ev{padding-left:40px}ol.tl:before{left:13px}.dot{left:4px}}
+.mast nav{display:flex;gap:6px;flex-wrap:wrap}.mast nav a{display:flex;align-items:center;gap:7px;margin:0!important;padding:6px 10px;border:1px solid #EDE5D8;border-radius:99px;background:#fff;font-size:.8rem;color:var(--ink)}
+.mast nav a small{font-weight:500;color:var(--mut);font-size:.72rem}.mast nav a i{width:8px;height:8px;border-radius:50%;display:inline-block}
+.mast nav .n1 i{background:var(--tt)}.mast nav .n2 i{background:var(--navy)}.mast nav .n3 i{background:#9CA3AF}.mast nav a:hover{border-color:#D6C9B5}.mast nav a.on{background:var(--ttbg);border-color:#F8D3B8;color:var(--tt)}
+@media(max-width:760px){.mast nav a.hide-m{display:none}}
+.nx{font:600 1.3rem Fraunces,Georgia,serif;color:var(--ink);margin:30px 0 12px}
+.next{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.nc{display:flex;flex-direction:column;gap:4px;padding:16px;border-radius:14px;background:var(--paper);border:1px solid #EDE5D8;border-top:4px solid #9CA3AF;text-decoration:none;color:var(--txt)}
+.nc.s{border-top-color:var(--tt)}.nc.f{border-top-color:var(--navy)}
+.nc small{font-size:.7rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--mut)}
+.nc b{color:var(--ink);font-size:1rem}.nc span{font-size:.86rem}.nc em{font-style:normal;font-weight:600;font-size:.86rem;margin-top:auto;padding-top:8px}
+.nc.s em{color:var(--tt)}.nc.f em{color:var(--navy)}.nc.l em{color:#4B5563}.nc:hover{border-color:#D6C9B5}
+@media(max-width:700px){.next{grid-template-columns:1fr}.mast nav a small{display:none}}
+.next.two{grid-template-columns:1fr 1fr}
+.proof{margin-top:8px}.pl{margin:0 0 12px;max-width:640px}.pl b{color:var(--ink)}
+.pr{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:#EDE5D8;border:1px solid #EDE5D8;border-radius:12px;overflow:hidden}
+.pr a{background:var(--paper);padding:13px 15px;text-decoration:none;color:var(--txt);display:flex;flex-direction:column;gap:2px}.pr a:hover{background:#fff}
+.pr b{color:var(--ink);font-size:.92rem}.pr span{font-size:.82rem;color:var(--mut)}
+@media(max-width:700px){.next.two,.pr{grid-template-columns:1fr}}
+.plain{display:flex;gap:14px;align-items:center;flex-wrap:wrap;background:#fff;border:1px solid #EDE5D8;border-radius:14px;padding:14px 16px;margin:0 0 20px;max-width:760px}
+.plain p{margin:0;flex:1 1 380px;font-size:.95rem}.plain b{color:var(--ink)}
+#xp{font:600 .92rem Inter,Arial;background:var(--tt);color:#fff;border:0;border-radius:10px;padding:11px 16px;cursor:pointer;white-space:nowrap;box-shadow:0 6px 16px -8px rgba(194,65,12,.6)}
+.xg{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);width:min(560px,calc(100% - 24px));background:#111827;color:#F9FAFB;border-radius:16px;padding:16px 18px 14px;z-index:50;box-shadow:0 18px 40px -10px rgba(0,0,0,.45);font-size:.98rem;line-height:1.5}
+.xg .st{font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:#FDBA74;font-weight:700;margin:0 0 6px}
+.xg p{margin:0 0 12px}.xg b{color:#fff}
+.xg .bar{height:3px;background:#374151;border-radius:3px;overflow:hidden;margin:0 0 12px}.xg .bar i{display:block;height:100%;width:0;background:#FDBA74}
+.xg .ctl{display:flex;justify-content:space-between;align-items:center;gap:8px}.xg button{font:600 .85rem Inter,Arial;border-radius:9px;padding:8px 13px;cursor:pointer;border:1px solid #4B5563;background:transparent;color:#E5E7EB}
+.xg button.n{background:#fff;color:#111827;border-color:#fff}.xg .x{border:0;padding:4px 6px;color:#9CA3AF}
+.xhl{scroll-margin-top:96px;outline:3px solid #FDBA74!important;outline-offset:4px;border-radius:12px;transition:outline-color .3s}
+</style></head><body>
+<div class="mast"><div class="w"><a class="wm" href="index.html">One Rupee's <i>Route</i></a><nav><a class="n2" href="https://every-rupee-gets-owner.lovable.app/demo" style="background:var(--navy);color:#fff;border-color:var(--navy)"><i></i>Live product ↗</a><a class="n2" href="sources.html"><i></i>Sources</a></nav></div></div>
+<header class="top"><div class="w">
+<p class="k">Every Rupee · a quote-to-cash case · sample data</p>
+<h1>A discount promised in sales gets paid for in finance. Follow one rupee all the way to closed books.</h1>
+<p class="lead">Two products, one shared approval record. Pick an outcome and watch every date, decision and ledger entry until the invoice balances to the rupee.</p>
+<div class="plain"><p><b>In plain words:</b> a salesperson promises a shop a discount. Weeks later the shop pays less than the bill. This shows who decides whether that's right, and how the books still balance to the last rupee.</p><button id="xp" type="button">▶ 60-second explainer</button></div>
+<div class="rt"><span class="a">Ten Today · the promise</span><span class="ln"></span><span class="b">Every Rupee · the payment</span><span class="rec">linked by one approval record</span></div>
+<div class="cast"><span class="s"><b>Rahul</b> · sales rep (unapproved claims)</span><span class="s"><b>Kavita</b> · sales manager (approves discounts &amp; handles expired caps)</span><span class="f"><b>Asha</b> · AR executive (closes ≤₹10k &amp; submits &gt;₹10k)</span><span class="f"><b>Vikram</b> · finance controller (2nd approver &gt;₹10k)</span><span><b>Krishna Marketing, Surat</b> · distributor</span></div>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(185px,1fr));gap:10px;margin-top:16px;background:#fff;border:2px solid #CFDCEE;border-radius:14px;padding:12px 14px">
+  <div><b style="display:block;font-size:1.1rem;color:var(--navy)">7–14d → Day 0</b><span style="font-size:.78rem;font-weight:600;color:var(--ink)">Short-Payment Detection (&lt;5 ms)</span><small style="display:block;font-size:.72rem;color:var(--mut)">Splits cash from shortfall at UTR import (Hackett CPG baseline)</small></div>
+  <div><b style="display:block;font-size:1.1rem;color:var(--navy)">22m → &lt;2m / bill</b><span style="font-size:.78rem;font-weight:600;color:var(--ink)">~8.0 Hrs Saved per 25 Bills</span><small style="display:block;font-size:.72rem;color:var(--mut)">24/25 bills rule-checked across UTR, cap &amp; GST (APQC)</small></div>
+  <div><b style="display:block;font-size:1.1rem;color:var(--teal)">30–45d → 3–7d</b><span style="font-size:.78rem;font-weight:600;color:var(--ink)">Dispute Resolution SLA</span><small style="display:block;font-size:.72rem;color:var(--mut)">Role-locked owner on Day 0; prevents &gt;180d ECL (Cello FY25)</small></div>
+  <div><b style="display:block;font-size:1.1rem;color:var(--tt)">₹18,544 caught</b><span style="font-size:.78rem;font-weight:600;color:var(--ink)">₹0 Silent Write-Offs</span><small style="display:block;font-size:.72rem;color:var(--mut)">Dual-control &gt;₹10k (BR-5) + live SHA-256 chain</small></div>
+</div>
+</div></header>
+<nav class="pick"><div class="w"><p>Pick the outcome</p><div class="mode">
+<button data-m="pre" class="on">1 · Clean<small>₹8,000 + GST approved</small></button>
+<button data-m="inc">2 · Over-deducted<small>₹8,000 incl. GST approved</small></button>
+<button data-m="late">3 · Expired<small>invoice after the window</small></button>
+</div></div></nav>
+<main class="w">
+<div class="bar2"><h2 id="ttl"></h2><span class="pc"><span id="prog"></span><button class="play" id="play">▶ Play it step by step</button></span></div>
+<ol class="tl" id="tl"></ol>
+<div class="close" id="close"></div>
+<div class="why"><b style="color:var(--ink)">What changes for the business.</b> Without the shared record, each of these is a ₹9,440 gap in receivables while finance and sales argue over email. With it, the approved part clears by rule the day the money lands, the unapproved part goes to the person who made the promise, and finance's own backlog never stops a sale.</div>
+<h2 class="nx">Try both sides yourself</h2>
+<div class="next" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px">
+<a class="nc s" href="https://tentoday.vercel.app/app.html"><small>The promise · Ten Today, sales app</small><b>Approve the discount</b><span>See Kavita's approval blocked by Rahul's open claim, then cleared once he attaches proof.</span><em>Open Ten Today →</em></a>
+<a class="nc f" href="https://every-rupee-gets-owner.lovable.app/demo"><small>The payment · Every Rupee, the product</small><b>Match the payments</b><span>Press auto-match and watch it hold the one payment it can't place instead of guessing.</span><em>Open Every Rupee →</em></a>
+<a class="nc" href="#proof" style="border-top-color:#0071E3"><small>Enterprise ITIL · ServiceNow API</small><b>Change &amp; Dispute Hub</b><span>Dual-mode Normal vs. Emergency Changes, mandatory proof gates, HoD sign-offs &amp; PVT verification.</span><em style="color:#0071E3">Open ServiceNow Hub →</em></a>
+</div>
+<section class="proof" id="proof">
+  <div id="sn-case-study-card" style="background:#fff;border:1px solid #EDE5D8;border-top:4px solid #0071E3;border-radius:14px;padding:18px 20px;margin-bottom:18px">
     <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:8px">
       <div>
         <span style="font-size:.7rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#0071E3">Enterprise ITIL Architecture · Case Study Visual</span>
