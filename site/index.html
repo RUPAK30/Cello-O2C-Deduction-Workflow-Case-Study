@@ -121,15 +121,39 @@ table.rc tr.t td{font-weight:700;color:var(--ink);border-bottom:0;border-top:2px
 <div class="next" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px">
 <a class="nc s" href="https://tentoday.vercel.app/app.html"><small>The promise · Ten Today, sales app</small><b>Approve the discount</b><span>See Kavita's approval blocked by Rahul's open claim, then cleared once he attaches proof.</span><em>Open Ten Today →</em></a>
 <a class="nc f" href="https://every-rupee-gets-owner.lovable.app/demo"><small>The payment · Every Rupee, the product</small><b>Match the payments</b><span>Press auto-match and watch it hold the one payment it can't place instead of guessing.</span><em>Open Every Rupee →</em></a>
-<a class="nc" href="desk.html#sn" style="border-top-color:#0071E3"><small>Enterprise ITIL · ServiceNow API</small><b>Change &amp; Dispute Hub</b><span>Dual-mode Normal vs. Emergency Changes, mandatory proof gates, HoD sign-offs &amp; PVT verification.</span><em style="color:#0071E3">Open ServiceNow Hub →</em></a>
+<a class="nc" href="#proof" style="border-top-color:#0071E3"><small>Enterprise ITIL · ServiceNow API</small><b>Change &amp; Dispute Hub</b><span>Dual-mode Normal vs. Emergency Changes, mandatory proof gates, HoD sign-offs &amp; PVT verification.</span><em style="color:#0071E3">Open ServiceNow Hub →</em></a>
 </div>
-<section class="proof" id="proof"><h2 class="nx">Make-or-Break Controls · Test Asha (Brand) &amp; Neha (Lender)</h2>
+<section class="proof" id="proof">
+  <div id="sn-case-study-card" style="background:#fff;border:1px solid #EDE5D8;border-top:4px solid #0071E3;border-radius:14px;padding:18px 20px;margin-bottom:18px">
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:8px">
+      <div>
+        <span style="font-size:.7rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#0071E3">Enterprise ITIL Architecture · Case Study Visual</span>
+        <h3 style="margin:2px 0 0;font:600 1.2rem Fraunces,Georgia,serif;color:var(--ink)">ServiceNow Change &amp; Dispute Governance</h3>
+      </div>
+      <span style="font-size:.78rem;font-weight:600;padding:4px 10px;border-radius:99px;background:#EFF6FF;color:#1D4ED8">REST Table API: change_request &amp; sys_attachment</span>
+    </div>
+    <p style="font-size:.88rem;color:var(--txt);margin:0 0 14px;max-width:720px">When an unapproved deduction occurs, Every Rupee initiates a structured ServiceNow Change record. To guarantee fiscal integrity, closure is enforced through 3 gates directly in the daily workflow:</p>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px">
+      <div style="background:#F8FAFC;border:1px solid #E2E8F0;border-radius:10px;padding:12px">
+        <b style="display:block;font-size:.84rem;color:#0F2742;margin-bottom:4px">1 · Dual Change Types &amp; SLAs</b>
+        <span style="font-size:.78rem;color:#64748B"><b>Normal Change</b> (7-day TAT) vs. <b>Emergency Change</b> (2-day TAT). Real-time countdown triggers SLA breach incident if current day exceeds target end date.</span>
+      </div>
+      <div style="background:#F8FAFC;border:1px solid #E2E8F0;border-radius:10px;padding:12px">
+        <b style="display:block;font-size:.84rem;color:#0F2742;margin-bottom:4px">2 · Mandatory Proof Gate</b>
+        <span style="font-size:.78rem;color:#64748B">Signed GRN or Trade Circular attached via <code>sys_attachment</code>. Ticket is physically locked until proof document is attached.</span>
+      </div>
+      <div style="background:#F8FAFC;border:1px solid #E2E8F0;border-radius:10px;padding:12px">
+        <b style="display:block;font-size:.84rem;color:#0F2742;margin-bottom:4px">3 · HoD &amp; PVT Sign-off Gate</b>
+        <span style="font-size:.78rem;color:#64748B">Requires Finance Head (Vikram) sign-off + Post-Validation Testing (PVT) sign-off before ticket transitions to Closed (Resolved).</span>
+      </div>
+    </div>
+  </div><h2 class="nx">Make-or-Break Controls · Test Asha (Brand) &amp; Neha (Lender)</h2>
 <p class="pl">Instead of a static "all passed" table, pick a desk and <b>try to break a control</b>—or run all 31 acceptance tests against the live rule engine right here.</p>
 <div style="background:#fff;border:1px solid #EDE5D8;border-radius:14px;padding:16px;margin-bottom:16px">
   <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px">
     <div style="display:flex;gap:6px;flex-wrap:wrap" id="mb-tabs">
       <button type="button" data-p="asha" style="font:600 .82rem Inter,Arial;padding:8px 13px;border-radius:9px;border:1px solid var(--navy);background:var(--navy);color:#fff;cursor:pointer">Asha · Brand AR Desk (11 rules)</button>
-      <a href="desk.html#sn" style="font:600 .82rem Inter,Arial;padding:8px 13px;border-radius:9px;border:1px solid #0071E3;background:#EFF6FF;color:#1D4ED8;text-decoration:none;display:inline-flex;align-items:center;gap:6px">⚡ ServiceNow ITIL Hub (Normal / Emergency Changes, HoD &amp; PVT) →</a>
+      <a href="#proof" style="font:600 .82rem Inter,Arial;padding:8px 13px;border-radius:9px;border:1px solid #0071E3;background:#EFF6FF;color:#1D4ED8;text-decoration:none;display:inline-flex;align-items:center;gap:6px">⚡ ServiceNow ITIL Hub (Normal / Emergency Changes, HoD &amp; PVT) →</a>
       <button type="button" data-p="neha" style="font:600 .82rem Inter,Arial;padding:8px 13px;border-radius:9px;border:1px solid var(--line);background:#fff;color:var(--ink);cursor:pointer">Neha · Lender EMI Desk (5 rules)</button>
     </div>
     <button type="button" id="mb-runall" style="font:600 .8rem Inter,Arial;padding:8px 12px;border-radius:9px;border:1px solid var(--teal);background:var(--tealbg);color:var(--teal);cursor:pointer">▶ Verify all 6 controls</button>
