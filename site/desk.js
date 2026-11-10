@@ -341,7 +341,7 @@
     renderTower(); renderJournal();
     if ($("apv-body")) $("apv-body").innerHTML = (S.approvals || []).map(function (x) { var d = dist(x.va); return "<div class='apv'><p><b class='mono'>" + x.id + "</b> · " + esc(d.name.split(",")[0]) + "<br><span class='tiny'>Rep " + x.rep + " · approved by " + esc(x.approver) + " · cap " + inr(x.cap) + (x.taxIncl ? " incl. GST" : " + GST (clears up to " + inr(capLimit(x)) + ")") + " · invoices up to " + fmt(new Date(x.windowEnd)) + " · used " + inr(x.used) + "</span></p></div>"; }).join("") + (function () { var f = salesFeed("CELLOVA0005"); return "<p class='tiny' style='margin-top:10px'><b>Feed to Ten Today, Krishna Marketing:</b> waiting on Finance " + inr(f.financePending) + " (doesn't block) · rep-owned or unverified over 15 days " + inr(f.blocking) + (f.young ? " · under 15 days " + inr(f.young) : "") + " → next discount <b>" + (f.block ? "blocked until proof or recovery" : "can be approved") + "</b></p>"; })();
 
-    $("log").innerHTML = S.log.length ? S.log.slice(0, 60).map(function (l) { return "<li><span class='mono'>Day " + l.day + "</span> <span class='rule'>" + esc(l.rule) + "</span> " + esc(l.text) + (l.hash ? " <span class='trace'>[" + esc((l.prevHash || "GENESIS").slice(0, 8)) + " → " + esc(l.hash.slice(0, 8)) + "]</span>" : "") + "</li>"; }).join("") : "<li class='empty'>Nothing yet.</li>";
+    $("log").innerHTML = S.log.length ? S.log.slice(0, 60).map(function (l, i) { return "<li><span class='mono'>Day " + l.day + "</span> <span class='rule'>" + esc(l.rule) + "</span> <input type='text' class='log-edit' data-log-idx='" + i + "' value='" + esc(l.text) + "' title='Edit stored audit text directly to test SHA-256 tamper detection' style='width:62%;font:inherit;padding:2px 6px;border:1px dashed #cbd5e1;border-radius:4px;background:#fff' />" + (l.hash ? " <span class='trace'>[" + esc((l.prevHash || "GENESIS").slice(0, 8)) + " → " + esc(l.hash.slice(0, 8)) + "]</span>" : "") + "</li>"; }).join("") : "<li class='empty'>Nothing yet.</li>";
   }
 
   /* Control tower: what a finance head looks at first */
@@ -432,6 +432,15 @@
     var type = /scheme|diwali|promo|discount|offer|target/.test(t) ? "Scheme claim" : /damage|broken|short(age)? qty|shortage|leak/.test(t) ? "Damage / shortage" : /rate|price diff/.test(t) ? "Rate difference" : /return|grn/.test(t) ? "Returns" : "";
     $("f-type").value = type; if (amt && type) $("f-camt").value = amt;
   };
+  document.addEventListener("input", function (e) {
+    var inp = e.target.closest("[data-log-idx]"); if (!inp) return;
+    var idx = Number(inp.dataset.logIdx);
+    if (!S.log[idx] || S.log[idx].text === inp.value) return;
+    if (!BACKUP_LOG) BACKUP_LOG = JSON.parse(JSON.stringify(S.log));
+    S.log[idx].text = inp.value;
+    if ($("undo-tamper")) $("undo-tamper").hidden = false;
+    if ($("verify-chain")) $("verify-chain").click();
+  });
   document.addEventListener("click", function (e) {
     var b = e.target.closest("[data-pre]"); if (!b) return;
     var P = b.dataset.pre === "1" ? ["CELLOVA0001", 991153, "INV-1041", "Less Diwali scheme 8,000 + TDS", true] : ["CELLOVA0002", 295000, "INV-2015", "", false];
@@ -514,6 +523,15 @@
     if ($("chain-status")) $("chain-status").hidden = true;
     render();
   };
+  document.addEventListener("input", function (e) {
+    var inp = e.target.closest("[data-log-idx]"); if (!inp) return;
+    var idx = Number(inp.dataset.logIdx);
+    if (!S.log[idx] || S.log[idx].text === inp.value) return;
+    if (!BACKUP_LOG) BACKUP_LOG = JSON.parse(JSON.stringify(S.log));
+    S.log[idx].text = inp.value;
+    if ($("undo-tamper")) $("undo-tamper").hidden = false;
+    if ($("verify-chain")) $("verify-chain").click();
+  });
   document.addEventListener("click", function (e) {
     var b = e.target.closest("[data-a]"); if (b) act(b.dataset.id, b.dataset.a);
     var o = e.target.closest("[data-order]"); if (o) order(o.dataset.order);
