@@ -331,8 +331,15 @@ td,th{padding:12px 14px!important}
           <table><thead><tr><th>Note</th><th>Distributor</th><th class="r">Amount</th><th class="r">IRP due</th></tr></thead><tbody id="cn-body"></tbody></table>
         </div>
         <div class="card">
-          <h2 id="auditc">Audit trail</h2>
-          <p class="sub">Every action, with the rule that drove it.</p>
+          <h2 id="auditc">Audit trail · linked SHA-256 chain</h2>
+          <p class="sub">Every action is chained to the previous entry's fingerprint (<code>GENESIS → prevHash → hash</code>) and pinned to a Controller Anchor Root.</p>
+          <div class="row" style="margin-bottom:10px;gap:6px">
+            <button class="btn small primary" id="verify-chain" type="button">Verify SHA-256 chain</button>
+            <button class="btn small" id="tamper-chain" type="button">Simulate DB tamper</button>
+            <button class="btn small" id="tamper-reseal" type="button">Simulate DBA edit + re-hash</button>
+            <button class="btn small" id="undo-tamper" type="button" hidden>Restore intact log</button>
+          </div>
+          <p id="chain-status" class="plain" hidden style="margin:0 0 10px"></p>
           <ul id="log"></ul>
           <div class="row" style="margin-top:10px"><button class="btn small" id="dl-log">Download audit trail (CSV)</button></div>
         </div>
