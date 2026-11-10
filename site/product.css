@@ -123,3 +123,7 @@ html,body{overflow-x:clip}
 .appbar nav a{white-space:nowrap}
 .bar-top{top:64px}.tabs2{top:64px}html{scroll-padding-top:128px}
 @media(max-width:760px){.appbar nav a.hide-s{display:none}.lw small{display:none}}
+
+/* ---- narrow screens: header wraps, nav scrolls instead of colliding ---- */
+@media(max-width:900px){.appbar .in{height:auto;flex-wrap:wrap;padding:8px 12px;gap:8px}.appbar nav{margin-left:0;width:100%;order:3;justify-content:flex-start;overflow-x:auto;scrollbar-width:none}.appbar nav::-webkit-scrollbar{display:none}.appbar nav a{white-space:nowrap}}
+
