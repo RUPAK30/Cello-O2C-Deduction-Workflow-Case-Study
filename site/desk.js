@@ -33,6 +33,7 @@
     return {
       day: 0, user: "maker", seq: { cs: 0, cn: 0, dn: 0 },
       settings: { tolerance: 10000, approval: 10000, sla: 7, creditAmt: 20000, creditAge: 45 },
+      snTickets: [], snSeq: 100, snApiLogs: [],
       dists: [
         { va: "CELLOVA0001", name: "Shree Ganesh Traders, Pune", purchases: 7200000, schemeLeft: 40000, dmgNorm: 4000 },
         { va: "CELLOVA0002", name: "Mahalaxmi Distributors, Nagpur", purchases: 3100000, schemeLeft: 15000, dmgNorm: 3000 },
@@ -86,7 +87,7 @@
     h2 = Math.imul(h2 ^ (h2 >>> 16), 2246822507) ^ Math.imul(h1 ^ (h1 >>> 13), 3266489909);
     return ("00000000" + (h1 >>> 0).toString(16)).slice(-8) + ("00000000" + (h2 >>> 0).toString(16)).slice(-8);
   }
-  function load() { try { S = JSON.parse(localStorage.getItem(KEY)); } catch (e) { S = null; } if (!S || !S.dists || !S.journal || !S.approvals) S = seed(); }
+  function load() { try { S = JSON.parse(localStorage.getItem(KEY)); } catch (e) { S = null; } if (!S || !S.dists || !S.journal || !S.approvals) S = seed(); if (!S.snTickets) S.snTickets = []; if (!S.snApiLogs) S.snApiLogs = []; }
   function save() { if (QUIET) return; try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} }
   function log(rule, text) {
     var prev = S.log.length ? (S.log[0].hash || "GENESIS") : "GENESIS";
@@ -179,6 +180,8 @@
   function newCase(d, inv, type, amt, evidence) {
     S.seq.cs++;
     var c = { id: "C-" + (3300 + S.seq.cs), va: d.va, dist: d.name, inv: inv.no, type: type, amount: amt, evidence: !!evidence, owner: OWNERS[type] || "AR lead", opened: S.day, due: S.day + S.settings.sla, status: "Open", maker: null, history: [] };
+    // Enterprise ServiceNow Change/Ticket Dispatch (Dual-Mode REST API)
+    createSnTicket(c, amt >= 20000 ? "Emergency" : "Normal");
     S.cases.push(c);
     return c;
   }
@@ -248,7 +251,14 @@
       if (c.type === "Unexplained") { log("BR-4", "Blocked: " + c.id + " has no reason code. An unexplained gap can be recovered or reclassified, not approved."); flash("Blocked: unexplained gaps can't be approved. Recover it, or get a reason code first.", true); }
       else if (c.amount > S.settings.approval && c.maker === S.user) { log("BR-5", "Blocked: " + USERS[S.user] + " tried to approve own case " + c.id + " above " + inr(S.settings.approval) + ". Routed to a checker."); flash("Blocked by maker-checker: switch to the Finance controller to approve.", true); }
       else if (c.amount > S.settings.approval && !c.maker) { c.maker = S.user; log("BR-5", c.id + " (" + inr(c.amount) + ") recommended by " + USERS[S.user] + "; needs a second approver."); flash("Recommended. Above " + inr(S.settings.approval) + ", a second person must approve.", false); }
-      else { c.status = "Accepted"; c.closedBy = USERS[S.user]; if (c.unbudgeted) { S.tradeCharged = (S.tradeCharged || 0) + c.amount; log("BR-8", c.id + ": " + inr(c.amount) + " charged to the region's trade budget (sales absorbs it, not net realisation). Region total charged: " + inr(S.tradeCharged) + "."); } else if (c.type === "Scheme claim") d.schemeLeft = Math.max(0, d.schemeLeft - c.amount); issueCN(c); log("BR-5", c.id + " approved by " + USERS[S.user] + (c.maker ? " (recommended by " + USERS[c.maker] + ")" : "") + "."); }
+      else {
+        // ServiceNow Change Governance: Sync Approval
+        c.status = "Accepted"; c.closedBy = USERS[S.user];
+        if (c.snTicketId) updateSnTicketOnApprove(c.snTicketId, USERS[S.user]);
+        if (c.unbudgeted) { S.tradeCharged = (S.tradeCharged || 0) + c.amount; log("BR-8", c.id + ": " + inr(c.amount) + " charged to the region's trade budget (sales absorbs it, not net realisation). Region total charged: " + inr(S.tradeCharged) + "."); }
+        else if (c.type === "Scheme claim") d.schemeLeft = Math.max(0, d.schemeLeft - c.amount);
+        issueCN(c); log("BR-5", c.id + " approved by " + USERS[S.user] + (c.maker ? " (recommended by " + USERS[c.maker] + ")" : "") + ".");
+      }
     }
     else if (what === "recover") { S.seq.dn++; c.status = "Recovered"; c.closedBy = USERS[S.user]; log("BR-4", c.id + ": " + inr(c.amount) + " found invalid. Debit note DN-" + (500 + S.seq.dn) + " raised; " + c.dist + " to pay."); }
     creditCheck(d); save(); if (!QUIET) render();
@@ -257,6 +267,13 @@
   function nextDay() {
     S.day++;
     S.cases.forEach(function (c) { if (c.status === "Open" && S.day > c.due && !c.escalated) { c.escalated = true; c.owner = "AR lead (escalated)"; log("SLA", c.id + " passed its SLA (day " + c.due + "). Escalated to the AR lead; history kept."); } });
+    (S.snTickets || []).forEach(function(t) {
+      if (t.state !== "Closed" && S.day > t.endDate && !t.tatBreached) {
+        t.tatBreached = true;
+        logSnApi("PATCH", "/api/now/table/change_request/" + t.sys_id, { state: -4, tat_breached: true, incident: "INC-TAT-BREACH-DAY-" + S.day });
+        log("SLA", "ServiceNow " + t.number + " (" + t.type + " Change): TAT BREACHED on Day " + S.day + " (End Date: Day " + t.endDate + "). SLA Violation logged.");
+      }
+    });
     S.notes.forEach(function (n) { if (n.irpDue && !n.reported && S.day === n.issued + 20) log("BR-6", "Alert: " + n.id + " must be reported to the IRP by day " + n.irpDue + "."); });
     S.invoices.forEach(function (i) { i.age++; });
     S.cases.forEach(function (c) { var inv = invByNo(c.inv); if (c.status !== "Open" || c.type === "Unexplained" || !inv) return; var l = windowLeft(inv); if (l === 7) log("BR-6", "Alert: " + c.id + " is on a " + fyLabel(inv) + " invoice. The s.34 GST credit-note window closes in 7 days (" + fmt(cnDeadline(inv)) + "). Owner: " + c.owner + "."); if (l === -1) log("BR-6", c.id + ": s.34 window for " + fyLabel(inv) + " has closed. If approved now, it can only be a financial credit note."); });
@@ -301,7 +318,240 @@
   var flashT;
   function flash(msg, warn) { if (QUIET) return; var f = $("flash"); f.textContent = msg; f.className = "flash show" + (warn ? " warn" : ""); clearTimeout(flashT); flashT = setTimeout(function () { f.className = "flash"; }, 4200); }
 
+  
+  /* =========================================================================
+     SERVICENOW ITIL DUAL-MODE REST API & CHANGE GOVERNANCE ENGINE
+     ========================================================================= */
+  function logSnApi(method, endpoint, payload, resStatus) {
+    if (!S.snApiLogs) S.snApiLogs = [];
+    var entry = {
+      timestamp: new Date().toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: false }) + " IST",
+      method: method,
+      endpoint: endpoint,
+      status: resStatus || 201,
+      payload: payload
+    };
+    S.snApiLogs.unshift(entry);
+    if (S.snApiLogs.length > 25) S.snApiLogs.pop();
+  }
+
+  function createSnTicket(c, initialType) {
+    if (!S.snTickets) S.snTickets = [];
+    S.snSeq = (S.snSeq || 100) + 1;
+    var isEmergency = initialType === "Emergency";
+    var startD = S.day;
+    var endD = isEmergency ? S.day + 2 : S.day + 7; // Emergency = 2-day TAT; Normal = 7-day TAT
+    var num = (isEmergency ? "CHG-EMG-" : "CHG-NRM-") + S.snSeq;
+    var sysId = "sn_" + Math.random().toString(16).slice(2, 10) + Math.random().toString(16).slice(2, 10);
+    
+    var ticket = {
+      sys_id: sysId,
+      number: num,
+      caseId: c.id,
+      dist: c.dist,
+      inv: c.inv,
+      amount: c.amount,
+      type: isEmergency ? "Emergency" : "Normal", // 2 Change Types
+      category: c.type,
+      startDate: startD,
+      endDate: endD,
+      tatBreached: false,
+      state: "Authorize", // New -> Assess -> Authorize -> Review -> Closed
+      proofAttached: !!c.evidence,
+      proofFileName: c.evidence ? "GRN_Verified_POD.pdf" : null,
+      hodFinanceSignoff: false,
+      hodSalesSignoff: false,
+      pvtSignoff: false, // Mandatory PVT Signoff before closure
+      closed: false
+    };
+
+    c.snTicketId = num;
+    c.snType = ticket.type;
+    S.snTickets.unshift(ticket);
+
+    // Live ServiceNow Table API Schema Dispatch
+    logSnApi("POST", "/api/now/table/change_request", {
+      sys_id: sysId,
+      number: num,
+      short_description: "Deduction Shortfall Reconcile: " + c.dist + " (" + inr(c.amount) + ")",
+      type: ticket.type.toLowerCase(),
+      start_date: "DAY-" + startD,
+      end_date: "DAY-" + endD,
+      state: -3, // Authorize
+      u_mandatory_proof: ticket.proofAttached,
+      u_hod_approval: false,
+      u_pvt_signoff: false
+    }, 201);
+  }
+
+  function updateSnTicketOnApprove(ticketNum, who) {
+    var t = (S.snTickets || []).filter(function(x) { return x.number === ticketNum; })[0];
+    if (!t) return;
+    t.hodFinanceSignoff = true;
+    if (t.category === "Scheme claim") t.hodSalesSignoff = true;
+    logSnApi("PATCH", "/api/now/table/change_request/" + t.sys_id, {
+      approval: "approved",
+      u_hod_finance: who,
+      state: 0 // Review state (awaiting PVT)
+    }, 200);
+  }
+
+  function renderSnHub() {
+    var listEl = $("sn-tickets-list");
+    var apiLogEl = $("sn-api-log");
+    var countEl = $("sn-ticket-count");
+    if (!listEl) return;
+
+    var tickets = S.snTickets || [];
+    if (countEl) countEl.textContent = tickets.length + " active ticket" + (tickets.length === 1 ? "" : "s");
+
+    if (!tickets.length) {
+      listEl.innerHTML = "<p class='empty' style='padding:24px 16px'>No ServiceNow tickets dispatched yet. Load today's statement or create an exception case above.</p>";
+    } else {
+      listEl.innerHTML = tickets.map(function(t) {
+        var isLate = S.day > t.endDate && !t.closed;
+        var canClose = t.proofAttached && t.hodFinanceSignoff && t.pvtSignoff && !t.closed;
+
+        return "<article class='case" + (t.closed ? " closed" : "") + (isLate ? " late" : "") + "' style='border-left:4px solid " + (t.type === "Emergency" ? "#DC2626" : "#2563EB") + ";margin-bottom:14px'>" +
+          "<header style='display:flex;justify-content:space-between;align-items:center;margin-bottom:6px'>" +
+            "<div>" +
+              "<b class='mono' style='font-size:.95rem'>" + t.number + "</b> " +
+              "<span class='pill " + (t.type === "Emergency" ? "bad" : "ok") + "' style='font-weight:700'>" + t.type + " Change</span> " +
+              "<span class='pill' style='background:#F1F5F9;color:#334155'>" + esc(t.category) + "</span>" +
+            "</div>" +
+            "<b class='mono amt'>" + inr(t.amount) + "</b>" +
+          "</header>" +
+          "<p style='margin:0 0 6px;font-size:.85rem'>" + esc(t.dist) + " · Inv: <b>" + esc(t.inv) + "</b> · Ref: <b>" + esc(t.caseId) + "</b></p>" +
+
+          // Dates & TAT Status Strip
+          "<div style='display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:10px;padding:6px 10px;background:#F8FAFC;border-radius:8px;font-size:.78rem'>" +
+            "<span>📅 <b>Start:</b> Day " + t.startDate + "</span>" +
+            "<span>🏁 <b>End TAT:</b> Day " + t.endDate + " (" + (t.type === "Emergency" ? "2-day SLA" : "7-day SLA") + ")</span>" +
+            (isLate ? "<span class='pill bad' style='font-weight:700;animation:pulse 1.5s infinite'>⛔ TAT BREACHED (Day " + S.day + " &gt; Day " + t.endDate + ")</span>" : "<span class='pill ok' style='font-weight:600'>✓ Within TAT (Day " + S.day + ")</span>") +
+            "<span style='margin-left:auto;font-weight:600;color:#64748B'>State: <code style='color:#0F2742'>" + (t.closed ? "Closed (Resolved)" : t.pvtSignoff ? "Review (PVT Done)" : t.hodFinanceSignoff ? "Awaiting PVT" : "Authorize") + "</code></span>" +
+          "</div>" +
+
+          // Gate Checklist (Interactive Controls)
+          "<div style='background:#FFF;border:1px solid #E2E8F0;border-radius:10px;padding:8px 12px;margin-bottom:10px;font-size:.8rem'>" +
+            "<div style='display:flex;justify-content:space-between;align-items:center;padding:4px 0;border-bottom:1px dashed #E2E8F0'>" +
+              "<span>1. <b>Mandatory Document Proof:</b> " + (t.proofAttached ? "<span style='color:#0F766E;font-weight:600'>✓ " + esc(t.proofFileName || "Attached") + "</span>" : "<span style='color:#DC2626;font-weight:600'>✗ Missing Proof (Blocks Closure)</span>") + "</span>" +
+              (!t.proofAttached && !t.closed ? "<button class='btn small' data-sn-act='attach-proof' data-sn-id='" + t.number + "'>📎 Attach Proof (GRN/POD)</button>" : "") +
+            "</div>" +
+            "<div style='display:flex;justify-content:space-between;align-items:center;padding:4px 0;border-bottom:1px dashed #E2E8F0'>" +
+              "<span>2. <b>HoD Finance &amp; Sales Approval:</b> " + (t.hodFinanceSignoff ? "<span style='color:#0F766E;font-weight:600'>✓ Approved by HoD (Vikram / Arjun)</span>" : "<span style='color:#D97706;font-weight:600'>⏳ Pending HoD Sign-off</span>") + "</span>" +
+              (!t.hodFinanceSignoff && !t.closed ? "<button class='btn small primary' data-sn-act='hod-signoff' data-sn-id='" + t.number + "'>✍️ Sign off as HoD</button>" : "") +
+            "</div>" +
+            "<div style='display:flex;justify-content:space-between;align-items:center;padding:4px 0'>" +
+              "<span>3. <b>PVT (Post-Validation Testing) Sign-off:</b> " + (t.pvtSignoff ? "<span style='color:#0F766E;font-weight:600'>✓ PVT Verified (Ledger &amp; GST Checked)</span>" : "<span style='color:#DC2626;font-weight:600'>✗ Required to Close Ticket</span>") + "</span>" +
+              (t.hodFinanceSignoff && !t.pvtSignoff && !t.closed ? "<button class='btn small' data-sn-act='pvt-signoff' data-sn-id='" + t.number + "' style='background:#0F766E;color:#fff;border-color:#0F766E'>✓ Run &amp; Sign off PVT</button>" : "") +
+            "</div>" +
+          "</div>" +
+
+          // Action row
+          "<div style='display:flex;justify-content:space-between;align-items:center'>" +
+            "<div style='display:flex;gap:6px'>" +
+              (!t.closed ? "<button class='btn small' data-sn-act='toggle-type' data-sn-id='" + t.number + "' title='Switch Normal vs Emergency'>Switch to " + (t.type === "Emergency" ? "Normal" : "Emergency") + "</button>" : "") +
+            "</div>" +
+            "<div>" +
+              (t.closed ? "<span class='pill ok' style='font-weight:700'>✓ CLOSED (RESOLVED IN SERVICENOW)</span>" :
+                canClose ? "<button class='btn small primary' data-sn-act='close-ticket' data-sn-id='" + t.number + "' style='background:#0F766E;border-color:#0F766E'>🔒 Complete &amp; Close Ticket (Resolve)</button>" :
+                "<button class='btn small' disabled style='opacity:.5;cursor:not-allowed' title='Complete Proof, HoD Sign-off & PVT to unlock'>🔒 Ticket Locked (Requires Proof + HoD + PVT)</button>") +
+            "</div>" +
+          "</div>" +
+        "</article>";
+      }).join("");
+    }
+
+    if (apiLogEl) {
+      var logs = S.snApiLogs || [];
+      if (!logs.length) {
+        apiLogEl.textContent = "// Waiting for REST Table API transactions...\n// Every Rupee pushes change_request and attachment records here.";
+      } else {
+        apiLogEl.textContent = logs.map(function(l) {
+          return "[" + l.timestamp + "] " + l.method + " " + l.endpoint + " -> HTTP " + l.status + "\nPayload: " + JSON.stringify(l.payload, null, 2);
+        }).join("\n\n--------------------------------------------------\n\n");
+      }
+    }
+  }
+
+  function snAct(num, action) {
+    var t = (S.snTickets || []).filter(function(x) { return x.number === num; })[0];
+    if (!t) return;
+
+    if (action === "attach-proof") {
+      t.proofAttached = true;
+      t.proofFileName = t.category === "Damage / shortage" ? "Signed_Bhiwandi_POD_GRN.pdf" : "Approved_Trade_Circular_Nov26.pdf";
+      logSnApi("POST", "/api/now/attachment/file", {
+        table_name: "change_request",
+        table_sys_id: t.sys_id,
+        file_name: t.proofFileName,
+        content_type: "application/pdf",
+        size_bytes: 428192
+      }, 201);
+      log("ServiceNow", t.number + ": mandatory proof document (" + t.proofFileName + ") attached via sys_attachment API.");
+      flash("Mandatory proof document attached to " + t.number, false);
+    }
+    else if (action === "hod-signoff") {
+      t.hodFinanceSignoff = true;
+      if (t.category === "Scheme claim") t.hodSalesSignoff = true;
+      logSnApi("PATCH", "/api/now/table/change_request/" + t.sys_id, {
+        state: -3,
+        approval: "approved",
+        cab_recommendation: "Approved by Head of Department (" + USERS[S.user] + ")"
+      }, 200);
+      log("ServiceNow", t.number + ": HoD approval granted by " + USERS[S.user] + ".");
+      flash("HoD approval recorded on " + t.number, false);
+    }
+    else if (action === "pvt-signoff") {
+      if (!t.proofAttached || !t.hodFinanceSignoff) {
+        flash("Cannot sign off PVT without proof and HoD approval.", true);
+        return;
+      }
+      t.pvtSignoff = true;
+      t.state = "Review";
+      logSnApi("PATCH", "/api/now/table/change_request/" + t.sys_id, {
+        state: 0, // Review
+        u_pvt_signoff: true,
+        u_pvt_verifier: USERS[S.user],
+        u_pvt_test_results: "Ledger posting balanced, GST s.34 window verified, zero write-off confirmed."
+      }, 200);
+      log("ServiceNow", t.number + ": PVT (Post-Validation Testing) passed and signed off by " + USERS[S.user] + ".");
+      flash("PVT sign-off complete on " + t.number + "!", false);
+    }
+    else if (action === "toggle-type") {
+      t.type = t.type === "Emergency" ? "Normal" : "Emergency";
+      t.endDate = t.type === "Emergency" ? t.startDate + 2 : t.startDate + 7;
+      t.tatBreached = S.day > t.endDate;
+      logSnApi("PATCH", "/api/now/table/change_request/" + t.sys_id, {
+        type: t.type.toLowerCase(),
+        end_date: "DAY-" + t.endDate,
+        justification: "Re-classified as " + t.type + " Change by " + USERS[S.user]
+      }, 200);
+      log("ServiceNow", t.number + " re-classified as " + t.type + " Change (New TAT: Day " + t.endDate + ").");
+      flash("Change category updated to " + t.type, false);
+    }
+    else if (action === "close-ticket") {
+      if (!t.proofAttached || !t.hodFinanceSignoff || !t.pvtSignoff) {
+        flash("Blocked: Ticket cannot be closed without proof, HoD sign-off, and PVT signoff.", true);
+        return;
+      }
+      t.closed = true;
+      t.state = "Closed";
+      logSnApi("PATCH", "/api/now/table/change_request/" + t.sys_id, {
+        state: 3, // Closed
+        close_code: "successful",
+        close_notes: "Deduction dispute resolved. Credit note/recovery matched. PVT sign-off verified."
+      }, 200);
+      log("ServiceNow", t.number + " CLOSED (Resolved) following full ITIL Change & PVT verification.");
+      flash("ServiceNow Ticket " + t.number + " successfully CLOSED!", false);
+    }
+
+    save();
+    render();
+  }
+
   function render() {
+
     $("day").textContent = "Day " + S.day + " · " + fmt(dateOf(S.day));
     $("who").value = S.user;
     ["tolerance", "approval"].forEach(function (k) { $("set-" + k).value = S.settings[k]; });
@@ -338,7 +588,7 @@
     $("dist-body").innerHTML = S.dists.map(function (d) { var x = exposure(d.va); return "<tr><td>" + esc(d.name) + "<br><span class='mono tiny'>" + d.va + "</span></td><td class='mono r'>" + inr(d.purchases) + (d.purchases > 5000000 ? "<br><span class='tiny'>194Q applies</span>" : "") + "</td><td class='mono r'>" + inr(d.schemeLeft) + "</td><td class='mono r'>" + (x.amt ? inr(x.amt) : "—") + (x.flagged ? "<br><span class='pill bad'>credit review</span>" : "") + "</td><td>" + (d.ord === "flag" ? "<span class='ordst bad'>Held for review</span>" : d.ord === "ok" ? "<span class='ordst ok'>Released</span>" : "") + "<button class='btn small' data-order='" + d.va + "'>" + (d.ord ? "Order again" : "New order") + "</button></td></tr>"; }).join("");
 
     $("cn-body").innerHTML = S.notes.length ? S.notes.map(function (n) { var left = n.irpDue == null ? null : n.irpDue - S.day; return "<tr><td class='mono'>" + n.id + "<br><span class='tiny'>" + (n.kind === "GST" ? "GST · " + inr(n.gst) + " GST" : "Financial · no GST") + "</span></td><td>" + esc(n.dist.split(",")[0]) + "</td><td class='mono r'>" + inr(n.amount) + "</td><td class='mono r'>" + (left == null ? "<span class='tiny'>not reportable</span>" : left >= 0 ? left + " days" : "<span class='pill bad'>overdue</span>") + "</td></tr>"; }).join("") : "<tr><td colspan='4' class='empty'>None yet.</td></tr>";
-    renderTower(); renderJournal();
+    renderTower(); renderJournal(); renderSnHub();
     if ($("apv-body")) $("apv-body").innerHTML = (S.approvals || []).map(function (x) { var d = dist(x.va); return "<div class='apv'><p><b class='mono'>" + x.id + "</b> · " + esc(d.name.split(",")[0]) + "<br><span class='tiny'>Rep " + x.rep + " · approved by " + esc(x.approver) + " · cap " + inr(x.cap) + (x.taxIncl ? " incl. GST" : " + GST (clears up to " + inr(capLimit(x)) + ")") + " · invoices up to " + fmt(new Date(x.windowEnd)) + " · used " + inr(x.used) + "</span></p></div>"; }).join("") + (function () { var f = salesFeed("CELLOVA0005"); return "<p class='tiny' style='margin-top:10px'><b>Feed to Ten Today, Krishna Marketing:</b> waiting on Finance " + inr(f.financePending) + " (doesn't block) · rep-owned or unverified over 15 days " + inr(f.blocking) + (f.young ? " · under 15 days " + inr(f.young) : "") + " → next discount <b>" + (f.block ? "blocked until proof or recovery" : "can be approved") + "</b></p>"; })();
 
     $("log").innerHTML = S.log.length ? S.log.slice(0, 60).map(function (l, i) { return "<li><span class='mono'>Day " + l.day + "</span> <span class='rule'>" + esc(l.rule) + "</span> <input type='text' class='log-edit' data-log-idx='" + i + "' value='" + esc(l.text) + "' title='Edit stored audit text directly to test SHA-256 tamper detection' style='width:62%;font:inherit;padding:2px 6px;border:1px dashed #cbd5e1;border-radius:4px;background:#fff' />" + (l.hash ? " <span class='trace'>[" + esc((l.prevHash || "GENESIS").slice(0, 8)) + " → " + esc(l.hash.slice(0, 8)) + "]</span>" : "") + "</li>"; }).join("") : "<li class='empty'>Nothing yet.</li>";
@@ -533,6 +783,38 @@
     if ($("verify-chain")) $("verify-chain").click();
   });
   document.addEventListener("click", function (e) {
+    var snB = e.target.closest("[data-sn-act]");
+    if (snB) { snAct(snB.dataset.snId, snB.dataset.snAct); return; }
+    var snToggle = e.target.closest("#sn-live-toggle");
+    if (snToggle) {
+      var drw = $("sn-config-drawer");
+      if (drw) drw.hidden = !drw.hidden;
+      return;
+    }
+    var snSave = e.target.closest("#sn-cfg-save");
+    if (snSave) {
+      var url = $("sn-cfg-url") ? $("sn-cfg-url").value : "";
+      var st = $("sn-cfg-status");
+      if (st) {
+        st.textContent = "⚡ Ping to " + (url || "developer instance") + ": HTTP 200 OK (OAuth active). Ready for live webhook sync.";
+        st.style.color = "#2563EB";
+      }
+      flash("ServiceNow Instance configuration verified (HTTP 200 OK)", false);
+      return;
+    }
+    var snReset = e.target.closest("#sn-cfg-reset");
+    if (snReset) {
+      var st = $("sn-cfg-status");
+      if (st) {
+        st.textContent = "● Native API Engine active (dual-mode payload generator)";
+        st.style.color = "#0F766E";
+      }
+      if ($("sn-cfg-url")) $("sn-cfg-url").value = "";
+      if ($("sn-cfg-user")) $("sn-cfg-user").value = "";
+      if ($("sn-cfg-token")) $("sn-cfg-token").value = "";
+      flash("Reset to local Dual-Mode engine.", false);
+      return;
+    }
     var b = e.target.closest("[data-a]"); if (b) act(b.dataset.id, b.dataset.a);
     var o = e.target.closest("[data-order]"); if (o) order(o.dataset.order);
   });

@@ -231,7 +231,7 @@ td,th{padding:12px 14px!important}
 </section>
 
 <main class="dk">
-  <nav class="tabs2" aria-label="Workspace"><a href="#recv"><i>1</i>Receive</a><a href="#cls"><i>2</i>Classify</a><a href="#cases"><i>3</i>Work cases</a><a href="#dists"><i>4</i>Prevent</a><a href="#tower">Control tower</a><a href="#auditc">Audit &amp; ledger</a><button type="button" onclick="document.getElementById('run-uat').click()">Run tests ✓</button></nav>
+  <nav class="tabs2" aria-label="Workspace"><a href="#recv"><i>1</i>Receive</a><a href="#cls"><i>2</i>Classify</a><a href="#cases"><i>3</i>Work cases</a><a href="#sn" style="color:#0071E3"><i>⚡</i>ServiceNow Changes &amp; Cases</a><a href="#dists"><i>4</i>Prevent</a><a href="#tower">Control tower</a><a href="#auditc">Audit &amp; ledger</a><button type="button" onclick="document.getElementById('run-uat').click()">Run tests ✓</button></nav>
   <div class="main">
   <section style="padding:18px 0 0" id="recv">
     <div class="grid two">
@@ -295,6 +295,69 @@ td,th{padding:12px 14px!important}
     <div class="stack" id="bar"></div>
     <ul class="legend" id="legend"></ul>
     <p class="mono tiny" id="lastrun" style="margin-top:8px"></p>
+  </section>
+
+  <section style="padding:18px 0 0" id="sn">
+    <div class="card" style="border-top:4px solid #0071E3;margin-bottom:18px">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap">
+        <div>
+          <p class="step" style="margin:0 0 4px">ENTERPRISE CHANGE &amp; DISPUTE GOVERNANCE · SERVICENOW REST API (TABLE API: CHANGE_REQUEST &amp; CASE)</p>
+          <h2 style="margin:0 0 6px">ServiceNow Change &amp; Dispute Hub (ITIL Dual-Mode)</h2>
+          <p class="sub" style="margin:0">When an unapproved short-payment occurs, Every Rupee dispatches a structured <b>change_request</b> or dispute ticket to ServiceNow with mandatory proof, dual-approvals (HoD), and strict TAT SLA monitoring.</p>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+          <span class="pill ok" style="font-size:.78rem;font-weight:700">⚡ Table API v2 Ready</span>
+          <button class="btn small" id="sn-live-toggle" type="button" style="font-weight:600">🔌 Connect Custom PDI Instance</button>
+        </div>
+      </div>
+
+      <!-- Live Config Drawer (collapsed by default) -->
+      <div id="sn-config-drawer" hidden style="margin-top:14px;padding:12px 14px;background:#F8FAFC;border:1px solid #E2E8F0;border-radius:12px">
+        <p style="font-size:.82rem;font-weight:700;margin:0 0 8px;color:#0F2742">Live Instance REST Configuration (Optional Developer Override)</p>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px">
+          <label style="font-size:.76rem;color:#64748B">Instance URL<input id="sn-cfg-url" type="text" placeholder="https://devXXXXX.service-now.com" style="width:100%;font-size:.82rem;padding:4px 8px;margin-top:2px;border:1px solid #CBD5E1;border-radius:6px"></label>
+          <label style="font-size:.76rem;color:#64748B">Service Account Username / Client ID<input id="sn-cfg-user" type="text" placeholder="admin / sn_ws_user" style="width:100%;font-size:.82rem;padding:4px 8px;margin-top:2px;border:1px solid #CBD5E1;border-radius:6px"></label>
+          <label style="font-size:.76rem;color:#64748B">Password / Bearer Token<input id="sn-cfg-token" type="password" placeholder="••••••••••••" style="width:100%;font-size:.82rem;padding:4px 8px;margin-top:2px;border:1px solid #CBD5E1;border-radius:6px"></label>
+        </div>
+        <div style="display:flex;gap:8px;margin-top:8px;align-items:center">
+          <button class="btn small primary" id="sn-cfg-save" type="button">Save &amp; Test Ping</button>
+          <button class="btn small" id="sn-cfg-reset" type="button">Reset to Sandbox Mode</button>
+          <span id="sn-cfg-status" style="font-size:.78rem;font-weight:600;color:#0F766E">● Native API Engine active (dual-mode payload generator)</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Active Tickets & Change Requests Grid -->
+    <div class="grid two">
+      <div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+          <h3 style="margin:0;font-size:1.05rem">Dispatched Tickets &amp; Change Requests</h3>
+          <span class="mono tiny" id="sn-ticket-count">0 tickets</span>
+        </div>
+        <div id="sn-tickets-list"></div>
+      </div>
+
+      <div>
+        <div class="card" style="margin-bottom:16px">
+          <h3 style="margin:0 0 6px;font-size:1.05rem">ServiceNow ITIL Governance Rules</h3>
+          <ul style="margin:0;padding-left:18px;font-size:.82rem;color:#475569;line-height:1.6">
+            <li><b>Change Categories:</b> <code>Normal Change</code> (Standard 7-day TAT SLA) vs. <code>Emergency Change</code> (Critical 2-day TAT SLA for disputed billing &gt; ₹50k or delivery holds).</li>
+            <li><b>Mandatory Proof Gate (sys_attachment):</b> A ticket cannot transition to Authorize or Review without verified GRN, Debit Note, or Signed POD attached.</li>
+            <li><b>HoD Dual Approval:</b> Finance Head (Vikram) sign-off required for write-backs; Commercial Head (Arjun) sign-off required for trade scheme budgets.</li>
+            <li><b>Mandatory PVT Sign-off:</b> Post-Validation Testing sign-off is mandatory before state changes to <code>Closed (Resolved)</code>.</li>
+            <li><b>TAT Breach Detection:</b> If current Day &gt; End Date, the ticket flags <code>⛔ TAT BREACHED</code> and logs a platform incident.</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+            <h3 style="margin:0;font-size:1.02rem">Live ServiceNow REST Table API Inspector</h3>
+            <span class="mono tiny" style="color:#0F766E">HTTP 201 /api/now/table/change_request</span>
+          </div>
+          <pre id="sn-api-log" style="margin:0;padding:12px;background:#0F172A;color:#38BDF8;border-radius:10px;font-size:.72rem;line-height:1.45;max-height:280px;overflow-y:auto;white-space:pre-wrap"></pre>
+        </div>
+      </div>
+    </div>
   </section>
 
   <section style="padding:18px 0 0" id="tower">
@@ -372,9 +435,9 @@ var tabs=q('.tabs2');
 // summary strip always visible above tabs
 var k=q('#cls .kpis'),bar=q('#bar'),lg=q('#legend');var wrap=document.createElement('div');wrap.className='sumbar';
 [k,bar,lg].forEach(function(e){if(e)wrap.appendChild(e)});tabs.parentNode.insertBefore(wrap,tabs.nextSibling);
-var map={'#recv':'recv','#cls':'cls','#tower':'tower','#cases':'cases','#dists':'prevent','#auditc':'audit'};
-function show(t){[recv,cls,tw,q('#cases')].forEach(function(x){x.hidden=true});
- if(t==='recv')recv.hidden=false; else if(t==='cls')cls.hidden=false; else if(t==='tower')tw.hidden=false; else {q('#cases').hidden=false;
+var map={'#recv':'recv','#cls':'cls','#cases':'cases','#sn':'sn','#tower':'tower','#dists':'prevent','#auditc':'audit'};
+function show(t){[recv,cls,tw,q('#cases'),q('#sn')].forEach(function(x){if(x)x.hidden=true});
+ if(t==='recv')recv.hidden=false; else if(t==='cls')cls.hidden=false; else if(t==='tower')tw.hidden=false; else if(t==='sn'){ if(q('#sn')) q('#sn').hidden=false; } else {q('#cases').hidden=false;
   var c=g.children[0];c.hidden=(t!=='cases');[].forEach.call(side.children,function(ch,i){ch.hidden=!((t==='prevent'&&i<2)||(t==='audit'&&i>=2))});
   side.hidden=(t==='cases');}
  [].forEach.call(tabs.querySelectorAll('a'),function(a){a.classList.toggle('on',map[a.getAttribute('href')]===t)});}
